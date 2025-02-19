@@ -10,7 +10,7 @@ pnpm-debug.log
 
 # Fichiers sensibles Laravel
 .env
-.env.*
+#.env.*
 !.env.example  # Garde un exemple pour que les devs puissent configurer rapidement leur environnement
 
 # Clés et cache Laravel
