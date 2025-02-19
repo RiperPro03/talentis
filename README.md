@@ -30,7 +30,7 @@ composer install
 npm install
 ```
 
-### 3️⃣ **Créer et configurer le fichier ```.env```**
+### 3️⃣ **Créer et configurer le fichier `.env`**
 ```sh
 copy .env.example .env
 ```
@@ -51,7 +51,12 @@ Si tu utilises SQLite, change DB_CONNECTION=sqlite et crée le fichier de base d
 type nul > database/database.sqlite
 ```
 
-### 4️⃣ **Exécuter les migrations**
+### 4️⃣ **Générer la clé d'application**
+```sh
+php artisan key:generate
+```
+
+### 5️⃣ **Exécuter les migrations**
 ```sh
 php artisan migrate
 ```
