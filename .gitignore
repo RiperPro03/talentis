@@ -1,30 +1,67 @@
+# Dépendances Composer
 /vendor/
-node_modules/
+
+# Dépendances Node.js
+/node_modules/
 npm-debug.log
 yarn-error.log
+pnpm-debug.log
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
+# Fichiers sensibles Laravel
+#.env
+#.env.*    # Ignore tous les fichiers .env sauf .env.example
+!.env.example    # Garde un exemple pour que les devs puissent le copier
 
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
+# Clés et cache
 storage/*.key
-.env
+bootstrap/cache/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/logs/
+storage/pail/
+
+# Autoriser le suivi des dossiers vides (sinon Laravel ne fonctionne pas)
+!storage/
+!storage/logs/
+!storage/framework/
+!storage/framework/cache/
+!storage/framework/sessions/
+!storage/framework/views/
+!bootstrap/cache/
+
+# Artefacts de build et stockage public
+/public/build/
+/public/hot
+/public_html/storage
+/public_html/hot
+
+# Fichiers temporaires et logs
+.phpunit.result.cache
+.phpactor.json
 Homestead.yaml
 Homestead.json
 /.vagrant
-.phpunit.result.cache
 
-/public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
+# Fichiers liés aux éditeurs et OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Cache Tailwind CSS & DaisyUI
+.tailwindcache/
+*.css.map
+
+# Verrouillage des dépendances (ces fichiers DOIVENT être commités)
+!composer.lock
+!package-lock.json
+!yarn.lock
+!pnpm-lock.yaml
+
+# Clés SSH et Auth
 auth.json
