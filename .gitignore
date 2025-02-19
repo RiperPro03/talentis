@@ -1,5 +1,6 @@
 # Dépendances Composer
 /vendor/
+composer.lock  # Doit être suivi pour garantir les mêmes versions chez tous les devs
 
 # Dépendances Node.js
 /node_modules/
@@ -8,18 +9,18 @@ yarn-error.log
 pnpm-debug.log
 
 # Fichiers sensibles Laravel
-#.env
-#.env.*    # Ignore tous les fichiers .env sauf .env.example
-!.env.example    # Garde un exemple pour que les devs puissent le copier
+.env
+.env.*
+!.env.example  # Garde un exemple pour que les devs puissent configurer rapidement leur environnement
 
-# Clés et cache
-storage/*.key
+# Clés et cache Laravel
+/storage/*.key
+/storage/pail
 bootstrap/cache/
 storage/framework/cache/
 storage/framework/sessions/
 storage/framework/views/
 storage/logs/
-storage/pail/
 
 # Autoriser le suivi des dossiers vides (sinon Laravel ne fonctionne pas)
 !storage/
@@ -33,23 +34,28 @@ storage/pail/
 # Artefacts de build et stockage public
 /public/build/
 /public/hot
+/public/storage
 /public_html/storage
 /public_html/hot
 
-# Fichiers temporaires et logs
+# Fichiers PHPUnit & autres caches
+.phpunit.cache
 .phpunit.result.cache
 .phpactor.json
+
+# Fichiers Homestead et Vagrant
 Homestead.yaml
 Homestead.json
 /.vagrant
 
-# Fichiers liés aux éditeurs et OS
+# Configurations et fichiers spécifiques aux éditeurs
+/.fleet/
 .idea/
 .vscode/
-*.swp
-*.swo
-*.bak
-*.tmp
+.nova/
+.zed/
+
+# Fichiers système (OS)
 .DS_Store
 Thumbs.db
 
@@ -58,7 +64,6 @@ Thumbs.db
 *.css.map
 
 # Verrouillage des dépendances (ces fichiers DOIVENT être commités)
-!composer.lock
 !package-lock.json
 !yarn.lock
 !pnpm-lock.yaml
