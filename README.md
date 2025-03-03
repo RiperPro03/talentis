@@ -70,6 +70,9 @@ php artisan migrate
 npm run build
 ```
 
+
+T'es beau Christopher tu sais ? <3
+
 ### 🌐 Démarrer le serveur Laravel
 ```sh
 php artisan serve
