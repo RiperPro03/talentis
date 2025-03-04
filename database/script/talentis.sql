@@ -1,102 +1,120 @@
-CREATE TABLE Company(
-   Id_Company COUNTER,
-   name VARCHAR(255) NOT NULL,
-   logo_path VARCHAR(255),
-   description VARCHAR(255),
-   email VARCHAR(255) NOT NULL,
-   phone_number VARCHAR(10),
-   deleted_at DATE,
-   PRIMARY KEY(Id_Company),
-   UNIQUE(name)
-);
+<?php
 
-CREATE TABLE Skill(
-   Id_Skill COUNTER,
-   skill_name VARCHAR(255) NOT NULL,
-   deleted_at DATE,
-   PRIMARY KEY(Id_Skill),
-   UNIQUE(skill_name)
-);
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-CREATE TABLE Role(
-   Id_Role COUNTER,
-   role_name VARCHAR(255) NOT NULL,
-   deleted_at DATE,
-   PRIMARY KEY(Id_Role),
-   UNIQUE(role_name)
-);
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('companies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('logo_path');
+            $table->string('description')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone_number', 10)->nullable()->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
 
-CREATE TABLE Promotion(
-   Id_Promotion COUNTER,
-   promotion_code VARCHAR(255) NOT NULL,
-   deleted_at DATE,
-   PRIMARY KEY(Id_Promotion),
-   UNIQUE(promotion_code)
-);
+        Schema::create('skills', function (Blueprint $table) {
+            $table->id();
+            $table->string('skill_name')->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
 
-CREATE TABLE Users(
-   Id_User COUNTER,
-   profile_picture_path VARCHAR(255),
-   name VARCHAR(255) NOT NULL,
-   first_name VARCHAR(255),
-   birthdate DATE,
-   password VARCHAR(255) NOT NULL,
-   email VARCHAR(255) NOT NULL,
-   email_verified_at DATE,
-   created_at DATE,
-   updated_at DATE,
-   deleted_at DATE,
-   Id_Promotion INT,
-   Id_Role INT NOT NULL,
-   PRIMARY KEY(Id_User),
-   FOREIGN KEY(Id_Promotion) REFERENCES Promotion(Id_Promotion),
-   FOREIGN KEY(Id_Role) REFERENCES Role(Id_Role)
-);
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_name')->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
 
-CREATE TABLE Offer(
-   Id_Offer COUNTER,
-   title VARCHAR(50),
-   description VARCHAR(50),
-   base_salary INT,
-   offer_duration VARCHAR(50),
-   deleted_at DATE,
-   Id_Company INT NOT NULL,
-   PRIMARY KEY(Id_Offer),
-   FOREIGN KEY(Id_Company) REFERENCES Company(Id_Company)
-);
+        Schema::create('promotions', function (Blueprint $table) {
+            $table->id();
+            $table->string('promotion_code')->unique();
+            $table->softDeletes();
+            $table->timestamps();
+        });
 
-CREATE TABLE put_in_wishlist(
-   Id_User INT,
-   Id_Offer INT,
-   PRIMARY KEY(Id_User, Id_Offer),
-   FOREIGN KEY(Id_User) REFERENCES Users(Id_User),
-   FOREIGN KEY(Id_Offer) REFERENCES Offer(Id_Offer)
-);
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('profile_picture_path');
+            $table->string('name');
+            $table->string('first_name');
+            $table->date('birthdate');
+            $table->string('password');
+            $table->string('email', 255)->unique();
+            $table->date('email_verified_at')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->foreignId('Id_Promotion')->constrained( 'promotions');
+            $table->foreignId('Id_Role')->constrained('roles');
+        });
 
-CREATE TABLE apply(
-   Id_User INT,
-   Id_Offer INT,
-   created_at INT,
-   curriculum_vitae VARCHAR(255),
-   cover_letter VARCHAR(255),
-   PRIMARY KEY(Id_User, Id_Offer),
-   FOREIGN KEY(Id_User) REFERENCES Users(Id_User),
-   FOREIGN KEY(Id_Offer) REFERENCES Offer(Id_Offer)
-);
+        Schema::create('offers', function (Blueprint $table) {
+            $table->id();
+            $table->string('title', 50);
+            $table->string('description', 50);
+            $table->integer('base_salary')->nullable();
+            $table->string('offer_duration', 50)->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+            $table->foreignId('Id_Company')->constrained('companies');
+        });
 
-CREATE TABLE contain(
-   Id_Offer INT,
-   Id_Skill INT,
-   PRIMARY KEY(Id_Offer, Id_Skill),
-   FOREIGN KEY(Id_Offer) REFERENCES Offer(Id_Offer),
-   FOREIGN KEY(Id_Skill) REFERENCES Skill(Id_Skill)
-);
+        Schema::create('put_in_wishlist', function (Blueprint $table) {
+            $table->foreignId('Id_User')->constrained('users');
+            $table->foreignId('Id_Offer')->constrained('offers');
+            $table->primary(['Id_User', 'Id_Offer']);
+        });
 
-CREATE TABLE evaluate(
-   Id_User INT,
-   Id_Company INT,
-   rating VARCHAR(2),
-   PRIMARY KEY(Id_User, Id_Company),
-   FOREIGN KEY(Id_User) REFERENCES Users(Id_User),
-   FOREIGN KEY(Id_Company) REFERENCES Company(Id_Company)
-);
+        Schema::create('apply', function (Blueprint $table) {
+            $table->foreignId('Id_User')->constrained('users');
+            $table->foreignId('Id_Offer')->constrained('offers');
+            $table->timestamps();
+            $table->string('curriculum_vitae_path', 255);
+            $table->string('cover_letter_path', 255);
+            $table->primary(['Id_User', 'Id_Offer']);
+        });
+
+        Schema::create('contain', function (Blueprint $table) {
+            $table->foreignId('Id_Offer')->constrained('offers');
+            $table->foreignId('Id_Skill')->constrained('skills');
+            $table->primary(['Id_Offer', 'Id_Skill']);
+        });
+
+        Schema::create('evaluate', function (Blueprint $table) {
+            $table->foreignId('Id_User')->constrained('users');
+            $table->foreignId('Id_Company')->constrained('companies');
+            $table->string('rating', 2);
+            $table->primary(['Id_User', 'Id_Company']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('evaluate');
+        Schema::dropIfExists('contain');
+        Schema::dropIfExists('apply');
+        Schema::dropIfExists('put_in_wishlist');
+        Schema::dropIfExists('offers');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('promotions');
+        Schema::dropIfExists('roles');
+        Schema::dropIfExists('skills');
+        Schema::dropIfExists('companies');
+    }
+};
