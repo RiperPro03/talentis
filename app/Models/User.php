@@ -18,9 +18,15 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'profile_picture_path',
         'name',
+        'first_name',
+        'birthdate',
         'email',
+        'email_verified_at',
         'password',
+        'promotion_id',
+        'role_id',
     ];
 
     /**
@@ -44,5 +50,30 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function promotion()
+    {
+        return $this->belongsTo(Promotion::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->belongsToMany(Offer::class, 'wishlists');
+    }
+
+    public function applies()
+    {
+        return $this->belongsToMany(Offer::class, 'applies')->withPivot('created_at', 'curriculum_vitae', 'cover_letter');
+    }
+
+    public function evaluations()
+    {
+        return $this->belongsToMany(Company::class, 'evaluates')->withPivot('rating');
     }
 }
