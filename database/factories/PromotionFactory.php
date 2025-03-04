@@ -17,7 +17,10 @@ class PromotionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'promotion_code'=>$this->faker->text(255),
+            'created_at'=>now(),
+            'updated_at'=>now(),
+
         ];
     }
 }
