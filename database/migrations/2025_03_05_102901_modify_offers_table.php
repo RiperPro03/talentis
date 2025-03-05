@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('offers', function (Blueprint $table) {
             $table->dropColumn('offer_duration');
-            $table->foreignId('sector_id')->nullable()->constrained('sector');
+            $table->foreignId('sector_id')->nullable()->constrained('sectors');
             $table->date('start_offer');
             $table->date('end_offer');
             //
