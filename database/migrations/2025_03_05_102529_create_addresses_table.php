@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('offers', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 50);
-            $table->string('description', 255);
-            $table->integer('base_salary');
-            $table->string('offer_duration', 50);
-            $table->softDeletes();
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->string('postal_code',5)->unique();
+            $table->string('city');
             $table->timestamps();
+            $table->softDeletes();
         });
-        
     }
 
     /**
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offers');
+        Schema::dropIfExists('addresses');
     }
 };

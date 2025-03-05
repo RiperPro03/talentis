@@ -16,7 +16,26 @@ class SkillFactory extends Factory
      */
     public function definition(): array
     {
+        $competences = [
+            'Développement web',
+            'JavaScript',
+            'PHP',
+            'Python',
+            'Java',
+            'C++',
+            'SQL',
+            'DevOps',
+            'Analyse de données',
+            'Machine Learning',
+            'UI/UX Design',
+            'Gestion de projet',
+            'Marketing digital',
+            'Réseaux et sécurité'
+        ];
         return [
+            'skill_name' => $this-> faker ->randomElement($competences),
+            'created_at'=>now(),
+            'updated_at'=>now(),
             //
         ];
     }
