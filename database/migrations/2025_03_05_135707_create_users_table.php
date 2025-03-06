@@ -24,7 +24,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('promotion_id')->nullable()->constrained('promotions')->onDelete('set null');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
         });
 
         Schema::create('sessions', function (Blueprint $table) {

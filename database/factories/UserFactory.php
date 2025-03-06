@@ -34,8 +34,6 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => Hash::make('password'), // Par défaut, tous les users auront 'password' comme mot de passe
             'promotion_id' => Promotion::inRandomOrder()->first()?->id ?? Promotion::factory()->create()->id,
-            'role_id' => Role::inRandomOrder()->first()?->id ?? Role::factory()->create()->id,
-            'remember_token' => Str::random(10),
         ];
     }
 
