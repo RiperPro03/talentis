@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('logo_path', 255)->nullable();
             $table->string('description', 255)->nullable();
             $table->string('email', 255)->unique();
-            $table->string('phone_number', 10)->nullable();
+            $table->string('phone_number',15)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

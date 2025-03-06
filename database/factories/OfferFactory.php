@@ -20,8 +20,9 @@ class OfferFactory extends Factory
         return [
             'title'=> $this -> faker -> text(50),
             'description'=>$this -> faker -> text(255),
-            'base_salary'=>$this -> faker -> random_int(500,10000),
-            'offer_duration'=>$this->faker->text(50),
+            'base_salary'=>$this -> faker -> numberBetween(500,10000),
+            'start_offer'=>$this->faker->date(),
+            'end_offer'=>$this->faker->date(),
             'created_at'=>now(),
             'updated_at'=>now(),
             'company_id'=>Company::inRandomOrder()->first()?->id ?? Company::factory()->create()->id,

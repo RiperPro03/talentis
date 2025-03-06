@@ -27,7 +27,7 @@ class CompanyFactory extends Factory
             'logo_path'=>$this->faker->imageUrl(200,200,'people'),
             'description'=>$this->faker->text(255),
             'email'=>$this->faker->unique()->safeEmail(),
-            'phone_number'=>$this->faker->unique()->phoneNumber(),
+            'phone_number'=>$this->faker->unique()->e164phoneNumber(),
             'created_at'=>now(),
             'updated_at'=>now(),
             //
