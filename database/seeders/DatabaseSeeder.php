@@ -22,7 +22,11 @@ class DatabaseSeeder extends Seeder
 //        $this->call(OfferSeeder::class);
 
         // Création des rôles
-        $roles = ['user', 'student', 'pilot', 'admin'];
+        $roles = [
+            'student',
+            'pilot',
+            'admin'
+        ];
 
         foreach ($roles as $role) {
             Role::create(['name' => $role]);
@@ -42,7 +46,6 @@ class DatabaseSeeder extends Seeder
         }
 
         // Attribution des permissions aux rôles
-        Role::findByName('user')->givePermissionTo([]);
         Role::findByName('student')->givePermissionTo(['access_student']);
         Role::findByName('pilot')->givePermissionTo(['manage_students', 'access_pilot']);
         Role::findByName('admin')->givePermissionTo(Permission::all());

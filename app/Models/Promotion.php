@@ -2,11 +2,22 @@
 
 namespace App\Models;
 
+use Database\Factories\PromotionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
-    /** @use HasFactory<\Database\Factories\PromotionFactory> */
-    use HasFactory;
+    /** @use HasFactory<PromotionFactory> */
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'promotion_code',
+    ];
+
+    public function users(): Promotion|\Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -2,11 +2,22 @@
 
 namespace App\Models;
 
+use Database\Factories\SectorFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Sector extends Model
 {
-    /** @use HasFactory<\Database\Factories\SectorFactory> */
-    use HasFactory;
+    /** @use HasFactory<SectorFactory> */
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function offers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

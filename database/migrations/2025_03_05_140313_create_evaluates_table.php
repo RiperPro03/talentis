@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('evaluates', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->string('rating', 2);
+            $table->tinyInteger('rating')->unsigned();
             $table->primary(['user_id', 'company_id']);
         });
-        
+
     }
 
     /**

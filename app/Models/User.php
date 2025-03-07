@@ -24,7 +24,6 @@ class User extends Authenticatable
         'first_name',
         'birthdate',
         'email',
-        'email_verified_at',
         'password',
         'promotion_id',
     ];
@@ -47,33 +46,27 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    public function promotion()
+    public function promotion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Promotion::class);
     }
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function wishlists()
+    public function offers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Offer::class, 'wishlists');
     }
 
-    public function applies()
+    public function applies(): User|\Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsToMany(Offer::class, 'applies')->withPivot('created_at', 'curriculum_vitae', 'cover_letter');
+        return $this->hasMany(Offer::class);
     }
 
-    public function evaluations()
+    public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsToMany(Company::class, 'evaluates')->withPivot('rating');
+        return $this->hasMany(Company::class);
     }
 }
