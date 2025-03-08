@@ -13,7 +13,7 @@ class Address extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'zip_code',
+        'postal_code',
         'city',
     ];
 
@@ -24,6 +24,6 @@ class Address extends Model
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany(Company::class,'locates');
     }
 }

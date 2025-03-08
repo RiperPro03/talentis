@@ -57,16 +57,16 @@ class User extends Authenticatable
 
     public function offers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Offer::class, 'wishlists');
+        return $this->belongsToMany(Offer::class, 'wishlists')->withTimestamps();
     }
 
-    public function applies(): User|\Illuminate\Database\Eloquent\Relations\HasMany
+    public function applies(): User|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Offer::class);
+        return $this->belongsToMany(Offer::class,'applies')->withPivot('curriculum_vitae','cover_letter')->withTimestamps();;
     }
 
-    public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\HasMany
+    public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Company::class);
+        return $this->belongsToMany(Company::class, 'evaluates')->withPivot('rating')->withTimestamps();
     }
 }

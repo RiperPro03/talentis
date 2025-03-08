@@ -32,15 +32,15 @@ class Offer extends Model
 
     public function skills(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class,'contains');
     }
 
-    public function applies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function applies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Apply::class);
+        return $this->belongsToMany(User::class,'applies')->withPivot('curriculum_vitae','cover_letter')->withTimestamps();
     }
 
-    public function sectors(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function sector(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Sector::class);
     }
