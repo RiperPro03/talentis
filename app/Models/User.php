@@ -69,4 +69,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'evaluates')->withPivot('rating')->withTimestamps();
     }
+
+    public function addresses(): \Illuminate\Database\Eloquent\Relations\HasOne
+
+    {
+        return $this->hasOne(Address::class,'lives');
+    }
+
+
 }

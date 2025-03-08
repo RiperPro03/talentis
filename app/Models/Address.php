@@ -26,4 +26,9 @@ class Address extends Model
     {
         return $this->belongsToMany(Company::class,'locates');
     }
+    public function addresses(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+
+    {
+        return $this->belongsTo(User::class,'lives');
+    }
 }
