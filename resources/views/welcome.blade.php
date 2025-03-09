@@ -13,12 +13,12 @@
     </h1>
 
     <h2 class="text-2xl md:text-4xl font-light opacity-0 animate-fade-in-up delay-300">
-        Your Gateway to Opportunity!
+        Trouvez de nouvelles opportunités !
     </h2>
 </div>
 
 <!-- SEARCH BAR -->
-<div
+<from action="#" method="GET"
     class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 bg-white p-6 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-4">
     <!-- Input: Vous cherchez ? -->
     <input type="text" placeholder="Vous cherchez ?" class="input input-bordered w-full md:w-1/4"/>
@@ -36,10 +36,10 @@
     </select>
 
     <!-- Bouton de recherche -->
-    <button class="btn btn-primary text-white w-full md:w-auto">
+    <button type="submit" class="btn btn-primary text-white w-full md:w-auto">
         Rechercher
     </button>
-</div>
+</from>
 
 
 
@@ -133,10 +133,10 @@
 
     <!-- Boutons de navigation visibles uniquement sur PC (`lg:`) -->
     <button id="prev"
-            class="hidden lg:flex absolute left-0 top-1/2 transform -translate-y-1/2 btn btn-circle btn-primary">❮
+            class="hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮
     </button>
     <button id="next"
-            class="hidden lg:flex absolute right-0 top-1/2 transform -translate-y-1/2 btn btn-circle btn-primary">❯
+            class="hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯
     </button>
 </div>
 @endsection
