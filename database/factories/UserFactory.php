@@ -25,25 +25,20 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $role = Role::inRandomOrder()->first();
         return [
             'profile_picture_path' => $this->faker->imageUrl(),
             'name' => $this->faker->lastName(),
             'first_name' => $this->faker->firstName(),
             'birthdate' => $this->faker->date(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => Hash::make('password'), // Par défaut, tous les users auront 'password' comme mot de passe
             'promotion_id' => Promotion::inRandomOrder()->first()?->id ?? Promotion::factory()->create()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'Id_Address' => \App\Models\Address::factory(),
+            'Id_Promotion' => \App\Models\Promotion::factory(),
+            'Id_Role' => $role ? $role->id : null,
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

@@ -23,14 +23,16 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'=>$this->faker->Name(),
+            'name'=>$this->faker->company,
             'logo_path'=>$this->faker->imageUrl(200,200,'people'),
-            'description'=>$this->faker->text(255),
-            'email'=>$this->faker->unique()->safeEmail(),
-            'phone_number'=>$this->faker->unique()->phoneNumber(),
+            'description'=>$this->faker->company . ' se spécialise dans ' . $this->faker->bs . ' pour transformer l’industrie.',
+            'email'=>$this->faker->unique()->companyEmail,
+            'phone_number'=>$this->faker->unique()->numerify('06########'),
             'created_at'=>now(),
             'updated_at'=>now(),
             //
         ];
     }
 }
+
+

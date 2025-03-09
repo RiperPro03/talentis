@@ -13,17 +13,17 @@ class Address extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'zip_code',
+        'postal_code',
         'city',
     ];
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function users(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class,'address_id', 'id');
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany(Company::class,'locates');
     }
 }

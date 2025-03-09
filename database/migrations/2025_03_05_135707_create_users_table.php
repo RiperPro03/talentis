@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->date('birthdate');
             $table->string('password');
             $table->string('email', 255)->unique();
-            $table->date('email_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('promotion_id')->nullable()->constrained('promotions')->onDelete('set null');
