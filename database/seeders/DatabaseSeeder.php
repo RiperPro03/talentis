@@ -57,5 +57,21 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
+
+        $this->call([
+            CompanySeeder::class,
+            SkillSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+            OfferSeeder::class,
+            ApplySeeder::class,
+            AddressSeeder::class,
+            IndustrySeeder::class,
+            PromotionSeeder::class,
+            SectorSeeder::class,
+            EvaluateSeeder::class,
+            LocateSeeder::class,
+        ]);
+
     }
 }

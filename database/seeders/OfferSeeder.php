@@ -2,17 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Offer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Offer;
+use App\Models\Sector;
+use App\Models\Company;
 
 class OfferSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Offer::factory()->count(50)->create();
+        $sector = Sector::inRandomOrder()->first(); // Sélectionne un secteur aléatoire
+        $company = Company::inRandomOrder()->first(); // Sélectionne une compagnie aléatoire
+
+        Offer::factory(10)->create([
+            'Id_Sector' => $sector->id,
+            'Id_Company' => $company->id,
+        ]);
     }
 }

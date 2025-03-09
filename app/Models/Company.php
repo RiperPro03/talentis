@@ -20,28 +20,23 @@ class Company extends Model
         'phone_number'
     ];
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function offers(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(Offer::class, 'company_id', 'id');
     }
 
-    public function offers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function industries(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Offer::class);
+        return $this->belongsToMany(Industry::class,'works');
     }
 
-    public function industries(): Company|\Illuminate\Database\Eloquent\Relations\HasMany
+    public function addresses(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Industry::class);
+        return $this->belongsToMany(Address::class,'locates');
     }
 
-    public function addresses(): Company|\Illuminate\Database\Eloquent\Relations\HasMany
+    public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Address::class);
-    }
-
-    public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Company::class);
+        return $this->belongsToMany(User::class,'evaluates')->withPivot('rating')->withTimestamps();
     }
 }
