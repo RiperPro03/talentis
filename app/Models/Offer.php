@@ -27,7 +27,7 @@ class Offer extends Model
 
     public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 
     public function skills(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -42,7 +42,7 @@ class Offer extends Model
 
     public function sector(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Sector::class);
+        return $this->belongsTo(Sector::class, 'sector_id', 'id');
     }
 
 

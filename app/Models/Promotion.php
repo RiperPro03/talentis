@@ -18,6 +18,6 @@ class Promotion extends Model
 
     public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'promotion_id', 'id');
     }
 }

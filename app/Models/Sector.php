@@ -18,6 +18,6 @@ class Sector extends Model
 
     public function offers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Offer::class);
+        return $this->hasMany(Offer::class, 'sector_id', 'id');
     }
 }

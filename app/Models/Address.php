@@ -17,18 +17,13 @@ class Address extends Model
         'city',
     ];
 
-    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function users(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class,'address_id', 'id');
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class,'locates');
-    }
-    public function addresses(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-
-    {
-        return $this->belongsTo(User::class,'lives');
     }
 }

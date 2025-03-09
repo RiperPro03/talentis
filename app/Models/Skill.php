@@ -16,7 +16,7 @@ class Skill extends Model
 
     public function offers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Offer::class);
+        return $this->belongsToMany(Offer::class, 'contains');
     }
 
 }

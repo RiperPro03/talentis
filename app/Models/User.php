@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function promotion(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Promotion::class);
+        return $this->belongsTo(Promotion::class, 'promotion_id', 'id');
     }
 
     public function offers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function applies(): User|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Offer::class,'applies')->withPivot('curriculum_vitae','cover_letter')->withTimestamps();;
+        return $this->belongsToMany(Offer::class,'applies')->withPivot('curriculum_vitae','cover_letter')->withTimestamps();
     }
 
     public function evaluations(): User|\Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -70,11 +70,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Company::class, 'evaluates')->withPivot('rating')->withTimestamps();
     }
 
-    public function addresses(): \Illuminate\Database\Eloquent\Relations\HasOne
-
+    public function addresses(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Address::class,'lives');
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
-
 
 }

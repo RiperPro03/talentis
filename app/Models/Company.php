@@ -22,7 +22,7 @@ class Company extends Model
 
     public function offers(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
-        return $this->hasMany(Offer::class);
+        return $this->hasMany(Offer::class, 'company_id', 'id');
     }
 
     public function industries(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
