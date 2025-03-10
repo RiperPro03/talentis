@@ -24,7 +24,7 @@ return [
          * `Spatie\Permission\Contracts\Role` contract.
          */
 
-        'roleSeeders' => Spatie\Permission\Models\Role::class,
+        'role' => Spatie\Permission\Models\Role::class,
 
     ],
 
@@ -111,7 +111,7 @@ return [
     'register_octane_reset_listener' => false,
 
     /*
-     * Events will fire when a roleSeeders or permission is assigned/unassigned:
+     * Events will fire when a role or permission is assigned/unassigned:
      * \Spatie\Permission\Events\RoleAttached
      * \Spatie\Permission\Events\RoleDetached
      * \Spatie\Permission\Events\PermissionAttached
@@ -154,7 +154,7 @@ return [
     'display_permission_in_exception' => false,
 
     /*
-     * When set to true, the required roleSeeders names are added to exception messages.
+     * When set to true, the required role names are added to exception messages.
      * This could be considered an information leak in some contexts, so the default
      * setting is false here for optimum safety.
      */
@@ -193,7 +193,7 @@ return [
 
         /*
          * You may optionally indicate a specific cache driver to use for permission and
-         * roleSeeders caching using any of the `store` drivers listed in the cache.php config
+         * role caching using any of the `store` drivers listed in the cache.php config
          * file. Using 'default' here means to use the `default` set in cache.php.
          */
 

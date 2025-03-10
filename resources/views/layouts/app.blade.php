@@ -19,13 +19,13 @@
     @endif
 </head>
 
-<body class="font-sans antialiased bg-slate-100">
+<body class="font-sans antialiased bg-slate-100 min-h-screen flex flex-col">
 
 <!-- HEADER -->
 <x-header />
 
 <!-- Contenu Principal -->
-<main class="p-6 text-neutral text-center">
+<main class="flex-1 p-6 text-neutral text-center">
     @yield('content')
 </main>
 
