@@ -14,17 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-//        $this->call(PromotionSeeder::class);
-//        $this->call(UserSeeder::class);
-//        $this->call(CompanySeeder::class);
-//        $this->call(SkillSeeder::class);
-//        $this->call(OfferSeeder::class);
-
-        // Création des rôles
-
-
-
         $this->call([
             CompanySeeder::class,
             AddressSeeder::class,
@@ -41,5 +30,25 @@ class DatabaseSeeder extends Seeder
             LocateSeeder::class,
         ]);
 
+        // Création d'un utilisateur admin
+        $admin = User::factory()->create([
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password')
+        ]);
+        $admin->assignRole('admin');
+
+        // Création d'un utilisateur pilote
+        $pilot = User::factory()->create([
+            'email' => 'pilot@exemple.com',
+            'password' => bcrypt('password')
+        ]);
+        $pilot->assignRole('pilot');
+
+        // Création d'un utilisateur étudiant
+        $student = User::factory()->create([
+            'email' => 'etu@exemple.com',
+            'password' => bcrypt('password')
+        ]);
+        $student->assignRole('student');
     }
 }
