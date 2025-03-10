@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 50);
+            $table->string('title', 255);
+            $table->string('type', 50);
             $table->string('description', 255);
             $table->integer('base_salary');
             $table->string('offer_duration', 50);
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->timestamps();
         });
-        
+
     }
 
     /**

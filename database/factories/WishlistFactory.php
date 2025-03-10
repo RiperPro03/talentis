@@ -9,8 +9,8 @@ class WishlistFactory extends Factory
     public function definition()
     {
         return [
-            'Id_User' => \App\Models\Users::factory(),
-            'Id_Offer' => \App\Models\Offer::factory(),
+            'user_id' => \App\Models\User::factory(),
+            'offer_id' => \App\Models\Offer::factory(),
         ];
     }
 }

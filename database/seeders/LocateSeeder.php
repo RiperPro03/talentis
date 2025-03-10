@@ -15,7 +15,7 @@ class LocateSeeder extends Seeder
 
         foreach ($companies as $company) {
             $address = $addresses->random();
-            $company->located()->attach($address->id);
+            $company->addresses()->attach($address->id);
         }
     }
 }

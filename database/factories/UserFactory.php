@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Models\Promotion;
-use App\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -25,7 +24,6 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $role = Role::inRandomOrder()->first();
         return [
             'profile_picture_path' => $this->faker->imageUrl(),
             'name' => $this->faker->lastName(),
@@ -36,9 +34,7 @@ class UserFactory extends Factory
             'promotion_id' => Promotion::inRandomOrder()->first()?->id ?? Promotion::factory()->create()->id,
             'created_at' => now(),
             'updated_at' => now(),
-            'Id_Address' => \App\Models\Address::factory(),
-            'Id_Promotion' => \App\Models\Promotion::factory(),
-            'Id_Role' => $role ? $role->id : null,
+            'address_id' => Address::factory(),
         ];
     }
 }

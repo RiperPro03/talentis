@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->tinyInteger('rating')->unsigned();
             $table->primary(['user_id', 'company_id']);
+            $table->timestamps();
         });
 
     }

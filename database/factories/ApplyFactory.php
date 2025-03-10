@@ -15,8 +15,8 @@ class ApplyFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\Users::factory(),
-            'offer_id' => \App\Models\Offer::factory(),
+            'user_id' => User::factory(),
+            'offer_id' => Offer::factory(),
             'created_at' => now(),
             'curriculum_vitae' => $this->faker->word(),
             'cover_letter' => $this->faker->word(),
