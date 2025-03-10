@@ -50,6 +50,7 @@ class CompanyController extends Controller
         }
 
 //        return view('company.show', compact('company'));
+        return response()->json($company);
     }
 
     /**
