@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 // Route accessible par tout le monde
 Route::get('/', function () {
     return view('welcome');
+ 
 })->name('home');
 
 // Route pour les utilisateurs non authentifiés
@@ -50,10 +51,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('Promotion', PromotionController::class);
     Route::resource('Sector', SectorController::class);
-
-});
+}
 
 // Route pour les utilisateurs avec la permission manage_students
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     // TODO: Ajouter les routes pour la gestion des étudiants
 });
+
