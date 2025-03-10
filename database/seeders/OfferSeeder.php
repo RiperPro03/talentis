@@ -11,12 +11,16 @@ class OfferSeeder extends Seeder
 {
     public function run()
     {
-        $sector = Sector::inRandomOrder()->first(); // Sélectionne un secteur aléatoire
-        $company = Company::inRandomOrder()->first(); // Sélectionne une compagnie aléatoire
+        for ($i = 1; $i <= 10; $i++) {
 
-        Offer::factory(10)->create([
-            'Id_Sector' => $sector->id,
-            'Id_Company' => $company->id,
+            $sector = Sector::inRandomOrder()->first(); // Sélectionne un secteur aléatoire
+        $company = Company::inRandomOrder()->first(); // Sélectionne une compagnie aléatoire
+        Offer::factory(1)->create([
+
+            'sector_id' => $sector->id,
+            'company_id' => $company->id,
         ]);
     }
+    }
+
 }
