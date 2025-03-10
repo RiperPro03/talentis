@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 // Route pour les utilisateurs non authentifiés
 Route::middleware(['guest'])->group(function () {
-    Route::get('/login', [AuthController::class, 'index'])->name('login.index');
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
