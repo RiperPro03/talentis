@@ -36,7 +36,7 @@ return new class extends Migration
 
         Schema::create($tableNames['roles'], static function (Blueprint $table) use ($teams, $columnNames) {
             // $table->engine('InnoDB');
-            $table->bigIncrements('id'); // role id
+            $table->bigIncrements('id'); // roleSeeders id
             if ($teams || config('permission.testing')) { // permission.testing is a fix for sqlite testing
                 $table->unsignedBigInteger($columnNames['team_foreign_key'])->nullable();
                 $table->index($columnNames['team_foreign_key'], 'roles_team_foreign_key_index');
@@ -83,7 +83,7 @@ return new class extends Migration
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');
 
             $table->foreign($pivotRole)
-                ->references('id') // role id
+                ->references('id') // roleSeeders id
                 ->on($tableNames['roles'])
                 ->onDelete('cascade');
             if ($teams) {
@@ -108,7 +108,7 @@ return new class extends Migration
                 ->onDelete('cascade');
 
             $table->foreign($pivotRole)
-                ->references('id') // role id
+                ->references('id') // roleSeeders id
                 ->on($tableNames['roles'])
                 ->onDelete('cascade');
 

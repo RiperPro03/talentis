@@ -9,8 +9,8 @@ class ContainFactory extends Factory
     public function definition()
     {
         return [
-            'Id_Offer' => \App\Models\Offer::factory(),
-            'Id_Skill' => \App\Models\Skill::factory(),
+            'offer_id' => \App\Models\Offer::factory(),
+            'skill_id' => \App\Models\Skill::factory(),
         ];
     }
 }

@@ -9,8 +9,8 @@ class LocatedFactory extends Factory
     public function definition()
     {
         return [
-            'Id_Company' => \App\Models\Company::factory(),
-            'Id_Address' => \App\Models\Address::factory(),
+            'company_id' => \App\Models\Company::factory(),
+            'address_id' => \App\Models\Address::factory(),
         ];
     }
 }
