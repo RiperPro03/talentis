@@ -41,7 +41,7 @@
         @endauth
 
         @guest
-            <a href="{{ route('login') }}" class="btn btn-primary text-base-100">Connexion</a>
+            <a href="{{ route('login.index') }}" class="btn btn-primary text-base-100">Connexion</a>
         @endguest
     </div>
 
@@ -93,7 +93,7 @@
         @endauth
 
         @guest
-            <a href="{{ route('login') }}" class="btn btn-primary text-base-100">Connexion</a>
+            <a href="{{ route('login.index') }}" class="btn btn-primary text-base-100">Connexion</a>
         @endguest
     </div>
 </div>

@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Models\Promotion;
-
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -25,7 +24,6 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-
         return [
             'profile_picture_path' => $this->faker->imageUrl(),
             'name' => $this->faker->lastName(),
@@ -33,11 +31,10 @@ class UserFactory extends Factory
             'birthdate' => $this->faker->date(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password'), // Par défaut, tous les users auront 'password' comme mot de passe
-            'promotion_id' => \App\Models\Promotion::factory(),
+            'promotion_id' => Promotion::inRandomOrder()->first()?->id ?? Promotion::factory()->create()->id,
             'created_at' => now(),
             'updated_at' => now(),
-            'address_id' => \App\Models\Address::factory(),
-
+            'address_id' => Address::factory(),
         ];
     }
 }

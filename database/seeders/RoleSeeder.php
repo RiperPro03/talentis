@@ -15,33 +15,36 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // Création des rôles
-        $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $pilot = Role::firstOrCreate(['name' => 'Pilote']);
-        $student = Role::firstOrCreate(['name' => 'Etudiant']);
+        $roles = [
+            'student',
+            'pilot',
+            'admin'
+        ];
+
+        foreach ($roles as $role) {
+            Role::create(['name' => $role]);
+        }
 
         // Création des permissions
         $permissions = [
             'access_dashboard',
             'manage_students',
             'manage_pilots',
+            'manage_company',
+            'manage_offers',
+            'manage_apply', // Gestion des candidatures des étudiants (admin) et gestion des candidatures de ses offres (etudiant)
+            'manage_wishlist',
             'access_student',
             'access_pilot',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::create(['name' => $permission]);
         }
 
         // Attribution des permissions aux rôles
-        $student->givePermissionTo(['access_student']);
-        $pilot->givePermissionTo(['manage_students', 'access_pilot']);
-        $admin->givePermissionTo(Permission::all());
-
-        // Création d'un utilisateur admin
-        $adminUser = User::factory()->create([
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password')
-        ]);
-        $adminUser->assignRole('Admin');
+        Role::findByName('student')->givePermissionTo(['access_student', 'manage_apply', 'manage_wishlist']);
+        Role::findByName('pilot')->givePermissionTo(['manage_students', 'access_pilot', 'manage_company', 'manage_offers']);
+        Role::findByName('admin')->givePermissionTo(Permission::all());
     }
 }
