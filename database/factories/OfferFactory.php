@@ -28,8 +28,8 @@ class OfferFactory extends Factory
             'start_offer' => $this->faker->date,
             'end_offert' => $this->faker->date,
             'company_id'=>Company::inRandomOrder()->first()?->id ?? Company::factory()->create()->id,
-            'Id_Sector' => \App\Models\Sector::factory(),
-            'Id_Company' => \App\Models\Company::factory(),
+            'sector_id' => \App\Models\Sector::factory(),
+            'company_id' => \App\Models\Company::factory(),
         ];
     }
 }
