@@ -1,0 +1,10 @@
+Company = (Id_Company COUNTER, name VARCHAR(255), logo_path VARCHAR(255), description VARCHAR(255), email VARCHAR(255), phone_number VARCHAR(10), deleted_at DATE);
+Skill = (Id_Skill COUNTER, skill_name VARCHAR(255), deleted_at DATE);
+Role = (Id_Role COUNTER, role_name VARCHAR(255), deleted_at DATE);
+Promotion = (Id_Promotion COUNTER, promotion_code VARCHAR(255), deleted_at DATE);
+Users = (Id_User COUNTER, profile_picture_path VARCHAR(255), name VARCHAR(255), first_name VARCHAR(255), birthdate DATE, password VARCHAR(255), email VARCHAR(255), email_verified_at DATE, created_at DATE, updated_at DATE, deleted_at DATE, #Id_Promotion*, #Id_Role);
+Offer = (Id_Offer COUNTER, title VARCHAR(50), description VARCHAR(50), base_salary INT, offer_duration VARCHAR(50), deleted_at DATE, #Id_Company);
+put_in_wishlist = (#Id_User, #Id_Offer);
+apply = (#Id_User, #Id_Offer, created_at INT, curriculum_vitae VARCHAR(255), cover_letter VARCHAR(255));
+contain = (#Id_Offer, #Id_Skill);
+evaluate = (#Id_User, #Id_Company, rating VARCHAR(2));
