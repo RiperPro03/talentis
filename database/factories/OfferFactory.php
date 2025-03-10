@@ -18,13 +18,17 @@ class OfferFactory extends Factory
     public function definition(): array
     {
         return [
-            'title'=> $this -> faker -> text(50),
+            'title'=> $this -> faker -> jobTitle,
             'description'=>$this -> faker -> text(255),
-            'base_salary'=>$this -> faker -> random_int(500,10000),
-            'offer_duration'=>$this->faker->text(50),
+            'base_salary'=>$this -> faker -> numberBetween(30000, 100000),
+            'type' => $this->faker->randomElement(['CDI', 'CDD', 'Stage', 'Alternance']),
             'created_at'=>now(),
             'updated_at'=>now(),
+            'start_offer' => $this->faker->date,
+            'end_offer' => $this->faker->date,
             'company_id'=>Company::inRandomOrder()->first()?->id ?? Company::factory()->create()->id,
+            'sector_id' => \App\Models\Sector::factory(),
+            'company_id' => \App\Models\Company::factory(),
         ];
     }
 }

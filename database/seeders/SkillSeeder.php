@@ -2,17 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Skill;
 
 class SkillSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        Skill::factory()->count(5)->create();
+        Skill::factory()->count(5)->create(); // Crée 10 compétences aléatoires en utilisant la factory
     }
 }

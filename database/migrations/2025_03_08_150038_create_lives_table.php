@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('applies', function (Blueprint $table) {
+        Schema::create('lives', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('offer_id')->constrained('offers')->onDelete('cascade');
-            $table->timestamps();
-            $table->string('curriculum_vitae', 255);
-            $table->string('cover_letter', 255);
-            $table->primary(['user_id', 'offer_id']);
+            $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
+            $table->primary(['user_id', 'address_id']);
         });
-
     }
 
     /**
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('applies');
+        Schema::dropIfExists('lives');
     }
 };

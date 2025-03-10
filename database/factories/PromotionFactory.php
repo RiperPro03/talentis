@@ -17,7 +17,7 @@ class PromotionFactory extends Factory
     public function definition(): array
     {
         return [
-            'promotion_code'=>$this->faker->text(255),
+            'promotion_code' => strtoupper($this->faker->bothify('TL####')),
             'created_at'=>now(),
             'updated_at'=>now(),
 

@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use App\Models\Promotion;
-use App\Models\Role;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -31,19 +30,11 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'birthdate' => $this->faker->date(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => Hash::make('password'), // Par défaut, tous les users auront 'password' comme mot de passe
             'promotion_id' => Promotion::inRandomOrder()->first()?->id ?? Promotion::factory()->create()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+            'address_id' => Address::factory(),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

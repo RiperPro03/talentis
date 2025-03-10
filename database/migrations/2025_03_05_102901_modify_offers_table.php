@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('offers', function (Blueprint $table) {
             $table->dropColumn('offer_duration');
-            $table->foreignId('sector_id')->nullable()->constrained('sectors')->onDelete('set null');
+            $table->foreignId('sector_id')->nullable()->constrained('sectors')->onDelete('cascade');
             $table->date('start_offer');
             $table->date('end_offer');
             //

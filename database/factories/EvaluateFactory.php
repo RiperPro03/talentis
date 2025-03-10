@@ -12,9 +12,9 @@ class EvaluateFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => $this->faker->randomNumber(),
-            'company_id' => $this->faker->randomNumber(),
-            'rating' => $this->faker->randomNumber(),
+            'user_id' => \App\Models\Users::factory(),
+            'company_id' => \App\Models\Company::factory(),
+            'rating' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

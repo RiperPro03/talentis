@@ -4,14 +4,13 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SectorFactory extends Factory
+class WorkFactory extends Factory
 {
     public function definition()
     {
         return [
-            'name' => $this->faker->word,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'company_id' => \App\Models\Company::factory(),
+            'industry_id' => \App\Models\Industry::factory(),
         ];
     }
 }

@@ -16,7 +16,7 @@ class SkillFactory extends Factory
      */
     public function definition(): array
     {
-        $competences = [
+        static $competences = [
             'Développement web',
             'JavaScript',
             'PHP',
@@ -32,11 +32,17 @@ class SkillFactory extends Factory
             'Marketing digital',
             'Réseaux et sécurité'
         ];
+
+        if (empty($competences)) {
+            throw new \Exception("Toutes les compétences ont été utilisées !");
+        }
+
+        $skill_name = array_splice($competences, array_rand($competences), 1)[0];
+
         return [
-            'skill_name' => $this-> faker ->randomElement($competences),
-            'created_at'=>now(),
-            'updated_at'=>now(),
-            //
+            'skill_name' => $skill_name,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
