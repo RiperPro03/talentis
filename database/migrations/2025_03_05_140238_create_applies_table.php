@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('applies', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('offer_id')->constrained('offers')->onDelete('cascade');
-            $table->timestamp('created_at');
+            $table->timestamps();
             $table->string('curriculum_vitae', 255);
             $table->string('cover_letter', 255);
             $table->primary(['user_id', 'offer_id']);
         });
-        
+
     }
 
     /**

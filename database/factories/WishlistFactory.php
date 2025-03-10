@@ -9,7 +9,7 @@ class WishlistFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => \App\Models\Users::factory(),
+            'user_id' => \App\Models\User::factory(),
             'offer_id' => \App\Models\Offer::factory(),
         ];
     }

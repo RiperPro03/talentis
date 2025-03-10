@@ -15,7 +15,7 @@ class EvaluateSeeder extends Seeder
 
         foreach ($users as $user) {
             $company = $companies->random();
-            $user->evaluate()->attach($company->id, [
+            $user->evaluations()->attach($company->id, [
                 'rating' => rand(1, 5), // Donne une note aléatoire entre 1 et 5
             ]);
         }
