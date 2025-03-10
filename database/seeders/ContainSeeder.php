@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Offer;
 use App\Models\Sector;
+use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -16,15 +17,14 @@ class ContainSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::all();
         $offers = Offer::all();
+        $skills = Skill::all();
 
-        foreach ($users as $user) {
-            $offer = $offers->random();
-            $user->applies()->attach($offer->id, [
-                'curriculum_vitae' => 'CV for offer ' . $offer->id,
-                'cover_letter' => 'Cover letter for offer ' . $offer->id,
-            ]);
+
+
+        // Attacher aléatoirement des compétences aux offres
+        foreach ($offers as $offer) {
+            $randomSkills = $skills->random();
+            $offer->skills()->attach($randomSkills);
         }
-    }
-}
+}}
