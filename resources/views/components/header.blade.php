@@ -48,7 +48,8 @@
     <!-- Partie Desktop -->
     <div class="hidden w-full lg:flex items-center justify-between">
         <!-- Logo (PC) -->
-        <a class="btn btn-ghost text-xl" href="{{ route('home') }}">
+        <a class="btn btn-ghost text-3xl animate-gradient-text font-bold bg-clip-text text-transparent
+                        bg-gradient-to-r from-primary via-secondary to-accent" href="{{ route('home') }}">
             <img src="{{ asset('img/logo/logo.png') }}" class="h-8 w-auto mr-2 rounded-full" alt="Logo">
             Talentis
         </a>
@@ -75,8 +76,8 @@
         @auth
             <!-- Avatar (PC) -->
             <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                    <div class="w-10 rounded-full">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar w-20 h-20">
+                    <div class="w-16 rounded-full">
                         <img src="{{ auth()->user()->profile_picture_path ? Storage::url(auth()->user()->profile_picture_path) : asset('img/1223671392.jpg') }}"
                              alt="Photo de profil"
                              class="w-10 h-10 rounded-full">
@@ -84,10 +85,10 @@
                 </div>
 
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-                    <li><a>Profil</a></li>
-                    <li><a>Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a>Favori</a></li>
-                    <li><a href="{{ route('logout') }}" class="text-red-500">Déconnexion</a></li>
+                    <li><a href="#" class="text-lg">Profil</a></li>
+                    <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                    <li><a href="#" class="text-lg">Favori</a></li>
+                    <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>
             </div>
         @endauth

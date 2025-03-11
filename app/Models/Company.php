@@ -39,4 +39,9 @@ class Company extends Model
     {
         return $this->belongsToMany(User::class,'evaluates')->withPivot('rating')->withTimestamps();
     }
+
+    public function averageRating()
+    {
+        return $this->evaluations()->avg('rating') ?? 0;
+    }
 }

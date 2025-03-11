@@ -18,33 +18,21 @@ class ContainSeeder extends Seeder
     public function run()
     {
         $offer = Offer::find(1);
-        $skill = Skill::find(1);
-        $offer->skills()->attach($skill);
-        $skill = Skill::find(2);
-        $offer->skills()->attach($skill);
-        $skill = Skill::find(7);
-        $offer->skills()->attach($skill);
-        $skill = Skill::find(11);
-        $offer->skills()->attach($skill);
+        $skillsToAttach = [1, 2, 7, 11, 6, 8, 12];
 
-        $offer = Offer::find(1);
-        $skill = Skill::find(6);
-        $offer->skills()->attach($skill);
-        $skill = Skill::find(8);
-        $offer->skills()->attach($skill);
-        $skill = Skill::find(12);
-        $offer->skills()->attach($skill);
+        // Filtrer les compétences qui existent réellement dans la base de données
+        $existingSkills = Skill::whereIn('id', $skillsToAttach)->pluck('id')->toArray();
 
-
+        $offer->skills()->syncWithoutDetaching($existingSkills);
 
         $offers = Offer::all();
         $skills = Skill::all();
 
-
-
-        // Attacher aléatoirement des compétences aux offres
+        // Attacher aléatoirement des compétences aux offres, en vérifiant leur existence
         foreach ($offers as $offer) {
-            $randomSkills = $skills->random();
-            $offer->skills()->attach($randomSkills);
+            $randomSkills = $skills->random(rand(1, 3))->pluck('id')->toArray();
+            $offer->skills()->syncWithoutDetaching($randomSkills);
         }
-}}
+
+
+    }}
