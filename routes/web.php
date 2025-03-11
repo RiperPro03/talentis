@@ -57,3 +57,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     // TODO: Ajouter les routes pour la gestion des étudiants
 });
+
+
+Route::get('wish-list', function () {
+    return view('wish-list.index');
+});
