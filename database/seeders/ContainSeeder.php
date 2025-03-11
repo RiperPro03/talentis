@@ -33,10 +33,10 @@ class ContainSeeder extends Seeder
         $skill = Skill::find(8);
         $offer->skills()->attach($skill);
         $skill = Skill::find(12);
-        $offer->skills()->attach($skill);
+        $offer->skills()->attach($skill);}}
 
 
-
+/*
         $offers = Offer::all();
         $skills = Skill::all();
 
@@ -48,3 +48,4 @@ class ContainSeeder extends Seeder
             $offer->skills()->attach($randomSkills);
         }
 }}
+*/
