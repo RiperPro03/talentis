@@ -14,6 +14,15 @@ class WishlistSeeder extends Seeder
      */
     public function run(): void
     {
+        $user = User::find(3);
+        $offer = Offer::find(2);
+
+
+        $user->offers()->attach($offer);
+
+
+
+
         $users = User::all();
         $offers = Offer::all();
 

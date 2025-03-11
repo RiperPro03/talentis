@@ -14,6 +14,19 @@ class WorkSeeder extends Seeder
      */
     public function run(): void
     {
+        $company = Company::find(1);
+        $industry = Industry::find(1);
+        $company->industries()->attach($industry);
+        $industry = Industry::find(6);
+        $company->industries()->attach($industry);
+        $company = Company::find(2);
+        $industry = Industry::find(6);
+        $company->industries()->attach($industry);}}
+
+
+
+
+/*
         $companies = Company::all();
         $industries = Industry::all();
 
@@ -28,3 +41,4 @@ class WorkSeeder extends Seeder
 
     }
 }
+*/

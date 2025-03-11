@@ -17,6 +17,26 @@ class ContainSeeder extends Seeder
      */
     public function run()
     {
+        $offer = Offer::find(1);
+        $skill = Skill::find(1);
+        $offer->skills()->attach($skill);
+        $skill = Skill::find(2);
+        $offer->skills()->attach($skill);
+        $skill = Skill::find(7);
+        $offer->skills()->attach($skill);
+        $skill = Skill::find(11);
+        $offer->skills()->attach($skill);
+
+        $offer = Offer::find(1);
+        $skill = Skill::find(6);
+        $offer->skills()->attach($skill);
+        $skill = Skill::find(8);
+        $offer->skills()->attach($skill);
+        $skill = Skill::find(12);
+        $offer->skills()->attach($skill);
+
+
+
         $offers = Offer::all();
         $skills = Skill::all();
 

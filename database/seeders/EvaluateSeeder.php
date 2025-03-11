@@ -10,6 +10,19 @@ class EvaluateSeeder extends Seeder
 {
     public function run()
     {
+
+        $user = User::find(3);
+        $company = Company::find(2);
+        $user->evaluations()->attach($company->id, [
+            'rating' => 5,
+        ]);
+        $user = User::find(2);
+        $company = Company::find(1);
+        $company->evaluations()->attach($user->id, [
+            'rating' =>2 ,
+        ]);}}
+
+/*
         $users = User::all();
         $companies = Company::all();
 
@@ -21,3 +34,4 @@ class EvaluateSeeder extends Seeder
         }
     }
 }
+*/
