@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@extends('layouts.dashboard-admin')
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,26 +12,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
-    <div class="h-screen flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-base-100 p-5 flex flex-col">
-            <h2 class="text-xl font-bold text-primary mb-6">📌 Dashboard</h2>
+<body class="bg-base-200">
 
-            <ul class="menu space-y-2">
-                <!-- Liens vers les tables existantes -->
-                <li><a href="{{ url('/dashboard/home') }}" class="font-bold">🏠 Home</a></li>
-                <li><a href="/dashboard?table=pilot" class="font-bold">👤 Pilotes</a></li>
-                <li><a href="/dashboard?table=offer" class="font-bold">📦 Offres</a></li>
-                <li><a href="/dashboard?table=company" class="font-bold">🏢 Entreprises</a></li>
-                <li><a href="/dashboard?table=student" class="font-bold">🎓 Étudiants</a></li>
-                <li><a href="/dashboard?table=apply" class="font-bold">📋 Candidatures</a></li>
-                <li><a href="/dashboard?table=wishlist" class="font-bold">💼 Wishlist</a></li>
-            </ul>
-        </aside>
+    <!-- Conteneur principal qui doit couvrir toute la page et la largeur -->
+    <div class="min-h-screen w-full bg-base-200 flex">
 
         <!-- Contenu principal -->
-        <main class="flex-1 p-6 flex flex-col items-center bg-base-200">
+        <main class="flex-1 p-6 lg:ml-64 mt-16 w-full"> <!-- Ajout de w-full pour que le contenu prenne toute la largeur -->
+
             @php
                 $table = request('table', 'pilot'); // Par défaut: table des utilisateurs
             @endphp
@@ -46,49 +36,77 @@
                     </a>
                 </div>
 
-                <!-- Affichage des données -->
-                @if ($table == 'pilot')
-                    @if ($pilot->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table des pilotes.</p>
+                <!-- Affichage des données avec ajout de overflow-x-auto -->
+                <div class="overflow-x-auto">
+                    @if ($table == 'pilot')
+                        @if ($pilot->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table des pilotes.</p>
+                        @else
+                            @foreach($pilot as $item)
+                                <x-table-row :item="$item" :table="'pilot'" />
+                            @endforeach
+                        @endif
+                    @elseif($table == 'offer')
+                        @if ($offer->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table des offres.</p>
+                        @else
+                            @foreach($offer as $item)
+                                <x-table-row :item="$item" :table="'offer'" />
+                            @endforeach
+                        @endif
+                    @elseif($table == 'company')
+                        @if ($company->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table des entreprises.</p>
+                        @else
+                            @foreach($company as $item)
+                                <x-table-row :item="$item" :table="'company'" />
+                            @endforeach
+                        @endif
+                    @elseif($table == 'student')
+                        @if ($student->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table des étudiants.</p>
+                        @else
+                            @foreach($student as $item)
+                                <x-table-row :item="$item" :table="'student'" />
+                            @endforeach
+                        @endif
+                    @elseif($table == 'apply')
+                        @if ($apply->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table des candidatures.</p>
+                        @else
+                            @foreach($apply as $item)
+                                <x-table-row :item="$item" :table="'apply'" />
+                            @endforeach
+                        @endif
+                    @elseif($table == 'wishlist')
+                        @if ($wishlist->isEmpty())
+                            <p class="text-center text-gray-500">Aucune donnée disponible dans la table wishlist.</p>
+                        @else
+                            @foreach($wishlist as $item)
+                                <x-table-row :item="$item" :table="'wishlist'" />
+                            @endforeach
+                        @endif
                     @else
-                        <x-table-test :data="$pilot" />
+                        <p>Table non trouvée.</p>
                     @endif
-                @elseif($table == 'offer')
-                    @if ($offer->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table des offres.</p>
-                    @else
-                        <x-table-test :data="$offer" />
-                    @endif
-                @elseif($table == 'company')
-                    @if ($company->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table des entreprises.</p>
-                    @else
-                        <x-table-test :data="$company" />
-                    @endif
-                @elseif($table == 'student')
-                    @if ($student->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table des étudiants.</p>
-                    @else
-                        <x-table-test :data="$student" />
-                    @endif
-                @elseif($table == 'apply')
-                    @if ($apply->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table des candidatures.</p>
-                    @else
-                        <x-table-test :data="$apply" />
-                    @endif
-                @elseif($table == 'wishlist')
-                    @if ($wishlist->isEmpty())
-                        <p class="text-center text-gray-500">Aucune donnée disponible dans la table wishlist.</p>
-                    @else
-                        <x-table-test :data="$wishlist" />
-                    @endif
-                @else
-                    <p>Table non trouvée.</p>
-                @endif
+                </div>
             </div>
         </main>
     </div>
+
+    <!-- Script pour gérer la visibilité de la sidebar et du header -->
+    <script>
+        // Fonction pour cacher le titre au défilement
+        window.addEventListener("scroll", function() {
+            let statsTitle = document.getElementById("statsTitle");
+            if (window.scrollY > 50) {
+                statsTitle.classList.add("opacity-0"); // Le titre devient invisible
+            } else {
+                statsTitle.classList.remove("opacity-0"); // Le titre devient visible
+            }
+        });
+    </script>
+
 </body>
 
 </html>

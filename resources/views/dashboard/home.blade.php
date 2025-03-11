@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@extends('layouts.dashboard-admin')
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,22 +13,20 @@
 </head>
 
 <body class="bg-base-200">
-    <div class="h-screen flex">
-        <!-- Sidebar pour PC -->
-        <aside class="w-64 bg-base-100 p-5 flex flex-col fixed top-0 left-0 h-full z-30">
-            <h2 class="text-xl font-bold text-primary mb-6">📌 Dashboard</h2>
 
-            <ul class="menu space-y-2">
-                <!-- Liens vers les tables existantes -->
-                <li><a href="{{ url('/dashboard/home') }}" class="font-bold">🏠 Home</a></li>
-                <li><a href="/dashboard?table=pilot" class="font-bold">👤 Pilotes</a></li>
-                <li><a href="/dashboard?table=offer" class="font-bold">📦 Offres</a></li>
-                <li><a href="/dashboard?table=company" class="font-bold">🏢 Entreprises</a></li>
-                <li><a href="/dashboard?table=student" class="font-bold">🎓 Étudiants</a></li>
-                <li><a href="/dashboard?table=apply" class="font-bold">📋 Candidatures</a></li>
-                <li><a href="/dashboard?table=wishlist" class="font-bold">💼 Wishlist</a></li>
-            </ul>
-        </aside>
+    <!-- Script pour gérer la visibilité de la sidebar et du header -->
+    <script>
+        window.addEventListener("scroll", function() {
+            let statsTitle = document.getElementById("statsTitle");
+            if (window.scrollY > 50) {
+                statsTitle.classList.add("opacity-0");
+            } else {
+                statsTitle.classList.remove("opacity-0");
+            }
+        });
+    </script>
+
+    <div class="md:h-screen flex">
 
         <!-- Contenu principal -->
         <main class="flex-1 p-10 md:ml-64 mt-16">
@@ -75,18 +75,6 @@
         </main>
     </div>
 
-    <!-- Script pour gérer la sidebar rétractable et le titre sur défilement -->
-    <script>
-        // Fonction pour cacher le titre au défilement
-        window.addEventListener("scroll", function() {
-            let statsTitle = document.getElementById("statsTitle");
-            if (window.scrollY > 50) {
-                statsTitle.classList.add("opacity-0"); // Le titre devient invisible
-            } else {
-                statsTitle.classList.remove("opacity-0"); // Le titre devient visible
-            }
-        });
-    </script>
 </body>
 
 </html>
