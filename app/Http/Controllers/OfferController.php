@@ -16,7 +16,10 @@ class OfferController extends Controller
         $offers = Offer::paginate(8);
 
         if (Route::currentRouteName() === 'admin.offer.index') {
-            return view('admin.offer.show', compact('offers'));
+            return view('dashboard.table', [
+                'table' => 'offer',
+                'items' => Offer::paginate(8)
+            ]);
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {

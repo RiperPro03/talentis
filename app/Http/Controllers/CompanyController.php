@@ -15,11 +15,14 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::paginate(8);
-
         if (Route::currentRouteName() === 'admin.company.index') {
-            return view('admin.company.show', compact('companies'));
+            return view('dashboard.table', [
+                'table' => 'company',
+                'items' => Company::paginate(8)
+            ]);
         }
+
+        $companies = Company::paginate(8);
 
         if (request()->has('page') && request()->page > $companies->lastPage()) {
             return redirect()->route('company.index', ['page' => $companies->lastPage()]);

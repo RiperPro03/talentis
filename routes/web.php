@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\IndustryController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
 
 // Route accessible par tout le monde
 Route::get('/', function () {
@@ -68,10 +68,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('offer', OfferController::class);
     Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
 
+    Route::resource('admin/user', UserController::class)->names([
+        'index' => 'admin.user.index',
+        'show' => 'admin.user.show',
+        'create' => 'admin.user.create',
+        'edit' => 'admin.user.edit',
+        'store' => 'admin.user.store',
+        'update' => 'admin.user.update',
+        'destroy' => 'admin.user.destroy',
+    ]);
+
     Route::resource('address', AddressController::class);
     Route::resource('industry', IndustryController::class);
     Route::resource('skill', SkillController::class);
-    Route::resource('admin/user', UserController::class);
+
     Route::resource('Promotion', PromotionController::class);
     Route::resource('Sector', SectorController::class);
 

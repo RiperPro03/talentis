@@ -88,7 +88,7 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
                     <li><a href="#" class="text-lg">Profil</a></li>
                     <li><a href="#" class="text-lg">Mes candidature</a></li>
-                    <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                    <li><a href="{{ route('admin') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
                     <li><a href="#" class="text-lg">Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>

@@ -1,28 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
 @extends('layouts.dashboard-admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('title', 'Tableau de board - Talentis')
 
-<body class="bg-base-200">
+@section('content')
+
+<div class="bg-base-200">
 
     <!-- Conteneur principal qui doit couvrir toute la page et la largeur -->
     <div class="min-h-screen w-full bg-base-200 flex">
 
         <!-- Contenu principal -->
-        <main class="flex-1 p-6 lg:ml-64 mt-16 w-full"> <!-- Ajout de w-full pour que le contenu prenne toute la largeur -->
-
-            @php
-                $table = request('table', 'pilot'); // Par défaut: table des utilisateurs
-            @endphp
+        <div class="flex-1 p-6 lg:ml-64 mt-16 w-full"> <!-- Ajout de w-full pour que le contenu prenne toute la largeur -->
 
             <div class="w-full max-w-4xl bg-white shadow-md rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-700 mb-4">
@@ -51,22 +39,7 @@
                     @endif
                 </div>
             </div>
-        </main>
+        </div>
     </div>
-
-    <!-- Script pour gérer la visibilité de la sidebar et du header -->
-    <script>
-        // Fonction pour cacher le titre au défilement
-        window.addEventListener("scroll", function() {
-            let statsTitle = document.getElementById("statsTitle");
-            if (window.scrollY > 50) {
-                statsTitle.classList.add("opacity-0"); // Le titre devient invisible
-            } else {
-                statsTitle.classList.remove("opacity-0"); // Le titre devient visible
-            }
-        });
-    </script>
-
-</body>
-
-</html>
+</div>
+@endsection

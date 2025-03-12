@@ -31,3 +31,12 @@ window.addEventListener('resize', updateButtons);
 
 // Mettre à jour les boutons lors du scroll manuel
 carousel.addEventListener('scroll', updateButtons);
+
+window.addEventListener("scroll", function() {
+    let statsTitle = document.getElementById("statsTitle");
+    if (window.scrollY > 50) {
+        statsTitle.classList.add("opacity-0");
+    } else {
+        statsTitle.classList.remove("opacity-0");
+    }
+});

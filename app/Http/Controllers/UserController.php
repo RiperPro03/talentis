@@ -12,9 +12,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-//        return view('users.index', compact('users'));
-        return response()->json($users);
+        return view('dashboard.table', [
+            'table' => 'user',
+            'items' => User::paginate(8)
+        ]);
     }
 
     /**
