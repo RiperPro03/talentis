@@ -18,7 +18,7 @@ class CompanyController extends Controller
         $companies = Company::paginate(8);
 
         if (Route::currentRouteName() === 'admin.company.index') {
-            return view('admin.company.index', compact('companies'));
+            return view('admin.company.show', compact('companies'));
         }
 
         if (request()->has('page') && request()->page > $companies->lastPage()) {
@@ -36,7 +36,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-//        return view('company.create');
+       return view('admin.company.insert');
     }
 
     /**
@@ -61,24 +61,24 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
         if(!$company) {
-//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-//        return view('company.show', compact('company'));
+        return view('company.show', compact('company'));
         return response()->json($company);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company = null)
+    public function edit(Company $company)
     {
         if(!$company) {
             return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
 
-//        return view('company.edit', compact('company'));
+        return view('admin.company.modify', compact('company'));
     }
 
     /**

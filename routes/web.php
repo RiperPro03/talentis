@@ -74,6 +74,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('admin/user', UserController::class);
     Route::resource('Promotion', PromotionController::class);
     Route::resource('Sector', SectorController::class);
+
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
 });
 
 // Route pour les utilisateurs avec la permission manage_students

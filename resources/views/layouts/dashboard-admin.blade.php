@@ -21,12 +21,12 @@
             <h2 class="text-xl font-bold text-primary mb-6">📌 Dashboard</h2>
             <ul class="menu space-y-2">
                 <li><a href="{{ url('/dashboard/home') }}" class="font-bold">🏠 Home</a></li>
-                <li><a href="/dashboard?table=pilot" class="font-bold">👤 Pilotes</a></li>
-                <li><a href="/dashboard?table=offer" class="font-bold">📦 Offres</a></li>
-                <li><a href="/dashboard?table=company" class="font-bold">🏢 Entreprises</a></li>
-                <li><a href="/dashboard?table=student" class="font-bold">🎓 Étudiants</a></li>
-                <li><a href="/dashboard?table=apply" class="font-bold">📋 Candidatures</a></li>
-                <li><a href="/dashboard?table=wishlist" class="font-bold">💼 Wishlist</a></li>
+                <li><a href="pilot" class="font-bold">👤 Pilotes</a></li>
+                <li><a href="offer" class="font-bold">📦 Offres</a></li>
+                <li><a href="company" class="font-bold">🏢 Entreprises</a></li>
+                <li><a href="student" class="font-bold">🎓 Étudiants</a></li>
+                <li><a href="apply" class="font-bold">📋 Candidatures</a></li>
+                <li><a href="wishlist" class="font-bold">💼 Wishlist</a></li>
             </ul>
         </aside>
 

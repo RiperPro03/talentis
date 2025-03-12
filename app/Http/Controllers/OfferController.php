@@ -15,8 +15,8 @@ class OfferController extends Controller
     {
         $offers = Offer::paginate(8);
 
-        if (Route::currentRouteName() === 'admin.company.index') {
-            return view('admin.offer.index', compact('offers'));
+        if (Route::currentRouteName() === 'admin.offer.index') {
+            return view('admin.offer.show', compact('offers'));
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
@@ -31,7 +31,7 @@ class OfferController extends Controller
      */
     public function create()
     {
-//        return view('offers.create');
+        return view('admin.offer.create');
     }
 
     /**
@@ -52,26 +52,31 @@ class OfferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Offer $offer = null)
+    public function show(Offer $offer )
     {
+
+        if (Route::currentRouteName() === 'admin.offer.index') {
+            return view('admin.offer.show', compact('offers'));
+        }
+
         if(!$offer) {
             return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
         }
 
-//        return view('offer.show', compact('offer'));
+        return view('admin.offer.show', compact('offers'));
         return response()->json($offer);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Offer $offer = null)
+    public function edit(Offer $offer)
     {
         if(!$offer) {
             return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
         }
 
-//        return view('offer.edit', compact('offer'));
+        return view('offer.edit', compact('offer'));
     }
 
     /**
