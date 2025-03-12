@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class OfferController extends Controller
 {
@@ -12,9 +13,17 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::all();
-//        return view('offer.index', compact('offers'));
-        return response()->json($offers);
+        $offers = Offer::paginate(8);
+
+        if (Route::currentRouteName() === 'admin.company.index') {
+            return view('admin.offer.index', compact('offers'));
+        }
+
+        if (request()->has('page') && request()->page > $offers->lastPage()) {
+            return redirect()->route('company.index', ['page' => $offers->lastPage()]);
+        }
+
+        return view('offer.index', compact('offers'));
     }
 
     /**

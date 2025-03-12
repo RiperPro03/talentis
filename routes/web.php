@@ -55,10 +55,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('company', CompanyController::class);
     Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
 
+    Route::resource('admin/offer', OfferController::class)->names([
+        'index' => 'admin.offer.index',
+        'show' => 'admin.offer.show',
+        'create' => 'admin.offer.create',
+        'edit' => 'admin.offer.edit',
+        'store' => 'admin.offer.store',
+        'update' => 'admin.offer.update',
+        'destroy' => 'admin.offer.destroy',
+    ]);
+    Route::resource('offer', OfferController::class);
+    Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
 
     Route::resource('address', AddressController::class);
     Route::resource('industry', IndustryController::class);
-    Route::resource('offer', OfferController::class);
     Route::resource('skill', SkillController::class);
     Route::resource('admin/user', UserController::class);
     Route::resource('Promotion', PromotionController::class);

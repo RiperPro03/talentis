@@ -25,7 +25,7 @@ class Offer extends Model
         return $this->belongsToMany(User::class, 'wishlists');
     }
 
-    public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }

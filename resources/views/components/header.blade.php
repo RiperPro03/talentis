@@ -10,7 +10,7 @@
             </div>
             <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
                 <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li><a>Offres</a></li>
+                <li><a href="{{ route('offer.index') }}">Offres</a></li>
                 <li><a href="{{ route('company.index') }}">Entreprises</a></li>
             </ul>
         </div>
@@ -59,7 +59,7 @@
         <div class="navbar">
             <ul class="menu menu-horizontal px-1 ml-5">
                 <li><a href="{{ route('home') }}" class="text-2xl">Accueil</a></li>
-                <li><a href="#" class="text-2xl">Offres</a></li>
+                <li><a href="{{ route('offer.index') }}" class="text-2xl">Offres</a></li>
                 <li><a href="{{ route('company.index') }}" class="text-2xl">Entreprises</a></li>
 
 {{--                <li>--}}
@@ -87,7 +87,7 @@
 
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
                     <li><a href="#" class="text-lg">Profil</a></li>
-                    <li><a>Mes candidature</a></li>
+                    <li><a href="#" class="text-lg">Mes candidature</a></li>
                     <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
                     <li><a href="#" class="text-lg">Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
