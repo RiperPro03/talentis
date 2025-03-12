@@ -10,6 +10,7 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // Route accessible par tout le monde
 Route::get('/', function () {
@@ -58,17 +59,15 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     // TODO: Ajouter les routes pour la gestion des étudiants
 });
 
-Route::get('/login', function () {
-    return view('login.show');
-})->name('login');
-
 Route::get('/dashboard', function () {
     return view('dashboard.show');
 })->name('dashboard');
 
 Route::get('/profile', function () {
-    return view('profile.show');
+     $user = Auth::user(); // Récupère l'utilisateur connecté
+    return view('profile.show', compact('user'));
 })->name('profile');
+
 
 Route::get('/student_crud', function () {
     return view('student_crud.show');
