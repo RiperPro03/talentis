@@ -6,10 +6,10 @@
     <div class="container mx-auto py-6 px-4">
         <!-- Bouton de retour en haut à gauche -->
         <div class="flex justify-start mb-4">
-            <button onclick="window.history.back();" class="btn btn-secondary">← Retour</button>
+            <button onclick="window.history.back();" class="btn btn-secondary">← Retour aux offres</button>
         </div>
 
-        <h1 class="text-2xl md:text-4xl font-bold mb-6 text-center">Wish-list d'Offres</h1>
+        <h1 class="text-2xl md:text-4xl font-bold mb-6 text-center text-lg">Wish-list d'Offres</h1>
 
         @if(empty($wishlist))
             <p class="text-center text-gray-500">Aucune offre ajoutée à votre wish-list.</p>
@@ -32,13 +32,13 @@
 
             <!-- Version Desktop: Affichage en tableau -->
             <div class="hidden md:block overflow-x-auto">
-                <table class="table w-full border-collapse border border-gray-200 text-sm md:text-base">
+                <table class="table w-full border-collapse border bg-white text-sm md:text-base">
                     <thead>
-                        <tr class="bg-gray-100 text-left">
-                            <th class="border px-4 py-2">Poste</th>
-                            <th class="border px-4 py-2">Entreprise</th>
-                            <th class="border px-4 py-2">Localisation</th>
-                            <th class="border px-4 py-2 text-center">Actions</th>
+                        <tr class="bg-gray-50">
+                            <th class="border px-4 py-2 text-center text-lg">Poste</th>
+                            <th class="border px-4 py-2 text-center text-lg">Entreprise</th>
+                            <th class="border px-4 py-2 text-center text-lg">Localisation</th>
+                            <th class="border px-4 py-2 text-center text-lg">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
