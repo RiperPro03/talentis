@@ -3,8 +3,8 @@
 @section('title', 'Tableau de bord - Talentis')
 
 @section('content')
-    <div class="container mx-auto px-4">
-        <div class="card bg-white shadow-xl">
+    <div class="w-full">
+        <div class="card bg-white shadow-xl w-full">
             <div class="card-body">
                 <div class="flex items-center justify-between">
                     <h3 class="card-title text-2xl font-bold text-gray-800">
@@ -38,20 +38,20 @@
                                     @foreach($item->getAttributes() as $key => $value)
                                         <td>
                                             @if($key === 'description' || $key === 'logo_path')
-                                                {{ Str::limit($value, 10) }}
+                                                {{ \Illuminate\Support\Str::limit($value, 10) }}
                                             @else
                                                 {{ $value }}
                                             @endif
                                         </td>
                                     @endforeach
                                     <td class="flex justify-center space-x-2">
-                                        <a href="{{ route("admin.$table.edit", $item->id) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route("admin.$table.edit", $item->id) }}" class="btn btn-warning btn-sm whitespace-nowrap">
                                             ✏️ Modifier
                                         </a>
                                         <form action="{{ route("admin.$table.destroy", $item->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-error btn-sm"
+                                            <button type="submit" class="btn btn-outline btn-error btn-sm whitespace-nowrap"
                                                     onclick="return confirm('Voulez-vous vraiment supprimer cette entrée ?')">
                                                 ❌ Supprimer
                                             </button>
@@ -60,7 +60,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                            <!-- Optionnel: Foot -->
+                            <!-- Foot -->
                             <tfoot>
                             <tr>
                                 @foreach(array_keys($items->first()->getAttributes()) as $column)
@@ -72,8 +72,8 @@
                         </table>
                     </div>
                     <!-- Pagination -->
-                    <div class="mt-4 flex justify-center">
-                        {{ $items->links('pagination::tailwind') }}
+                    <div class="mt-4">
+                        {{ $items->links() }}
                     </div>
                 @endif
             </div>
