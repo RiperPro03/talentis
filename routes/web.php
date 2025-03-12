@@ -1,55 +1,84 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\IndustryController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\SectorController;
+use App\Http\Controllers\SkillController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 
+// Route accessible par tout le monde
 Route::get('/', function () {
     return view('welcome');
+
+})->name('home');
+
+// Route pour les utilisateurs non authentifiés
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-Route::get('/login', function () {
-    return view('login.show');
-})->name('login');
+// Route pour les utilisateurs authentifiés
+Route::middleware(['auth'])->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/test-admin', function () {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return response()->json([
+                'message' => 'Informations utilisateur',
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->getRoleNames(),
+                    'permissions' => $user->getAllPermissions()->pluck('name')
+                ]
+            ], 200);
+        }
+        return response()->json(['message' => 'Accès refusé'], 403);
+    });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.show');
-})->name('dashboard');
+    Route::resource('admin/company', CompanyController::class)->names([
+        'index' => 'admin.company.index',
+        'show' => 'admin.company.show',
+        'create' => 'admin.company.create',
+        'edit' => 'admin.company.edit',
+        'store' => 'admin.company.store',
+        'update' => 'admin.company.update',
+        'destroy' => 'admin.company.destroy',
+    ]);
+    Route::resource('company', CompanyController::class);
+    Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
 
-Route::get('/profile', function () {
-    return view('profile.show');
-})->name('profile');
+    Route::resource('admin/offer', OfferController::class)->names([
+        'index' => 'admin.offer.index',
+        'show' => 'admin.offer.show',
+        'create' => 'admin.offer.create',
+        'edit' => 'admin.offer.edit',
+        'store' => 'admin.offer.store',
+        'update' => 'admin.offer.update',
+        'destroy' => 'admin.offer.destroy',
+    ]);
+    Route::resource('offer', OfferController::class);
+    Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
 
-Route::get('/student_crud', function () {
-    return view('student_crud.show');
-})->name('student_crud');
-
-Route::get('/dashboard', [DashboardController::class, 'index']);
-
-// Page d'insertion pour les produits
-Route::get('dashboard/home', function() {
-    return view('dashboard.home');
+    Route::resource('address', AddressController::class);
+    Route::resource('industry', IndustryController::class);
+    Route::resource('skill', SkillController::class);
+    Route::resource('admin/user', UserController::class);
+    Route::resource('Promotion', PromotionController::class);
+    Route::resource('Sector', SectorController::class);
 });
 
-Route::get('/offer/insert', function() {
-    return view('offer.insert');
+// Route pour les utilisateurs avec la permission manage_students
+Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    // TODO: Ajouter les routes pour la gestion des étudiants
 });
 
-Route::get('/pilot/insert', function() {
-    return view('pilot.insert');
-});
 
-Route::get('/company/insert', function() {
-    return view('company.insert');
-});
-
-Route::get('/student/insert', function() {
-    return view('student.insert');
-});
-
-Route::get('/apply/insert', function() {
-    return view('apply.insert');
-});
-
-Route::get('/wishlist/insert', function() {
-    return view('wishlist.insert');
-});
