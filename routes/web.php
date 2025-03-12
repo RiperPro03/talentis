@@ -10,6 +10,7 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 // Route accessible par tout le monde
 Route::get('/', function () {
@@ -79,4 +80,5 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     // TODO: Ajouter les routes pour la gestion des étudiants
 });
+
 
