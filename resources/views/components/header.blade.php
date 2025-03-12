@@ -1,4 +1,4 @@
-<div class="navbar bg-white shadow-lg">
+<header class="navbar bg-white shadow-lg">
     <!-- Partie Mobile -->
     <div class="flex w-full items-center justify-between lg:hidden">
         <!-- Menu Burger (à gauche) -->
@@ -33,6 +33,7 @@
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
                     <li><a>Profil</a></li>
+                    <li><a>Mes candidature</a></li>
                     <li><a>Tableau de bord</a></li> {{-- Dashboard admin --}}
                     <li><a>Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500">Déconnexion</a></li>
@@ -50,7 +51,7 @@
         <!-- Logo (PC) -->
         <a class="btn btn-ghost text-3xl animate-gradient-text font-bold bg-clip-text text-transparent
                         bg-gradient-to-r from-primary via-secondary to-accent" href="{{ route('home') }}">
-            <img src="{{ asset('img/logo/logo.png') }}" class="h-8 w-auto mr-2 rounded-full" alt="Logo">
+            <img src="{{ asset('img/logo/logo.png') }}" class="h-8 w-auto mr-2 rounded" alt="Logo">
             Talentis
         </a>
 
@@ -86,6 +87,7 @@
 
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
                     <li><a href="#" class="text-lg">Profil</a></li>
+                    <li><a>Mes candidature</a></li>
                     <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
                     <li><a href="#" class="text-lg">Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
@@ -97,4 +99,4 @@
             <a href="{{ route('login') }}" class="btn btn-primary text-base-100">Connexion</a>
         @endguest
     </div>
-</div>
+</header>

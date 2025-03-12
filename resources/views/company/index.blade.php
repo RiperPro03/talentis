@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Employeurs / Entreprises')
+@section('title', 'Entreprises - Talentis')
 
 @section('content')
     <div class="mx-auto py-8 container md:max-w-full">

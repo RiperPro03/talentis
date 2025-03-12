@@ -25,8 +25,8 @@ class CompanyController extends Controller
             return redirect()->route('company.index', ['page' => $companies->lastPage()]);
         }
 
-        $industries = Industry::all();
-        $locations = Address::all();
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
 
         return view('company.index', compact('companies', 'industries', 'locations'));
     }
@@ -139,8 +139,8 @@ class CompanyController extends Controller
         $companies = $query->paginate(8);
 
         // Récupérer les valeurs pour le formulaire
-        $industries = Industry::all();
-        $locations = Address::all();
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
 
         return view('company.index', compact('companies', 'industries', 'locations'));
     }
