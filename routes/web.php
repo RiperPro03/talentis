@@ -60,5 +60,23 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
 
 
 Route::get('wish-list', function () {
-    return view('wish-list.index');
+    $wishlist = [
+        [
+            'title' => 'Développeur Web',
+            'company' => 'Thales',
+            'location' => 'Paris',
+        ],
+        [
+            'title' => 'Développeur python',
+            'company' => 'Capgemini',
+            'location' => 'Toulouse',
+        ],
+        [
+            'title' => 'Chef de Projet IT',
+            'company' => 'Innovatech',
+            'location' => 'Marseille',
+        ],
+    ];
+
+    return view('wish-list.index', compact('wishlist'));
 });
