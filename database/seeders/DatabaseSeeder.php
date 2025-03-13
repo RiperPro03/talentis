@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
 
             EvaluateSeeder::class,
             LocateSeeder::class,
+            ContainSeeder::class,
+            WishlistSeeder::class,
+            WorkSeeder::class,
         ]);
 
         // Création d'un utilisateur admin

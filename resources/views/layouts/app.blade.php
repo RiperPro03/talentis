@@ -25,7 +25,7 @@
 <x-header />
 
 <!-- Contenu Principal -->
-<main class="flex-1 p-6 text-neutral text-center">
+<main class="flex-1 text-neutral text-center">
     @yield('content')
 </main>
 
