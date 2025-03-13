@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="text-center space-y-4">
-    <h1 class="animate-gradient-text text-6xl md:text-9xl font-bold bg-clip-text text-transparent
+    <h1 class="mt-4 animate-gradient-text text-6xl md:text-9xl font-bold bg-clip-text text-transparent
                         bg-gradient-to-r from-primary via-secondary to-accent
                         bg-[length:200%_auto] md:bg-[length:250%_auto]
                         transition-all duration-1000">

@@ -19,6 +19,10 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ],[
+            'email.required' => 'L\'adresse email est obligatoire.',
+            'email.email' => 'Veuillez entrer une adresse email valide.',
+            'password.required' => 'Le mot de passe est obligatoire.',
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -26,7 +30,7 @@ class AuthController extends Controller
             return redirect()->intended(route('home')); // Redirection après connexion
         }
 
-        return back()->withErrors(['User' => 'Invalid credentials. Please try again.']);
+        return back()->withErrors(['User' => 'Informations d\'identification non valides. Veuillez réessayer.']);
     }
 
     // Déconnexion

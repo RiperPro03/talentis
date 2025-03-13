@@ -15,6 +15,7 @@ class SectorSeeder extends Seeder
             'Design',
             'Gestion de projet',
             'Analyse de données',
+            'Développement web',
         ];
 
         foreach ($sectors as $sector) {
