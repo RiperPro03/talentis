@@ -1,4 +1,5 @@
 import './bootstrap';
+import './radio_button';
 
 const carousel = document.getElementById('carousel');
 const prevButton = document.getElementById('prev');
@@ -31,3 +32,23 @@ window.addEventListener('resize', updateButtons);
 
 // Mettre à jour les boutons lors du scroll manuel
 carousel.addEventListener('scroll', updateButtons);
+
+function toggleContent(buttonId) {
+    // Réinitialiser tous les boutons et contenus
+    for (let i = 1; i <= 2; i++) {
+        document.getElementById(`button${i}`).classList.remove('bg-gray-500');
+        document.getElementById(`button${i}`).classList.add('bg-blue-500');
+        document.getElementById(`button${i}`).classList.remove('hover:bg-blue-600');
+        document.getElementById(`button${i}`).classList.add('hover:bg-blue-500');
+        document.getElementById(`content${i}`).classList.add('hidden');
+    }
+
+    // Mettre à jour le bouton cliqué
+    document.getElementById(`button${buttonId}`).classList.add('bg-gray-500');
+    document.getElementById(`button${buttonId}`).classList.remove('bg-blue-500');
+    document.getElementById(`button${buttonId}`).classList.remove('hover:bg-blue-500');
+    document.getElementById(`button${buttonId}`).classList.add('hover:bg-gray-400');
+
+    // Afficher le contenu associé
+    document.getElementById(`content${buttonId}`).classList.remove('hidden');
+}

@@ -61,12 +61,12 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
         if(!$company) {
-//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
-            return response()->json(['error' => 'Entreprise non trouvée']);
+            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+
         }
 
-//        return view('company.show', compact('company'));
-        return response()->json($company);
+        return view('company.show', compact('company'));
+
     }
 
     /**
