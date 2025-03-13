@@ -43,27 +43,27 @@ Route::middleware(['auth'])->group(function () {
         return response()->json(['message' => 'Accès refusé'], 403);
     });
 
-    Route::resource('admin/company', CompanyController::class)->names([
-        'index' => 'admin.company.index',
-        'show' => 'admin.company.show',
-        'create' => 'admin.company.create',
-        'edit' => 'admin.company.edit',
-        'store' => 'admin.company.store',
-        'update' => 'admin.company.update',
-        'destroy' => 'admin.company.destroy',
-    ]);
+//    Route::resource('admin/company', CompanyController::class)->names([
+//        'index' => 'admin.company.index',
+//        'show' => 'admin.company.show',
+//        'create' => 'admin.company.create',
+//        'edit' => 'admin.company.edit',
+//        'store' => 'admin.company.store',
+//        'update' => 'admin.company.update',
+//        'destroy' => 'admin.company.destroy',
+//    ]);
     Route::resource('company', CompanyController::class);
     Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
 
-    Route::resource('admin/offer', OfferController::class)->names([
-        'index' => 'admin.offer.index',
-        'show' => 'admin.offer.show',
-        'create' => 'admin.offer.create',
-        'edit' => 'admin.offer.edit',
-        'store' => 'admin.offer.store',
-        'update' => 'admin.offer.update',
-        'destroy' => 'admin.offer.destroy',
-    ]);
+//    Route::resource('admin/offer', OfferController::class)->names([
+//        'index' => 'admin.offer.index',
+//        'show' => 'admin.offer.show',
+//        'create' => 'admin.offer.create',
+//        'edit' => 'admin.offer.edit',
+//        'store' => 'admin.offer.store',
+//        'update' => 'admin.offer.update',
+//        'destroy' => 'admin.offer.destroy',
+//    ]);
     Route::resource('offer', OfferController::class);
     Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
 
