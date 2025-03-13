@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Industry;
 use App\Models\Offer;
+use App\Models\Sector;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +27,12 @@ class OfferController extends Controller
             return redirect()->route('company.index', ['page' => $offers->lastPage()]);
         }
 
-        return view('offer.index', compact('offers'));
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
+        $skills = Skill::all('skill_name');
+        $sectors = Sector::all('name');
+
+        return view('offer.index', compact('offers', 'industries', 'locations', 'skills', 'sectors'));
     }
 
     /**

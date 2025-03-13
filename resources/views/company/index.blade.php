@@ -29,32 +29,10 @@
                             </div>
 
                             {{-- Filtres par industrie --}}
-                            <div class="form-control mb-4">
-                                <label class="label">
-                                    <span class="label-text">Secteur d'activité</span>
-                                </label>
-                                @foreach($industries as $industry)
-                                    <label class="flex items-center space-x-2">
-                                        <input type="checkbox" name="industry[]" value="{{ $industry->name }}" class="checkbox checkbox-primary"
-                                            {{ in_array($industry->name, request('industry', [])) ? 'checked' : '' }} />
-                                        <span>{{ $industry->name }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
+                            <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
 
                             {{-- Filtres par localisation --}}
-                            <div class="form-control mb-4">
-                                <label class="label">
-                                    <span class="label-text">Localisation</span>
-                                </label>
-                                @foreach($locations as $location)
-                                    <label class="flex items-center space-x-2">
-                                        <input type="checkbox" name="location[]" value="{{ $location->city }}" class="checkbox checkbox-secondary"
-                                            {{ in_array($location->city, request('location', [])) ? 'checked' : '' }} />
-                                        <span>{{ $location->city }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
+                            <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
 
                             {{-- Boutons de filtre et reset --}}
                             <div class="form-control flex flex-row gap-2">
@@ -67,6 +45,11 @@
             </div>
             {{-- Section principale d'affichage des entreprises --}}
             <div class="lg:w-full bg-base-100 card card-body overflow-hidden lg:mr-10">
+                @if ($companies->isEmpty())
+                    <div class="text-center text-gray-500 text-lg py-10">
+                        <p>Aucune entreprise disponible.</p>
+                    </div>
+                @else
                 {{-- Liste des entreprises --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach ($companies as $company)
@@ -112,9 +95,12 @@
                                     @php
                                         $rating = round($company->averageRating()); // Note entre 1 et 5
                                     @endphp
-                                    <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                        {{ $rating }} ⭐
-                                    </div>
+                                    @if(!$rating == 0)
+                                        <div class="badge badge-xl badge-secondary whitespace-nowrap">
+                                            {{ $rating }} ⭐
+                                        </div>
+                                    @endif
+
 
                                     {{-- Nombre d'offres --}}
                                     <div class="badge badge-xl badge-success whitespace-nowrap">
@@ -140,6 +126,7 @@
 
 {{--                </div>--}}
                 {{ $companies->links() }}
+                @endif
             </div>
         </div>
     </div>

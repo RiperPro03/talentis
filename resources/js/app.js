@@ -1,5 +1,16 @@
 import './bootstrap';
 
+$(document).ready(function() {
+    $('.js-select2').select2({
+        closeOnSelect: false,
+        placeholder: "Sélectionnez une ou plusieurs options",
+        allowClear: true,
+        width: '100%'
+    });
+});
+
+
+
 const carousel = document.getElementById('carousel');
 const prevButton = document.getElementById('prev');
 const nextButton = document.getElementById('next');

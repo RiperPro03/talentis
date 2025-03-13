@@ -35,7 +35,7 @@
                     <li><a>Profil</a></li>
                     <li><a>Mes candidature</a></li>
                     <li><a>Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a>Favori</a></li>
+                    <li><a href="{{ route('wishlist.index') }}">Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500">Déconnexion</a></li>
                 </ul>
             </div>
@@ -85,11 +85,11 @@
                     </div>
                 </div>
 
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
                     <li><a href="#" class="text-lg">Profil</a></li>
                     <li><a href="#" class="text-lg">Mes candidature</a></li>
                     <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a href="#" class="text-lg">Favori</a></li>
+                    <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>
             </div>
