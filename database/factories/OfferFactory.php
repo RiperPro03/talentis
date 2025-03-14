@@ -3,6 +3,7 @@
 namespace Database\Factories;
 use App\Models\Company;
 
+use App\Models\Sector;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,8 +28,7 @@ class OfferFactory extends Factory
             'start_offer' => $this->faker->date,
             'end_offer' => $this->faker->date,
             'company_id'=>Company::inRandomOrder()->first()?->id ?? Company::factory()->create()->id,
-            'sector_id' => \App\Models\Sector::factory(),
-            'company_id' => \App\Models\Company::factory(),
+            'sector_id' => Sector::factory(),
         ];
     }
 }
