@@ -24,6 +24,7 @@ class Company extends Model
     {
         return $this->hasMany(Offer::class, 'company_id', 'id');
     }
+  
 
     public function industries(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -44,4 +45,6 @@ class Company extends Model
     {
         return $this->evaluations()->avg('rating') ?? 0;
     }
+
+
 }
