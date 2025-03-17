@@ -18,7 +18,7 @@
                      alt="Header Image"
                      class="object-cover w-full h-full rounded-lg">
             </div>
-            <h1 class="text-4xl font-bold mb-10">Amazon</h1>
+            <h1 class="text-4xl font-bold mb-10">{{ $company->name }}</h1>
 
 
 
@@ -29,7 +29,7 @@
                 <div class="flex flex-col md:flex-row gap-4 items-start md:items-stretch h-full">
 
                     <!-- Ajout de flex ici -->
-                    <div class="w-full md:w-2/3 bg-blue-200 p-4 rounded h-full flex-1">
+                    <div class="w-full md:w-2/3 p-4 rounded h-full flex-1">
 
                         <p class="font-bold text-lg text-al">Description</p>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rhoncus diam et consequat vestibulum. Quisque vel magna vitae turpis viverra pulvinar. Ut finibus neque eu erat vehicula, eu posuere mauris euismod. Sed ornare luctus maximus. Donec vitae neque ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean dictum odio in pretium semper. Curabitur dignissim odio non tempor sollicitudin. Etiam tristique elit in quam molestie vulputate.
@@ -85,133 +85,92 @@
                             </div>
 
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
-                        </form></div>
-                    <div class="w-1/3 bg-green-200 p-4 rounded hidden md:block">Partie droite de la présentation
+                        </form>
+                    <br>
+                    <p class="font-bold text-lg text-al">Cette entreprise est actuellement notée:</p>
+                        @php $rating = round($company->averageRating()); // Note entre 1 et 5@endphp
 
-                        <div class="card card-bordered shadow-md bg-base-100">
-                            @if($company->logo_path)
-                                <figure class="bg-gray-100 flex items-center justify-center h-32">
-                                    <img
-                                        src="{{ asset($company->logo_path) }}"
-                                        alt="{{ 'logo_' . $company->name }}"
-                                        class="max-h-full max-w-full object-contain"
-                                    />
-                                </figure>
-                            @endif
 
-                            {{-- Corps de la carte --}}
-                            <div class="card-body">
-                                <h2 class="card-title">
-                                    {{ $company->name }}
-                                </h2>
-                                <p class="text-sm text-gray-600 text-left">
-                                    {{ Str::limit($company->description, 80) }}
-                                </p>
 
-                                {{-- Badges --}}
-                                <div class="flex flex-wrap items-center gap-2 mt-3">
-                                    {{-- Location --}}
-                                    @foreach($company->addresses as $location)
-                                        <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                            <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                                </path>
-                                            </svg>
-                                            {{ $location->city }}
+                        <div class="flex justify-center items-center mt-2">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <svg class="w-6 h-6 {{ $i <= $rating ? 'text-yellow-400' : 'text-gray-300' }}"
+                                     fill="currentColor"
+                                     viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 3.012a1 1 0 011.902 0l1.342 3.767a1 1 0 00.95.69h3.993a1 1 0 01.592 1.81l-3.235 2.36a1 1 0 00-.364 1.118l1.236 3.784a1 1 0 01-1.54 1.118l-3.23-2.36a1 1 0 00-1.176 0l-3.23 2.36a1 1 0 01-1.54-1.118l1.236-3.784a1 1 0 00-.364-1.118l-3.235-2.36a1 1 0 01.592-1.81h3.993a1 1 0 00.95-.69l1.342-3.767z"></path>
+                                </svg>
+                            @endfor
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="w-1/3 p-4  hidden md:block">
+                        <div class=" p-4 ">
+                            <h2 class="text-xl font-bold mb-4">Dernières offres</h2>
+                            @if($company->offers->isEmpty())
+                                <p>Aucune offre disponible.</p>
+                            @else
+                                <ul class="space-y-4">
+                                    @foreach($company->offers as $offer)
+
+
+
+                                        <div class="card card-bordered shadow-md bg-base-100">
+
+
+                                            {{-- Corps de la carte --}}
+                                            <div class="card-body">
+                                                <h2 class="card-title">
+                                                    {{ $offer->title }}
+                                                </h2>
+                                                <p class="text-sm text-gray-600 text-left">
+                                                    {{ Str::limit($offer->description, 80) }}
+                                                </p>
+                                                <p class="text-gray-500 text-sm">
+                                                    Publiée le {{ $offer->created_at->format('d/m/Y') }}
+                                                </p>
+
+                                                {{-- Badges --}}
+                                                <div class="flex flex-wrap items-center gap-2 mt-3">
+                                                    {{-- Location --}}
+
+                                                        <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
+
+                                                            {{ $offer->type }}
+                                                        </div>
+
+
+                                                    {{-- Note --}}
+
+
+
+                                                    {{-- Nombre d'offres --}}
+                                                    <div class="badge badge-xl badge-success whitespace-nowrap">
+                                                        {{ $offer->base_salary }}€
+                                                    </div>
+                                                </div>
+
+
+                                                {{-- Bouton d'action --}}
+                                                <div class="card-actions justify-end mt-4">
+                                                    <a href="{{ route('company.show', $company) }}"
+                                                       class="btn btn-sm btn-primary">
+                                                        Voir
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     @endforeach
-
-                                    {{-- Note --}}
-                                    @php
-                                        $rating = round($company->averageRating()); // Note entre 1 et 5
-                                    @endphp
-                                    <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                        {{ $rating }} ⭐
-                                    </div>
-
-                                    {{-- Nombre d'offres --}}
-                                    <div class="badge badge-xl badge-success whitespace-nowrap">
-                                        {{ $company->offers->count() }} offre(s)
-                                    </div>
-                                </div>
-
-
-                                {{-- Bouton d'action --}}
-                                <div class="card-actions justify-end mt-4">
-                                    <a href="{{ route('company.show', $company) }}"
-                                       class="btn btn-sm btn-primary">
-                                        Voir
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card card-bordered shadow-md bg-base-100">
-                            @if($company->logo_path)
-                                <figure class="bg-gray-100 flex items-center justify-center h-32">
-                                    <img
-                                        src="{{ asset($company->logo_path) }}"
-                                        alt="{{ 'logo_' . $company->name }}"
-                                        class="max-h-full max-w-full object-contain"
-                                    />
-                                </figure>
+                                </ul>
                             @endif
-
-                            {{-- Corps de la carte --}}
-                            <div class="card-body">
-                                <h2 class="card-title">
-                                    {{ $company->name }}
-                                </h2>
-                                <p class="text-sm text-gray-600 text-left">
-                                    {{ Str::limit($company->description, 80) }}
-                                </p>
-
-                                {{-- Badges --}}
-                                <div class="flex flex-wrap items-center gap-2 mt-3">
-                                    {{-- Location --}}
-                                    @foreach($company->addresses as $location)
-                                        <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                            <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                                </path>
-                                            </svg>
-                                            {{ $location->city }}
-                                        </div>
-                                    @endforeach
-
-                                    {{-- Note --}}
-                                    @php
-                                        $rating = round($company->averageRating()); // Note entre 1 et 5
-                                    @endphp
-                                    <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                        {{ $rating }} ⭐
-                                    </div>
-
-                                    {{-- Nombre d'offres --}}
-                                    <div class="badge badge-xl badge-success whitespace-nowrap">
-                                        {{ $company->offers->count() }} offre(s)
-                                    </div>
-                                </div>
-
-
-                                {{-- Bouton d'action --}}
-                                <div class="card-actions justify-end mt-4">
-                                    <a href="{{ route('company.show', $company) }}"
-                                       class="btn btn-sm btn-primary">
-                                        Voir
-                                    </a>
-                                </div>
-                            </div>
                         </div>
+
+
+
 
                     </div>
 

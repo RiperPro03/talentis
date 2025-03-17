@@ -15,7 +15,7 @@ class Sector extends Model
     protected $fillable = [
         'name',
     ];
-
+    protected $table = 'sectors';
     public function offers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Offer::class, 'sector_id', 'id');
