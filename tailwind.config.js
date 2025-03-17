@@ -20,10 +20,10 @@ export default {
             },
             keyframes: {
                 gradient: {
-                    '0%, 100%': { 
+                    '0%, 100%': {
                         'background-position': '0% 50%',
                     },
-                    '50%': { 
+                    '50%': {
                         'background-position': '100% 50%',
                     },
                 },
@@ -45,6 +45,7 @@ export default {
         themes: [{
             mytheme: {
                 "primary": "#1e90ff",
+                "primary-content": "#ffffff",
                 "secondary": "#1e4e5f",
                 "accent": "#f3a536",
                 "neutral": "#7b7f82",
@@ -52,7 +53,8 @@ export default {
                 "info": "#26547C",
                 "success": "#06D6A0",
                 "warning": "#FFD166",
-                "error": "#E43F6F"
+                "error": "#E43F6F",
+                "error-content": "#ffffff",
             },
         }],
     }
