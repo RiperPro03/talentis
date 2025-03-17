@@ -24,10 +24,7 @@ class Company extends Model
     {
         return $this->hasMany(Offer::class, 'company_id', 'id');
     }
-    public function sector()
-    {
-        return $this->belongsTo(Sector::class, 'sector_id');
-    }
+  
 
     public function industries(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

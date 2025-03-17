@@ -142,6 +142,10 @@
 
                                                             {{ $offer->type }}
                                                         </div>
+                                                    <div class="badge badge-xl badge-primary whitespace-nowrap flex items-center">
+
+                                                        {{ $offer->sector->name }}
+                                                    </div>
 
 
                                                     {{-- Note --}}
@@ -157,7 +161,7 @@
 
                                                 {{-- Bouton d'action --}}
                                                 <div class="card-actions justify-end mt-4">
-                                                    <a href="{{ route('company.show', $company) }}"
+                                                    <a href="{{ route('offers.show', $offer) }}"
                                                        class="btn btn-sm btn-primary">
                                                         Voir
                                                     </a>
@@ -181,11 +185,12 @@
             </div>
 
             <!-- Tab 2 -->
-            <input type="radio" name="my_tabs_1" id="tab2" role="tab" class="tab whitespace-nowrap" aria-label="Nos offres"  />
-            <div role="tabpanel" class="tab-content hidden">
-                <div class="bg-gray-300 p-4 rounded">Contenu de Nos Offres</div>
-            </div>
+            <a href="{{ route('offers.search') }}" class="tab whitespace-nowrap"  >Nos offres </a>
+            {{--        TODO: Add a link to the offers page--}}
+
+
         </div>
+
 
 
 @endsection
