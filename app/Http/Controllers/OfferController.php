@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Industry;
 use App\Models\Offer;
+use App\Models\Sector;
+use App\Models\Skill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class OfferController extends Controller
 {
@@ -12,9 +17,22 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::all();
-//        return view('offer.index', compact('offers'));
-        return response()->json($offers);
+        $offers = Offer::paginate(8);
+
+        if (Route::currentRouteName() === 'admin.company.index') {
+            return view('admin.offer.index', compact('offers'));
+        }
+
+        if (request()->has('page') && request()->page > $offers->lastPage()) {
+            return redirect()->route('company.index', ['page' => $offers->lastPage()]);
+        }
+
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
+        $skills = Skill::all('skill_name');
+        $sectors = Sector::all('name');
+
+        return view('offer.index', compact('offers', 'industries', 'locations', 'skills', 'sectors'));
     }
 
     /**
