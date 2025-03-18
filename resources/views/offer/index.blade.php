@@ -119,7 +119,7 @@
 
                                     {{-- Bouton d'action --}}
                                     <div class="card-actions justify-end mt-4">
-                                        <a href="{{ route('offer.show', $offer) }}"
+                                        <a href="{{ route('company.show', $offer) }}"
                                            class="btn btn-sm btn-primary">
                                             Voir
                                         </a>

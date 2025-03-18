@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
 //    ]);
     Route::resource('company', CompanyController::class);
     Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
+    Route::get('/offers/{offer}', [OfferController::class, 'show'])->name('offers.show');
+
 
 //    Route::resource('admin/offer', OfferController::class)->names([
 //        'index' => 'admin.offer.index',
@@ -66,5 +68,5 @@ Route::middleware(['auth'])->group(function () {
 
 // Route pour les utilisateurs avec la permission manage_students
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
-    // TODO: Ajouter les routes pour la gestion des étudiants
+//    Route::resource('pilot/student', StudentController::class);
 });
