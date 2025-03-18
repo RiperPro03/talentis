@@ -23,17 +23,16 @@
                     <div class="card-body">
                         <h2 class="card-title">Recherche et filtres</h2>
                         <form action="{{ route('offer.search') }}" method="GET">
-                            {{-- Champ de recherche par titre de l'offre --}}
+                            {{-- Champ de recherche par nom d'entreprise --}}
                             <div class="form-control mb-4">
-                                <input type="text" name="offre-title" placeholder="Titre de l'offre" class="input input-bordered" value="{{ request('offre-title') }}" />
-
-                                <x-multi-select-filter name="company" label="Entreprise" :items="$companies" key="name" />
-
-                                <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
-                                <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
-                                <x-multi-select-filter name="skill" label="Compétences" :items="$skills" key="skill_name" />
-                                <x-multi-select-filter name="sector" label="Secteur" :items="$sectors" key="name" />
+                                <input type="text" name="company-name" placeholder="Nom d'entreprise" class="input input-bordered" value="{{ request('company-name') }}" />
                             </div>
+
+                            <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
+                            <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
+                            <x-multi-select-filter name="skill" label="Compétences" :items="$skills" key="skill_name" />
+                            <x-multi-select-filter name="sector" label="Secteur" :items="$sectors" key="name" />
+
 
                             <div class="form-control flex flex-row gap-2">
                                 <button type="submit" class="btn btn-secondary w-full">Filtrer</button>
@@ -120,7 +119,7 @@
 
                                     {{-- Bouton d'action --}}
                                     <div class="card-actions justify-end mt-4">
-                                        <a href="{{ route('offers.show', $offer) }}"
+                                        <a href="{{ route('company.show', $offer) }}"
                                            class="btn btn-sm btn-primary">
                                             Voir
                                         </a>

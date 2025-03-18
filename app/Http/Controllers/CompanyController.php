@@ -13,8 +13,6 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-
     public function index()
     {
         $companies = Company::paginate(8);
@@ -63,12 +61,12 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
         if(!$company) {
-            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
-
+//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-        return view('company.show', compact('company'));
-
+//        return view('company.show', compact('company'));
+        return response()->json($company);
     }
 
     /**
@@ -112,23 +110,32 @@ class CompanyController extends Controller
 
     public function search(Request $request)
     {
+        $q_name = $request->query('company-name');
+        $q_industries = $request->query('industry', []);
+        $q_locations = $request->query('location', []);
+
         $query = Company::query();
 
         // Filtrer par nom d'entreprise
-        $query->when($request->query('company-name'), function ($q, $name) {
-            $q->where('name', 'like', '%' . $name . '%');
-        });
+        if (!empty($q_name)) {
+            $query->where('name', 'like', '%' . $q_name . '%');
+        }
 
         // Filtrer par plusieurs secteurs d'activité
-        $query->when($request->query('industry', []), function ($q, $industries) {
-            $q->whereHas('industries', fn($q) => $q->whereIn('name', $industries));
-        });
+        if (!empty($q_industries)) {
+            $query->whereHas('industries', function ($query) use ($q_industries) {
+                $query->whereIn('name', $q_industries);
+            });
+        }
 
         // Filtrer par plusieurs localisations
-        $query->when($request->query('location', []), function ($q, $locations) {
-            $q->whereHas('addresses', fn($q) => $q->whereIn('city', $locations));
-        });
+        if (!empty($q_locations)) {
+            $query->whereHas('addresses', function ($query) use ($q_locations) {
+                $query->whereIn('city', $q_locations);
+            });
+        }
 
+        // Récupérer les entreprises avec pagination
         $companies = $query->paginate(8);
 
         // Récupérer les valeurs pour le formulaire
@@ -137,5 +144,4 @@ class CompanyController extends Controller
 
         return view('company.index', compact('companies', 'industries', 'locations'));
     }
-
 }
