@@ -24,7 +24,7 @@ class OfferController extends Controller
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
-            return redirect()->route('company.index', ['page' => $offers->lastPage()]);
+            return redirect()->route('offers.index', ['page' => $offers->lastPage()]);
         }
 
         $industries = Industry::all('name');
@@ -61,14 +61,14 @@ class OfferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Offer $offer = null)
+    public function show(Offer $offer)
     {
         if(!$offer) {
             return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
         }
 
-//        return view('offer.show', compact('offer'));
-        return response()->json($offer);
+        return view('offer.show', compact('offer'));
+        // return response()->json($offer);
     }
 
     /**

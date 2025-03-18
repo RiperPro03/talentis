@@ -65,7 +65,7 @@ class CompanyController extends Controller
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-//        return view('company.show', compact('company'));
+        return view('company.show', compact('company'));
         return response()->json($company);
     }
 
