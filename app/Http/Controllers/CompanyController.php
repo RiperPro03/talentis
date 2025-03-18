@@ -112,32 +112,23 @@ class CompanyController extends Controller
 
     public function search(Request $request)
     {
-        $q_name = $request->query('company-name');
-        $q_industries = $request->query('industry', []);
-        $q_locations = $request->query('location', []);
-
         $query = Company::query();
 
         // Filtrer par nom d'entreprise
-        if (!empty($q_name)) {
-            $query->where('name', 'like', '%' . $q_name . '%');
-        }
+        $query->when($request->query('company-name'), function ($q, $name) {
+            $q->where('name', 'like', '%' . $name . '%');
+        });
 
         // Filtrer par plusieurs secteurs d'activité
-        if (!empty($q_industries)) {
-            $query->whereHas('industries', function ($query) use ($q_industries) {
-                $query->whereIn('name', $q_industries);
-            });
-        }
+        $query->when($request->query('industry', []), function ($q, $industries) {
+            $q->whereHas('industries', fn($q) => $q->whereIn('name', $industries));
+        });
 
         // Filtrer par plusieurs localisations
-        if (!empty($q_locations)) {
-            $query->whereHas('addresses', function ($query) use ($q_locations) {
-                $query->whereIn('city', $q_locations);
-            });
-        }
+        $query->when($request->query('location', []), function ($q, $locations) {
+            $q->whereHas('addresses', fn($q) => $q->whereIn('city', $locations));
+        });
 
-        // Récupérer les entreprises avec pagination
         $companies = $query->paginate(8);
 
         // Récupérer les valeurs pour le formulaire
@@ -146,17 +137,5 @@ class CompanyController extends Controller
 
         return view('company.index', compact('companies', 'industries', 'locations'));
     }
-
-    public function getLastOffers($id)
-    {
-        $company = Company::with(['offers' => function ($query) {
-            $query->latest()->take(3);
-        }])->findOrFail($id);
-
-        return view('company.show', compact('company'));
-    }
-    public function getSector($id)
-    {
-        $company = Company::with('sector')->find($id);}
 
 }

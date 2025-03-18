@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Company;
 use App\Models\Industry;
 use App\Models\Offer;
 use App\Models\Sector;
@@ -31,8 +32,10 @@ class OfferController extends Controller
         $locations = Address::all('city');
         $skills = Skill::all('skill_name');
         $sectors = Sector::all('name');
+        $companies = Company::all('name');
 
-        return view('offer.index', compact('offers', 'industries', 'locations', 'skills', 'sectors'));
+        return view('offer.index',
+            compact('offers', 'industries', 'locations', 'skills', 'sectors', 'companies'));
     }
 
     /**

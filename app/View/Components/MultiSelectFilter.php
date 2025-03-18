@@ -12,16 +12,18 @@ class MultiSelectFilter extends Component
     public string $label;
     public $items;
     public string $key;
+    public bool $multiple;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(string $name, string $label, $items, string $key = 'name')
+    public function __construct(string $name, string $label, $items, string $key = 'name', bool $multiple = true)
     {
         $this->name = $name;
         $this->label = $label;
         $this->items = $items;
         $this->key = $key;
+        $this->multiple = $multiple;
     }
 
     /**
