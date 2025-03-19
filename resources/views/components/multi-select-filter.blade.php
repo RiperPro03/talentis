@@ -2,10 +2,14 @@
     <label class="label">
         <span class="label-text">{{ $label }}</span>
     </label>
-    <select class="js-select2 w-full" name="{{ $name }}[]" multiple="multiple">
+    <select class="js-select2 select select-bordered w-full"
+            name="{{ $name }}"
+            {{ $multiple ? 'multiple="multiple"' : '' }}
+            data-selected="{{ request()->has($name) ? request($name) : $default }}">
+
         @foreach ($items as $item)
             <option value="{{ $item->{$key} }}"
-                {{ in_array($item->{$key}, request($name, [])) ? 'selected' : '' }}>
+                {{ (request()->has($name) && request($name) == $item->{$key}) || (!request()->has($name) && $default == $item->{$key}) ? 'selected' : '' }}>
                 {{ $item->{$key} }}
             </option>
         @endforeach

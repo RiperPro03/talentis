@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\Company;
 use App\Models\Industry;
 use App\Models\Offer;
 use App\Models\Sector;
@@ -24,15 +25,17 @@ class OfferController extends Controller
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
-            return redirect()->route('company.index', ['page' => $offers->lastPage()]);
+            return redirect()->route('offers.index', ['page' => $offers->lastPage()]);
         }
 
         $industries = Industry::all('name');
         $locations = Address::all('city');
         $skills = Skill::all('skill_name');
         $sectors = Sector::all('name');
+        $companies = Company::all('name');
 
-        return view('offer.index', compact('offers', 'industries', 'locations', 'skills', 'sectors'));
+        return view('offer.index',
+            compact('offers', 'industries', 'locations', 'skills', 'sectors', 'companies'));
     }
 
     /**
@@ -61,14 +64,14 @@ class OfferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Offer $offer = null)
+    public function show(Offer $offer)
     {
         if(!$offer) {
             return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
         }
 
-//        return view('offer.show', compact('offer'));
-        return response()->json($offer);
+        return view('offer.show', compact('offer'));
+        // return response()->json($offer);
     }
 
     /**

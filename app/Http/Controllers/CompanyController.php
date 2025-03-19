@@ -13,8 +13,6 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-
     public function index()
     {
         $companies = Company::paginate(8);
@@ -63,12 +61,12 @@ class CompanyController extends Controller
     {
         $company = Company::find($id);
         if(!$company) {
-            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
-
+//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-        return view('company.show', compact('company'));
-
+//        return view('company.show', compact('company'));
+        return response()->json($company);
     }
 
     /**
@@ -146,17 +144,4 @@ class CompanyController extends Controller
 
         return view('company.index', compact('companies', 'industries', 'locations'));
     }
-
-    public function getLastOffers($id)
-    {
-        $company = Company::with(['offers' => function ($query) {
-            $query->latest()->take(3);
-        }])->findOrFail($id);
-
-        return view('company.show', compact('company'));
-    }
-    public function getSector($id)
-    {
-        $company = Company::with('sector')->find($id);}
-
 }

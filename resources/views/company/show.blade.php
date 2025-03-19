@@ -13,7 +13,7 @@
             </div>
         @endif
 
-            <div class="mx-auto py-8 container w-5/6 h-auto overflow-hidden rounded-lg flex justify-center items-center">
+            <div class="mx-auto py-8 container w-5/6 h-48 overflow-hidden rounded-lg flex justify-center items-center">
                 <img src="{{ asset($company->logo_path) }}"
                      alt="Header Image"
                      class="object-cover w-full h-full rounded-lg">
@@ -73,8 +73,7 @@
                         <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
                         <form action="/save-rating" method="POST" class="space-y-4">
-                            <!-- Protection CSRF pour Laravel -->
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            @csrf
 
                             <div class="rating">
                                 <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="1" />
@@ -88,13 +87,10 @@
                         </form>
                     <br>
                     <p class="font-bold text-lg text-al">Cette entreprise est actuellement notée:</p>
-                        @php $rating = round($company->averageRating()); // Note entre 1 et 5@endphp
-
-
 
                         <div class="flex justify-center items-center mt-2">
                             @for ($i = 1; $i <= 5; $i++)
-                                <svg class="w-6 h-6 {{ $i <= $rating ? 'text-yellow-400' : 'text-gray-300' }}"
+                                <svg class="w-6 h-6 {{ $i <= $company->getRate() ? 'text-yellow-400' : 'text-gray-300' }}"
                                      fill="currentColor"
                                      viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +111,7 @@
                                 <p>Aucune offre disponible.</p>
                             @else
                                 <ul class="space-y-4">
-                                    @foreach($company->offers as $offer)
+                                    @foreach($company->latestOffers() as $offer)
 
 
 

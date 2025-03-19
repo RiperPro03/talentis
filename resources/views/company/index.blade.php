@@ -31,6 +31,7 @@
                             {{-- Filtres par industrie --}}
                             <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
 
+
                             {{-- Filtres par localisation --}}
                             <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
 
