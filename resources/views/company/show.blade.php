@@ -13,8 +13,8 @@
             </div>
         @endif
 
-            <div class="mx-auto py-8 container w-5/6 h-48 overflow-hidden rounded-lg flex justify-center items-center">
-                <img src="{{ asset('img/test/20220721_180349.jpg') }}"
+            <div class="mx-auto py-8 container w-5/6 h-auto overflow-hidden rounded-lg flex justify-center items-center">
+                <img src="{{ asset($company->logo_path) }}"
                      alt="Header Image"
                      class="object-cover w-full h-full rounded-lg">
             </div>
@@ -185,7 +185,7 @@
             </div>
 
             <!-- Tab 2 -->
-            <a href="{{ route('offers.search') }}" class="tab whitespace-nowrap"  >Nos offres </a>
+            <a href="{{ route('offer.search') }}" class="tab whitespace-nowrap"  >Nos offres </a>
             {{--        TODO: Add a link to the offers page--}}
 
 
