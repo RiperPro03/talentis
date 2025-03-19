@@ -35,7 +35,7 @@
                             {{-- Filtres par localisation --}}
                             <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
 
-                            {{-- Boutons de filtre --}}
+                            {{-- Boutons de filtre et reset --}}
                             <div class="form-control flex flex-row gap-2">
                                 <button type="submit" class="btn btn-secondary w-full">Filtrer</button>
                             </div>
@@ -93,9 +93,12 @@
                                     @endforeach
 
                                     {{-- Note --}}
-                                    @if(!$company->getRate() == 0)
+                                    @php
+                                        $rating = round($company->averageRating()); // Note entre 1 et 5
+                                    @endphp
+                                    @if(!$rating == 0)
                                         <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                            {{ $company->getRate() }} ⭐
+                                            {{ $rating }} ⭐
                                         </div>
                                     @endif
 
