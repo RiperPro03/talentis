@@ -76,3 +76,4 @@ Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.e
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
 
+Route::resource('pilot/company', CompanyController::class);

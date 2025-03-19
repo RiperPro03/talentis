@@ -21,6 +21,10 @@ class CompanyController extends Controller
             return view('admin.company.index', compact('companies'));
         }
 
+        if (Route::currentRouteName() === 'pilot.company') {
+            return view('pilot.company.index', compact('companies'));
+        }
+
         if (request()->has('page') && request()->page > $companies->lastPage()) {
             return redirect()->route('company.index', ['page' => $companies->lastPage()]);
         }
