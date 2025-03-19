@@ -8,6 +8,7 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
@@ -66,5 +67,12 @@ Route::middleware(['auth'])->group(function () {
 
 // Route pour les utilisateurs avec la permission manage_students
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
-//    Route::resource('pilot/student', StudentController::class);
+    Route::resource('pilot/student', StudentController::class);
 });
+
+
+
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+
+
