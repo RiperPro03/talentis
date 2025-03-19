@@ -112,4 +112,52 @@ class OfferController extends Controller
         $offer->delete();
         return redirect()->route('offer.index')->with('success', 'Offre supprimée');
     }
+
+    public function search(Request $request)
+    {
+        // Récupération des valeurs des filtres
+        $filters = [
+            'offer-title' => $request->query('offer-title'),
+            'companies'   => (array) $request->query('company', []),
+            'industry'    => (array) $request->query('industry', []),
+            'location'    => (array) $request->query('location', []),
+            'skill'       => (array) $request->query('skill', []),
+            'sector'      => (array) $request->query('sector', [])
+        ];
+
+        // Début de la requête
+        $query = Offer::query();
+
+        // Filtrer par titre de l'offre
+        if (!empty($filters['offer-title'])) {
+            $query->where('title', 'like', '%' . $filters['offer-title'] . '%');
+        }
+
+        // Définition des relations et des champs associés
+        $relations = [
+            'companies'  => 'name',
+            'sector'     => 'name',
+            'skills'     => 'skill_name'
+        ];
+
+        // Appliquer les filtres relationnels dynamiquement
+        foreach ($relations as $filterKey => $column) {
+            if (!empty($filters[$filterKey])) {
+                $query->whereHas($filterKey, fn($q) => $q->whereIn($column, $filters[$filterKey]));
+            }
+        }
+
+        // Récupération des offres avec pagination
+        $offers = $query->paginate(8);
+
+        // Récupération des filtres disponibles
+        $companies  = Company::all(['id', 'name']);
+        $industries = Industry::all(['name']);
+        $locations  = Address::all(['city']);
+        $skills     = Skill::all(['skill_name']);
+        $sectors    = Sector::all(['name']);
+
+        return view('offer.index', compact('offers', 'companies', 'industries', 'locations', 'skills', 'sectors'));
+    }
+
 }
