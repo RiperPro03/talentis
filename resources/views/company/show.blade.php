@@ -13,6 +13,10 @@
             </div>
         @endif
 
+        <a href="{{ route('company.index') }}" class="btn btn-outline btn-primary">
+            ← Retour
+        </a>
+
             <div class="mx-auto py-8 container w-5/6 h-48 overflow-hidden rounded-lg flex justify-center items-center">
                 <img src="{{ asset($company->logo_path) }}"
                      alt="Header Image"
@@ -32,11 +36,7 @@
                     <div class="w-full md:w-2/3 p-4 rounded h-full flex-1">
 
                         <p class="font-bold text-lg text-al">Description</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam rhoncus diam et consequat vestibulum. Quisque vel magna vitae turpis viverra pulvinar. Ut finibus neque eu erat vehicula, eu posuere mauris euismod. Sed ornare luctus maximus. Donec vitae neque ligula. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean dictum odio in pretium semper. Curabitur dignissim odio non tempor sollicitudin. Etiam tristique elit in quam molestie vulputate.
-
-                            Maecenas placerat sem nunc. Fusce non urna viverra, pellentesque justo tristique, vulputate neque. Fusce porttitor dictum sagittis. Proin auctor, orci et dignissim tempus, dolor velit congue lacus, nec hendrerit massa diam at orci. Fusce euismod erat vitae augue semper consequat. Ut id pellentesque dolor. Nulla et congue neque, vel accumsan nulla. Morbi fermentum nisi eu leo cursus laoreet. Donec at gravida tellus, eget congue odio.
-
-                            Nullam quis dolor at nulla placerat fringilla in non massa. Sed vel nunc in mauris semper lacinia at quis sem. Mauris venenatis vestibulum fermentum. Praesent fringilla ligula vel tortor feugiat, eu fringilla eros bibendum. Donec eu ex quis ligula vestibulum aliquam. Donec vitae nulla condimentum turpis vestibulum auctor. Maecenas luctus suscipit velit eget ullamcorper. Vestibulum scelerisque euismod magna. Fusce laoreet nunc id urna luctus accumsan. Vivamus sit amet ullamcorper magna. Duis a arcu luctus, aliquam eros in, interdum mi. Integer a hendrerit ante. Sed sagittis enim vel efficitur dapibus. Morbi rutrum ornare odio quis pretium. Morbi eget libero purus. Aenean nec facilisis magna, sit amet pharetra est.</p>
+                        <p>{{ $company->description }}</p>
                         <br>
 
                         <p class="font-bold text-lg text-al">Où nous trouver ?</p>
@@ -157,7 +157,7 @@
 
                                                 {{-- Bouton d'action --}}
                                                 <div class="card-actions justify-end mt-4">
-                                                    <a href="{{ route('offers.show', $offer) }}"
+                                                    <a href="{{ route('offer.show', $offer) }}"
                                                        class="btn btn-sm btn-primary">
                                                         Voir
                                                     </a>
@@ -181,8 +181,9 @@
             </div>
 
             <!-- Tab 2 -->
-            <a href="{{ route('offer.search') }}" class="tab whitespace-nowrap"  >Nos offres </a>
-            {{--        TODO: Add a link to the offers page--}}
+            <a href="{{ route('offer.search', ['company' => [$company->name]]) }}" class="tab whitespace-nowrap">
+                Nos offres
+            </a>
 
 
         </div>

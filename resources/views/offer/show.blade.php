@@ -3,6 +3,9 @@
 @section('content')
     <div class="flex justify-center items-center min-h-[80vh] p-6">
         <div class="card w-full max-w-lg bg-base-100 shadow-xl p-6 rounded-2xl flex flex-col h-full">
+            <a href="{{ route('offer.index') }}" class="absolute top-4 left-4 btn btn-outline btn-primary">
+                ← Retour
+            </a>
 
             <!-- Logo de l'entreprise -->
             <div class="flex justify-center mb-4">
