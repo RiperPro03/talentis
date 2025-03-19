@@ -181,7 +181,7 @@
             </div>
 
             <!-- Tab 2 -->
-            <a href="{{ route('offer.search', ['company' => ['Amazon']]) }}" class="tab whitespace-nowrap">
+            <a href="{{ route('offer.search', ['company' => [$company->name]]) }}" class="tab whitespace-nowrap">
                 Nos offres
             </a>
 
