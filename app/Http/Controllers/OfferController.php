@@ -54,6 +54,10 @@ class OfferController extends Controller
         request()->validate([
 
         ]);
+
+        // TODO : Faire la vérif que Type est bien un de ces input ['CDI', 'CDD', 'Stage', 'Alternance']
+        // TODO : Pour l'input Type : Faire un select avec les options ['CDI', 'CDD', 'Stage', 'Alternance']
+
         Offer::create([
 
         ]);
@@ -122,7 +126,8 @@ class OfferController extends Controller
             'industry'    => (array) $request->query('industry', []),
             'location'    => (array) $request->query('location', []),
             'skill'       => (array) $request->query('skill', []),
-            'sector'      => (array) $request->query('sector', [])
+            'sector'      => (array) $request->query('sector', []),
+            'type'        => (array) $request->query('type', []),
         ];
 
         // Début de la requête
@@ -131,6 +136,10 @@ class OfferController extends Controller
         // Filtrer par titre de l'offre
         if (!empty($filters['offer-title'])) {
             $query->where('title', 'like', '%' . $filters['offer-title'] . '%');
+        }
+        // Filtrer par type d'offre (CDI, CDD, Stage, Alternance)
+        if (!empty($filters['type'])) {
+            $query->whereIn('type', $filters['type']);
         }
 
         // Définition des relations et des champs associés

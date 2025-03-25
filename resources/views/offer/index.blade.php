@@ -27,6 +27,21 @@
                             <div class="form-control mb-4">
                                 <input type="text" name="offer-title" placeholder="Titre de l'offre" class="input input-bordered" value="{{ request('offer-title') }}" />
                                 <x-multi-select-filter name="company" label="Entreprise" :items="$companies" key="name" />
+
+                                <div class="form-control w-full mb-4">
+                                    <label for="type" class="label">
+                                        <span class="label-text">Type de contrat</span>
+                                    </label>
+                                    <select id="type" name="type[]" multiple class="js-select2 select select-bordered w-full">
+                                        @foreach (['CDI', 'CDD', 'Stage', 'Alternance'] as $type)
+                                            <option value="{{ $type }}" {{ in_array($type, (array) request('type')) ? 'selected' : '' }}>
+                                                {{ $type }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
                                 <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
                                 <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
                                 <x-multi-select-filter name="skill" label="Compétences" :items="$skills" key="skill_name" />
