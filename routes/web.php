@@ -12,7 +12,9 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
+
 
 // Route accessible par tout le monde
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
@@ -70,9 +72,8 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/student', StudentController::class);
 });
 
-
-
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
-
+Route::get('/apply', [ApplicationController::class, 'showForm'])->name('apply.form');
+Route::post('/apply', [ApplicationController::class, 'submitApplication'])->name('apply.submit');
