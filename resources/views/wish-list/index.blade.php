@@ -42,7 +42,7 @@
                         <form method="dialog">
                             <button class="btn">Annuler</button>
                         </form>
-                        <form action="{{ route('apply.remove', $offer) }}" method="POST">
+                        <form action="{{ route('wishlist.remove', $offer) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-error">Confirmer</button>
@@ -102,6 +102,7 @@
                         <th class="border px-4 py-2 text-center text-lg">Entreprise</th>
                         <th class="border px-4 py-2 text-center text-lg">Localisation</th>
                         <th class="border px-4 py-2 text-center text-lg">Type d'offre</th>
+                        <th class="border px-4 py-2 text-center text-lg">Ajouté le</th>
                         <th class="border px-4 py-2 text-center text-lg">Actions</th>
                     </tr>
                     </thead>
@@ -128,6 +129,10 @@
                             </td>
 
                             <td class="border px-4 py-2">{{ $offer->type }}</td>
+
+                            <td class="border px-4 py-2 text-center text-gray-500">
+                                {{ $offer->pivot->created_at->format('d/m/Y à H:i') }}
+                            </td>
 
                             <td class="border px-4 py-2 flex gap-2 justify-center">
                                 <a href="{{ route('offer.show', $offer) }}" class="btn btn-sm btn-primary">Voir</a>

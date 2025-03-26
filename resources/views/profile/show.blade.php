@@ -15,7 +15,7 @@
                     </div>
                     <h3 class="text-lg sm:text-xl font-bold">{{$user->first_name}} {{$user->name}}</h3>
                     <p class="text-sm sm:text-base font-medium">📅 Date de naissance : <span class="font-semibold">{{$user->birthdate}}</span></p>
-                    <p class="text-sm sm:text-base font-medium">🎓 Promotion : <span class="font-semibold">{{$user->promotion_id}}</span></p>
+                    <p class="text-sm sm:text-base font-medium">🎓 Promotion : <span class="font-semibold">{{$user->promotion->promotion_code}}</span></p>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
 
         <!-- Wishlist et Candidatures -->
         <div class="max-w-5xl w-full p-4 sm:p-6 flex flex-col lg:flex-row lg:gap-10 items-stretch mt-8">
-            
+
             <!-- Wishlist -->
             <div class="card bg-base-100 p-6 rounded-lg shadow-lg border w-full lg:w-1/2">
                 <h3 class="text-lg sm:text-xl font-bold text-center text-neutral mb-4">Ma Wishlist</h3>
@@ -54,13 +54,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($wishlists as $offre)
-                            @include('components.wishlist-row', ['offre' => $offre])
+                        @foreach ($wishlist as $offre)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $offre->title }}</td>
+                                <td class="border px-4 py-2">{{ $offre->company}}</td>
+                                <td class="border px-4 py-2">{{ $offre->date }}</td>
+                            </tr>
+
                         @endforeach
                     </tbody>
                 </table>
                 <div class="text-center mt-4">
-                    <a href="#" class="text-blue-500 font-semibold">Voir plus</a>
+                    <a href="{{ route('wishlist.index') }}" class="text-blue-500 font-semibold">Voir plus</a>
                 </div>
             </div>
 
@@ -71,21 +76,25 @@
                     <thead>
                         <tr class="bg-gray-200">
                             <th class="px-4 py-2">Titre</th>
-                            <th class="px-4 py-2">Statut</th>
+                            <th class="px-4 py-2">Entreprise</th>
                             <th class="px-4 py-2">Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($applies as $candidature)
-                            @include('components.candidature-row', ['candidature' => $candidature])
+                            <tr>
+                                <td class="border px-4 py-2">{{ $candidature->title }}</td>
+                                <td class="border px-4 py-2">{{ $candidature->companies->name }}</td>
+                                <td class="border px-4 py-2">{{ $candidature->pivot->created_at->format('d/m/Y à H:i') }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
                 <div class="text-center mt-4">
-                    <a href="#" class="text-blue-500 font-semibold">Voir plus</a>
+                    <a href="{{ route('apply.index') }}" class="text-blue-500 font-semibold">Voir plus</a>
                 </div>
             </div>
-            
+
         </div>
     </div>
 @endsection

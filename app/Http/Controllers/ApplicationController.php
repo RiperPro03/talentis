@@ -7,6 +7,7 @@ use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
@@ -15,7 +16,7 @@ class ApplicationController extends Controller
     {
         // Index pour voir toutes les candidatures
         if (Route::currentRouteName() === 'pilot.apply.index') {
-
+            //TODO: Faire la vue pour l'index des candidatures pour les pilotes
         }
 
         // Index pour voir ses propre candidatures
@@ -70,4 +71,25 @@ class ApplicationController extends Controller
 
         return redirect()->route('offer.show',$offer)->with('success', 'Candidature envoyée avec succès!');
     }
+
+    public function destroy(Offer $offer)
+    {
+        $user = auth()->user();
+
+        $application = $user->applies()->where('offer_id', $offer->id)->first();
+
+        if ($application) {
+            $cvPath = $application->pivot->curriculum_vitae;
+
+            if ($cvPath && Storage::disk('public')->exists($cvPath)) {
+                Storage::disk('public')->delete($cvPath);
+            }
+
+            // Supprimer la relation dans la table pivot
+            $user->applies()->detach($offer->id);
+        }
+
+        return redirect()->route('apply.index')->with('success', 'Candidature retirée avec succès.');
+    }
+
 }

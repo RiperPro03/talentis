@@ -65,6 +65,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('my/wish-list/{offer}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('my/wish-list/{offer}', [WishListController::class, 'remove'])->name('wishlist.remove');
 
+    //Profile
+    Route::get('my/profile', [UserController::class, 'profile'])->name('profile.show');
+
 
     Route::resource('address', AddressController::class);
     Route::resource('industry', IndustryController::class);

@@ -142,4 +142,16 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('user.index')->with('success', 'Utilisateur supprimé');
     }
+
+    public function profile()
+    {
+        $user = auth()->user();
+
+        $wishlist = $user->offers()->with('companies')->latest('wishlists.created_at')->get();
+
+        $applies = $user->applies()->with('companies')->orderByPivot('created_at', 'desc')->get();
+
+        return view('profile.show', compact('user', 'wishlist', 'applies'));
+    }
+
 }
