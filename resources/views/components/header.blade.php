@@ -17,7 +17,7 @@
 
         <!-- Logo (centré en mobile) -->
         <a class="btn btn-ghost text-xl" href="{{ route('home') }}">
-            <img src="{{ asset('./img/logo/logo.png') }}" class="h-10 w-auto mr-2 rounded" alt="Logo">
+            <img src="{{ asset('img/logo/logo.png') }}" class="h-10 w-auto mr-2 rounded" alt="Logo">
             Talentis
         </a>
 
@@ -76,16 +76,6 @@
                 <li><a href="{{ route('home') }}" class="text-2xl">Accueil</a></li>
                 <li><a href="{{ route('offer.index') }}" class="text-2xl">Offres</a></li>
                 <li><a href="{{ route('company.index') }}" class="text-2xl">Entreprises</a></li>
-
-{{--                <li>--}}
-{{--                    <details>--}}
-{{--                        <summary>Parent</summary>--}}
-{{--                        <ul class="p-2">--}}
-{{--                            <li class="p-4"><a>Submenu 1</a></li>--}}
-{{--                            <li class="p-4"><a>Submenu 2</a></li>--}}
-{{--                        </ul>--}}
-{{--                    </details>--}}
-{{--                </li>--}}
             </ul>
         </div>
 
