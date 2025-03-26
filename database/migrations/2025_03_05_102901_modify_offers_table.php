@@ -15,7 +15,7 @@ return new class extends Migration
             $table->dropColumn('offer_duration');
             $table->foreignId('sector_id')->nullable()->constrained('sectors')->onDelete('cascade');
             $table->date('start_offer');
-            $table->date('end_offer');
+            $table->date('end_offer')->nullable();
             //
         });
     }

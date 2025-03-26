@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="text-center space-y-4">
-    <h1 class="animate-gradient-text text-6xl md:text-9xl font-bold bg-clip-text text-transparent
+    <h1 class="mt-4 animate-gradient-text text-6xl md:text-9xl font-bold bg-clip-text text-transparent
                         bg-gradient-to-r from-primary via-secondary to-accent
                         bg-[length:200%_auto] md:bg-[length:250%_auto]
                         transition-all duration-1000">
@@ -18,28 +18,35 @@
 </div>
 
 <!-- SEARCH BAR -->
-<from action="#" method="GET"
-    class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 bg-white p-6 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-4">
-    <!-- Input: Vous cherchez ? -->
-    <input type="text" placeholder="Vous cherchez ?" class="input input-bordered w-full md:w-1/4"/>
+<form action="{{ route('offer.search') }}" method="GET"
+      class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 bg-white p-6 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-4">
 
-    <!-- Input: Où ? -->
-    <input type="text" placeholder="Où ?" class="input input-bordered w-full md:w-1/4"/>
+    <!-- Input: titre de l'offre -->
+    <input type="text" name="offer-title" placeholder="Vous cherchez ?"
+           class="input input-bordered w-full md:w-1/4"
+           value="{{ request('offer-title') }}" />
+
+    <!-- Input: localisation -->
+    <input type="text" name="location[]" placeholder="Où ?"
+           class="input input-bordered w-full md:w-1/4"
+           value="{{ request('location.0') }}" />
 
     <!-- Select: Type d'emploi -->
-    <select class="select select-bordered w-full md:w-1/4">
-        <option disabled selected>Type d'emploi</option>
-        <option>CDI</option>
-        <option>CDD</option>
-        <option>Stage</option>
-        <option>Alternance</option>
+    <select name="type[]" class="select select-bordered w-full md:w-1/4">
+        <option disabled {{ empty(request('type')) ? 'selected' : '' }}>Type d'emploi</option>
+        @foreach(['CDI', 'CDD', 'Stage', 'Alternance'] as $type)
+            <option value="{{ $type }}" {{ in_array($type, (array) request('type')) ? 'selected' : '' }}>
+                {{ $type }}
+            </option>
+        @endforeach
     </select>
 
     <!-- Bouton de recherche -->
     <button type="submit" class="btn btn-primary text-white w-full md:w-auto">
         Rechercher
     </button>
-</from>
+</form>
+
 
 
 
@@ -47,88 +54,26 @@
 <div class="relative w-full max-w-6xl mx-auto mt-6">
     <!-- Carousel avec cartes -->
     <div id="carousel" class="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
-
-        <!-- Card 1 -->
-        <div class="carousel-item w-80 snap-center shrink-0">
-            <div class="card bg-base-100 shadow-xl">
-                <figure class="px-6 pt-6">
-                    <img src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                         alt="Shoes" class="rounded-xl"/>
-                </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Shoes!</h2>
-                    <p>If a dog chews shoes whose shoes does he choose?</p>
-                    <div class="card-actions">
-                        <button class="btn btn-primary">More</button>
+        @foreach($offers as $offer)
+            <div class="carousel-item w-80 snap-center shrink-0">
+                <div class="card bg-base-100 shadow-xl">
+                    @if($offer->companies && $offer->companies->logo_path)
+                        <figure class="px-6 pt-6">
+                            <img src="{{ asset($offer->companies->logo_path) }}"
+                                 alt="{{ 'logo_' . $offer->companies->name }}"
+                                 class="rounded-xl w-auto h-24"/>
+                        </figure>
+                    @endif
+                    <div class="card-body items-center text-center">
+                        <h2 class="card-title">{{ $offer->title }}</h2>
+                        <p>{{ Str::limit($offer->description, 80) }}</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary">More</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="carousel-item w-80 snap-center shrink-0">
-            <div class="card bg-base-100 shadow-xl">
-                <figure class="px-6 pt-6">
-                    <img src="{{ asset('img/test/20220714_173115.jpg') }}" alt="Hat" class="rounded-xl"/>
-                </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Hat!</h2>
-                    <p>Why do hats make you look so cool?</p>
-                    <div class="card-actions">
-                        <button class="btn btn-primary">More</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="carousel-item w-80 snap-center shrink-0">
-            <div class="card bg-base-100 shadow-xl">
-                <figure class="px-6 pt-6">
-                    <img src="{{ asset('img/test/20220721_180349.jpg') }}" alt="Watch" class="rounded-xl"/>
-                </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Watch!</h2>
-                    <p>Time flies when you're having fun!</p>
-                    <div class="card-actions">
-                        <button class="btn btn-primary">More</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="carousel-item w-80 snap-center shrink-0">
-            <div class="card bg-base-100 shadow-xl">
-                <figure class="px-6 pt-6">
-                    <img src="{{ asset('img/test/20221228_094237.jpg') }}" alt="Sunglasses" class="rounded-xl"/>
-                </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Sunglasses!</h2>
-                    <p>Protect your eyes in style.</p>
-                    <div class="card-actions">
-                        <button class="btn btn-primary">More</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="carousel-item w-80 snap-center shrink-0">
-            <div class="card bg-base-100 shadow-xl">
-                <figure class="px-6 pt-6">
-                    <img src="{{ asset('img/test/IMG_6724-min-scaled.jpg') }}" alt="Sunglasses" class="rounded-xl"/>
-                </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Sunglasses!</h2>
-                    <p>Protect your eyes in style.</p>
-                    <div class="card-actions">
-                        <button class="btn btn-primary">More</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @endforeach
     </div>
 
     <!-- Boutons de navigation visibles uniquement sur PC (`lg:`) -->

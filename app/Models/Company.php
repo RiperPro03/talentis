@@ -25,6 +25,7 @@ class Company extends Model
         return $this->hasMany(Offer::class, 'company_id', 'id');
     }
 
+
     public function industries(): Company|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Industry::class,'works');
@@ -39,4 +40,20 @@ class Company extends Model
     {
         return $this->belongsToMany(User::class,'evaluates')->withPivot('rating')->withTimestamps();
     }
+
+    private function averageRating()
+    {
+        return $this->evaluations()->avg('rating') ?? 0;
+    }
+
+    public function getRate(): float
+    {
+        return round($this->averageRating());
+    }
+
+    public function latestOffers(int $limit = 3)
+    {
+        return $this->offers()->latest()->limit($limit)->get();
+    }
+
 }

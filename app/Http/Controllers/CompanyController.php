@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Company;
+use App\Models\Industry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
 {
@@ -12,9 +15,20 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::all();
-//        return view('company.index', compact('companies'));
-        return response()->json($companies);
+        $companies = Company::paginate(8);
+
+        if (Route::currentRouteName() === 'admin.company.index') {
+            return view('admin.company.index', compact('companies'));
+        }
+
+        if (request()->has('page') && request()->page > $companies->lastPage()) {
+            return redirect()->route('company.index', ['page' => $companies->lastPage()]);
+        }
+
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
+
+        return view('company.index', compact('companies', 'industries', 'locations'));
     }
 
     /**
@@ -46,11 +60,11 @@ class CompanyController extends Controller
     public function show(Company $company = null)
     {
         if(!$company) {
-            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-//        return view('company.show', compact('company'));
-        return response()->json($company);
+        return view('company.show', compact('company'));
     }
 
     /**
@@ -59,7 +73,7 @@ class CompanyController extends Controller
     public function edit(Company $company = null)
     {
         if(!$company) {
-            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
 
 //        return view('company.edit', compact('company'));
@@ -86,9 +100,48 @@ class CompanyController extends Controller
     public function destroy(Company $company = null)
     {
         if(!$company) {
-            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+            return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
         $company->delete();
         return redirect()->route('company.index')->with('success', 'Entreprise supprimée');
+    }
+
+    public function search(Request $request)
+    {
+        // Récupération des filtres depuis la requête
+        $filters = [
+            'company'      => (array) $request->query('company', []),
+            'industry'     => (array) $request->query('industry', []),
+            'location'     => (array) $request->query('location', [])
+        ];
+
+        // Début de la requête sur Company
+        $query = Company::query();
+
+        // Filtrer par plusieurs entreprises spécifiques
+        if (!empty($filters['company'])) {
+            $query->whereIn('name', $filters['company']);
+        }
+
+        // Filtrage dynamique sur relations (industries et addresses)
+        $relations = [
+            'industries' => 'name',
+            'addresses'  => 'city'
+        ];
+
+        foreach ($relations as $relation => $column) {
+            if (!empty($filters[$relation])) {
+                $query->whereHas($relation, fn($q) => $q->whereIn($column, $filters[$relation]));
+            }
+        }
+
+        // Récupération des entreprises avec pagination
+        $companies = $query->paginate(8);
+
+        // Récupération des valeurs pour les filtres
+        $industries = Industry::all(['name']);
+        $locations = Address::all(['city']);
+
+        return view('company.index', compact('companies', 'industries', 'locations'));
     }
 }
