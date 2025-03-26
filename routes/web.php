@@ -54,6 +54,12 @@ Route::middleware(['auth'])->group(function () {
 //    ]);
     Route::resource('offer', OfferController::class);
     Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
+    //Candidature
+    Route::get('/offer/{offer}/apply', [ApplicationController::class, 'create'])->name('apply.create');
+    Route::post('/offer/{offer}/apply', [ApplicationController::class, 'store'])->name('apply.store');
+    Route::get('my/applications', [ApplicationController::class, 'index'])->name('apply.index');
+    Route::delete('/offer/{offer}/apply', [ApplicationController::class, 'destroy'])->name('apply.remove');
+
 
     Route::get('my/wish-list', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('my/wish-list/{offer}', [WishlistController::class, 'store'])->name('wishlist.store');
@@ -76,6 +82,3 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
 
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-
-Route::get('/apply', [ApplicationController::class, 'showForm'])->name('apply.form');
-Route::post('/apply', [ApplicationController::class, 'submitApplication'])->name('apply.submit');
