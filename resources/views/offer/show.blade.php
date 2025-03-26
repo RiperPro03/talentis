@@ -86,7 +86,7 @@
 
             <!-- Bouton Postuler -->
             <div class="card-actions mt-6">
-                <a href="#" class="btn btn-primary w-full text-lg py-3 flex items-center justify-center">
+                <a href="{{ route('apply.create', $offer) }}" class="btn btn-primary w-full text-lg py-3 flex items-center justify-center">
                     Postuler
                 </a>
             </div>

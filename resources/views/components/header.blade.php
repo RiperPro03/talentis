@@ -31,12 +31,27 @@
                              class="w-10 h-10 rounded-full">
                     </div>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-                    <li><a>Profil</a></li>
-                    <li><a>Mes candidature</a></li>
-                    <li><a>Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a href="{{ route('wishlist.index') }}">Favori</a></li>
-                    <li><a href="{{ route('logout') }}" class="text-red-500">Déconnexion</a></li>
+                @php
+                    $isAdmin = auth()->user()->hasRole('admin');
+                    $isStudent = auth()->user()->hasRole('student');
+                    $isPilot = auth()->user()->hasRole('pilot');
+                @endphp
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
+                    <li><a href="#" class="text-lg">Profil</a></li>
+                    @if($isAdmin || $isStudent)
+                        <li><a href="{{ route('apply.index') }}" class="text-lg">Mes candidatures</a></li>
+                        <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
+                    @endif
+
+                    @if($isAdmin)
+                        <li><a href="#1" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                    @endif
+
+                    @if($isPilot)
+                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                    @endif
+
+                    <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>
             </div>
         @endauth
@@ -94,7 +109,7 @@
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
                     <li><a href="#" class="text-lg">Profil</a></li>
                     @if($isAdmin || $isStudent)
-                        <li><a href="#" class="text-lg">Mes candidatures</a></li>
+                        <li><a href="{{ route('apply.index') }}" class="text-lg">Mes candidatures</a></li>
                         <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
                     @endif
 

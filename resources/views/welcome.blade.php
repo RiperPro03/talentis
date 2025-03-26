@@ -68,7 +68,7 @@
                         <h2 class="card-title">{{ $offer->title }}</h2>
                         <p>{{ Str::limit($offer->description, 80) }}</p>
                         <div class="card-actions">
-                            <button class="btn btn-primary">More</button>
+                            <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary">En savoir plus</a>
                         </div>
                     </div>
                 </div>
