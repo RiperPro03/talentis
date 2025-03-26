@@ -14,6 +14,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 
 // Route accessible par tout le monde
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/student', StudentController::class);
 });
+
 
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
