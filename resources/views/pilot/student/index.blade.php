@@ -31,7 +31,7 @@
 
 
 
-            <!-- Version Mobile: Affichage en cartes -->
+        <!-- Version Mobile: Affichage en cartes -->
     </div>
 
 
@@ -43,12 +43,14 @@
                 <p class="text-gray-600">{{ $student->email }}</p>
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-{{--                    <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary btn-sm">Voir</a>--}}
-{{--                    <form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
-{{--                        @csrf--}}
-{{--                        @method('DELETE')--}}
-                        <button class="btn btn-error btn-sm">Retirer</button>
-{{--                    </form>--}}
+
+                    <form action="{{ route('users.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-error btn-sm" onclick="console.log('Bouton cliqué');">Retirer</button>
+
+                    </form>
+
                 </div>
             </div>
         @endforeach
@@ -66,6 +68,7 @@
             </tr>
             </thead>
             <tbody>
+
             @foreach($students as $student)
                 <tr class="hover:bg-gray-50">
                     <td class="border px-4 py-2">{{ $student->name }}</td>
@@ -74,13 +77,25 @@
                         {{$student->email}}
                     </td>
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-{{--                        <a href="{{ route('offer.show', $offer) }}" class="btn btn-sm btn-primary">Voir</a>--}}
-{{--                        //<form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
-{{--                            //@csrf--}}
-{{--                            //@method('DELETE')--}}
-                            <button class="btn btn-sm btn-error">Retirer</button>
-{{--                        </form>--}}
+                        <label for="modal_{{ $student->id }}" class="btn">open modal</label>
+
+                        <!-- Input caché pour contrôler l'état du modal -->
+                        <input type="checkbox" id="modal_{{ $student->id }}" class="modal-toggle" />
+
+                        <dialog id="modal_{{ $student->id }}" class="modal">
+                            <div class="modal-box">
+                                <h3 class="text-lg font-bold">Hello, {{ $student->name }}!</h3>
+                                <p class="py-4">Press ESC key or click outside to close</p>
+                                <!-- Bouton de fermeture -->
+                                <label for="modal_{{ $student->id }}" class="btn btn-secondary">Close</label>
+                            </div>
+                            <form method="dialog" class="modal-backdrop">
+                                <button>close</button>
+                            </form>
+                        </dialog>
                     </td>
+
+
                 </tr>
             @endforeach
             </tbody>

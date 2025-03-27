@@ -70,9 +70,15 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/student', StudentController::class);
 });
 
-
+Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    Route::resource('pilot/student', StudentController::class);
+});
+Route::get('/pilot/promotion', [PromotionController::class, 'index'])->name('promotion.index');
 
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::get('/promotions/{promotion}/edit', [PromotionController::class, 'edit'])->name('promotions.edit');
+Route::put('/promotions/{promotion}', [PromotionController::class, 'update'])->name('promotions.update');
 
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 

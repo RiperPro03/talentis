@@ -71,9 +71,11 @@
 
                 <x-multi-select-filter
                     name="promotion"
-                    label="Promotion"
+                    label=""
                     :items="$promotions"
                     key="promotion_code"
+                    :multiple="false"
+                    :default="$user->promotion ? $user->promotion->promotion_code : null"
                     :selectedItems="$user->promotion_id ? [$user->promotion->promotion_code] : []" />
 
 
