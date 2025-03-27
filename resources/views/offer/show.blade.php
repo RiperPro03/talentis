@@ -37,6 +37,20 @@
                         {{ $offer->companies->addresses->first()->city }}
                     </span>
                 </p>
+                @foreach($offer->companies->addresses as $location)
+                    <div class="badge badge-xl badge-ghost whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
+                            </path>
+                        </svg>
+                        {{ $location->city }}
+                    </div>
+                @endforeach
             </div>
 
             <!-- Contenu principal -->
@@ -83,6 +97,15 @@
             <div class="text-center text-gray-700 mt-5 text-base font-semibold">
                 📩 Nombre de candidatures : <span class="text-primary">{{ $offer->applies->count() }}</span>
             </div>
+
+            <!-- Bouton Ajouter aux Favoris -->
+            <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="mt-3">
+                @csrf
+                <input type="hidden" name="offer_id" value="{{ $offer->id }}">
+                <button type="submit" class="btn btn-outline w-full text-lg py-3 flex items-center justify-center gap-2">
+                    ❤️ Ajouter aux favoris
+                </button>
+            </form>
 
             <!-- Bouton Postuler -->
             <div class="card-actions mt-6">

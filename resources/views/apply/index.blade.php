@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mes Candidatures')
+@section('title', 'Mes Candidatures - Talentis')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">

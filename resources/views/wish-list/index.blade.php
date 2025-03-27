@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Wish-list d\'Offres')
+@section('title', 'Mes favoris - Talentis')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">

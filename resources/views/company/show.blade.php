@@ -17,13 +17,21 @@
             ← Retour
         </a>
 
-            <div class="mx-auto py-8 container w-5/6 h-48 overflow-hidden rounded-lg flex justify-center items-center">
-                <img src="{{ asset($company->logo_path) }}"
-                     alt="Header Image"
-                     class="object-cover w-full h-full rounded-lg">
-            </div>
-            <h1 class="text-4xl font-bold mb-10">{{ $company->name }}</h1>
+        <div class="mx-auto py-8 container w-5/6 h-auto overflow-hidden rounded-lg flex justify-center items-center">
+            <img src="{{ asset($company->logo_path) }}"
+                 alt="Logo de l'entreprise"
+                 class="object-contain w-full max-h-64 rounded-lg">
+        </div>
 
+        <h1 class="text-4xl font-bold mb-10">{{ $company->name }}</h1>
+
+        <div class="stats shadow">
+            <div class="stat">
+                <div class="stat-title">Nombre de candidatures</div>
+                <div class="stat-value">{{ $appliesCount }}</div>
+                <div class="stat-desc">utilisateur(s) ont postulé à une offre de cette entreprise.</div>
+            </div>
+        </div>
 
 
         <div role="tablist" class="tabs tabs-bordered">
@@ -42,45 +50,39 @@
                         <p class="font-bold text-lg text-al">Où nous trouver ?</p>
                         <br>
                         <div class="flex justify-center items-center gap-4">
-                            <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                    </path>
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                    </path>
-                                </svg>
-                                test
-                            </div>
-                            <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                    </path>
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                    </path>
-                                </svg>
-                                test2
-                            </div>
-
+                            @foreach($company->addresses as $location)
+                                <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
+                                    <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
+                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
+                                        </path>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
+                                        </path>
+                                    </svg>
+                                    {{ $location->city }}
+                                </div>
+                            @endforeach
                         </div>
 
                         <br>
                         <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
-                        <form action="/save-rating" method="POST" class="space-y-4">
+                        <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
                             @csrf
 
+                            @php
+                                $existingRating = $company->evaluations->where('id', auth()->id())->first()?->pivot->rating;
+                            @endphp
+
                             <div class="rating">
-                                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="1" />
-                                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="2" />
-                                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="3" />
-                                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="4" />
-                                <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" value="5" />
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <input type="radio" name="rating"
+                                           class="mask mask-star-2 bg-orange-400"
+                                           value="{{ $i }}"
+                                        {{ ($existingRating !== null && $existingRating == $i) || ($existingRating === null && $i == 5) ? 'checked' : '' }} />
+                                @endfor
                             </div>
 
                             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
@@ -89,14 +91,20 @@
                     <p class="font-bold text-lg text-al">Cette entreprise est actuellement notée:</p>
 
                         <div class="flex justify-center items-center mt-2">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <svg class="w-6 h-6 {{ $i <= $company->getRate() ? 'text-yellow-400' : 'text-gray-300' }}"
-                                     fill="currentColor"
-                                     viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.049 3.012a1 1 0 011.902 0l1.342 3.767a1 1 0 00.95.69h3.993a1 1 0 01.592 1.81l-3.235 2.36a1 1 0 00-.364 1.118l1.236 3.784a1 1 0 01-1.54 1.118l-3.23-2.36a1 1 0 00-1.176 0l-3.23 2.36a1 1 0 01-1.54-1.118l1.236-3.784a1 1 0 00-.364-1.118l-3.235-2.36a1 1 0 01.592-1.81h3.993a1 1 0 00.95-.69l1.342-3.767z"></path>
-                                </svg>
-                            @endfor
+                            @if($company->getRate() == 0)
+                                <p class="text-gray-500">Aucune note disponible.</p>
+
+
+                            @else
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <svg class="w-6 h-6 {{ $i <= $company->getRate() ? 'text-yellow-400' : 'text-gray-300' }}"
+                                         fill="currentColor"
+                                         viewBox="0 0 20 20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.049 3.012a1 1 0 011.902 0l1.342 3.767a1 1 0 00.95.69h3.993a1 1 0 01.592 1.81l-3.235 2.36a1 1 0 00-.364 1.118l1.236 3.784a1 1 0 01-1.54 1.118l-3.23-2.36a1 1 0 00-1.176 0l-3.23 2.36a1 1 0 01-1.54-1.118l1.236-3.784a1 1 0 00-.364-1.118l-3.235-2.36a1 1 0 01.592-1.81h3.993a1 1 0 00.95-.69l1.342-3.767z"></path>
+                                    </svg>
+                                @endfor
+                            @endif
                         </div>
                     </div>
 

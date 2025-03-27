@@ -69,7 +69,7 @@ class ApplicationController extends Controller
         ]);
 
 
-        return redirect()->route('offer.show',$offer)->with('success', 'Candidature envoyée avec succès!');
+        return redirect()->route('apply.index')->with('success', 'Candidature envoyée avec succès!');
     }
 
     public function destroy(Offer $offer)

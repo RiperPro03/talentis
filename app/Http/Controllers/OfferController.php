@@ -119,6 +119,18 @@ class OfferController extends Controller
 
     public function search(Request $request)
     {
+
+        $request->validate([
+            'offer-title' => 'string|nullable',
+            'company'     => 'array|nullable',
+            'industry'    => 'array|nullable',
+            'location'    => 'array|nullable',
+            'skill'       => 'array|nullable',
+            'sector'      => 'array|nullable',
+            'type'        => 'array|nullable',
+            'type.*'      => 'in:CDI,CDD,Stage,Alternance',
+        ]);
+
         // Récupération des valeurs des filtres
         $filters = [
             'offer-title' => $request->query('offer-title'),

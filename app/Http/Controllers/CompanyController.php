@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Company;
 use App\Models\Industry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
@@ -64,7 +65,13 @@ class CompanyController extends Controller
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-        return view('company.show', compact('company'));
+        $appliesCount = DB::table('applies')
+            ->join('offers', 'applies.offer_id', '=', 'offers.id')
+            ->where('offers.company_id', $company->id)
+            ->distinct('applies.user_id')
+            ->count('applies.user_id');
+
+        return view('company.show', compact('company', 'appliesCount'));
     }
 
     /**
@@ -108,6 +115,12 @@ class CompanyController extends Controller
 
     public function search(Request $request)
     {
+        $request->validate([
+            'company'  => 'array|nullable',
+            'industry' => 'array|nullable',
+            'location' => 'array|nullable'
+        ]);
+
         // Récupération des filtres depuis la requête
         $filters = [
             'company'      => (array) $request->query('company', []),
@@ -143,5 +156,18 @@ class CompanyController extends Controller
         $locations = Address::all(['city']);
 
         return view('company.index', compact('companies', 'industries', 'locations'));
+    }
+
+    public function rate(Request $request, Company $company)
+    {
+        $request->validate([
+            'rating' => 'required|integer|between:1,5'
+        ]);
+
+        $company->evaluations()->syncWithoutDetaching([
+            auth()->id() => ['rating' => $request->rating]
+        ]);
+
+        return redirect()->route('company.show', $company)->with('success', 'Note attribuée');
     }
 }

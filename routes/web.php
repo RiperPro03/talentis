@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Auth;
 
 // Route accessible par tout le monde
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
+Route::get('/legal-mentions', function () {
+    return view('legal-mentions');
+})->name('legal.mentions');
 
 // Route pour les utilisateurs non authentifiés
 Route::middleware(['guest'])->group(function () {
@@ -42,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
 //    ]);
     Route::resource('company', CompanyController::class);
     Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
+    Route::post('company/{company}/rate', [CompanyController::class, 'rate'])->name('company.rate');
 
 //    Route::resource('admin/offer', OfferController::class)->names([
 //        'index' => 'admin.offer.index',
@@ -66,7 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('my/wish-list/{offer}', [WishListController::class, 'remove'])->name('wishlist.remove');
 
     //Profile
-    Route::get('my/profile', [UserController::class, 'profile'])->name('profile.show');
+    Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
 
 
     Route::resource('address', AddressController::class);
