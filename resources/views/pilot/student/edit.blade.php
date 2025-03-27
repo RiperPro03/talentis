@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('students.update', $student) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -21,25 +21,25 @@
 
             <div>
                 <label class="block font-medium">Nom</label>
-                <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                <input type="text" name="name" value="{{ old('name', $student->name) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                 @error('name') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium">Prénom</label>
-                <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                <input type="text" name="first_name" value="{{ old('first_name',$student->first_name) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                 @error('first_name') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium">Date de naissance</label>
-                <input type="date" name="birthdate" value="{{ old('birthdate', $user->birthdate) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                <input type="date" name="birthdate" value="{{ old('birthdate', $student->birthdate) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                 @error('birthdate') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium">Email</label>
-                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                <input type="email" name="email" value="{{ old('email', $student->email) }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
                 @error('email') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
@@ -75,8 +75,8 @@
                     :items="$promotions"
                     key="promotion_code"
                     :multiple="false"
-                    :default="$user->promotion ? $user->promotion->promotion_code : null"
-                    :selectedItems="$user->promotion_id ? [$user->promotion->promotion_code] : []" />
+                    :default="$student->promotion ? $student->promotion->promotion_code : null"
+                    :selectedItems="$student->promotion_id ? [$student->promotion->promotion_code] : []" />
 
 
 

@@ -75,8 +75,9 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
 });
 Route::get('/pilot/promotion', [PromotionController::class, 'index'])->name('promotion.index');
 
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit'); // Méthode GET pour afficher le formulaire d'édition
+Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update'); // Méthode PUT pour la mise à jour
+
 Route::get('/promotions/{promotion}/edit', [PromotionController::class, 'edit'])->name('promotions.edit');
 Route::put('/promotions/{promotion}', [PromotionController::class, 'update'])->name('promotions.update');
 

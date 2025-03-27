@@ -43,7 +43,7 @@
                 <p class="text-gray-600">{{ $student->email }}</p>
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    <a href="{{ route('users.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary btn-sm">
                         Modifier
                     </a>
 
@@ -101,7 +101,7 @@
                     </td>
 
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        <a href="{{ route('users.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary btn-sm">
                             Modifier
                         </a>
 
