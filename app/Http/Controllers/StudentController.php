@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Promotion;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -39,9 +40,13 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user = null)
+    public function edit(User $student)
     {
+        $student->load('addresses', 'promotion'); // Charge aussi la promotion de l'utilisateur
+        $address = $student->addresses->first(); // Récupère la première adresse
+        $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
 
+        return view('pilot.student.edit', compact('student', 'promotions', 'address'));
     }
 
     /**
