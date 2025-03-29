@@ -44,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
 //        'destroy' => 'admin.company.destroy',
 //    ]);
     Route::resource('company', CompanyController::class);
-    Route::get('search/company', [CompanyController::class, 'search'])->name('company.search');
     Route::post('company/{company}/rate', [CompanyController::class, 'rate'])->name('company.rate');
 
 //    Route::resource('admin/offer', OfferController::class)->names([
