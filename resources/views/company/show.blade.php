@@ -40,15 +40,21 @@
             <div role="tabpanel" class="tab-content hidden">
                 <div class="flex flex-col md:flex-row gap-4 items-start md:items-stretch h-full">
 
-                    <!-- Ajout de flex ici -->
                     <div class="w-full md:w-2/3 p-4 rounded h-full flex-1">
-
                         <p class="font-bold text-lg text-al">Description</p>
+
+                        @if ($company->industries->isNotEmpty())
+                            @foreach ($company->industries as $industry)
+                                <span class="badge bg-blue-600 text-white px-3 py-1 text-sm rounded-full">
+                                    {{ $industry->name }}
+                                </span>
+                            @endforeach
+                        @endif
+
                         <p>{{ $company->description }}</p>
-                        <br>
+
 
                         <p class="font-bold text-lg text-al">Où nous trouver ?</p>
-                        <br>
                         <div class="flex justify-center items-center gap-4">
                             @foreach($company->addresses as $location)
                                 <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
@@ -189,7 +195,7 @@
             </div>
 
             <!-- Tab 2 -->
-            <a href="{{ route('offer.search', ['company' => [$company->name]]) }}" class="tab whitespace-nowrap">
+            <a href="{{ route('offer.index', ['company' => [$company->name]]) }}" class="tab whitespace-nowrap">
                 Nos offres
             </a>
 

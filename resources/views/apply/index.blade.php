@@ -5,6 +5,12 @@
 @section('content')
     <div class="container mx-auto py-6 px-4">
 
+        @if (session('success'))
+            <div class="alert alert-success shadow-lg mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-error shadow-lg mb-4">
                 <div class="flex items-center">
@@ -86,18 +92,36 @@
                                     </div>
                                 @endforeach
                             </div>
+                            <div class="mt-2 text-sm text-gray-700">
+                                @if ($offer->pivot && $offer->pivot->created_at)
+                                    {{ $offer->pivot->created_at->format('d/m/Y') }}
+                                @else
+                                    Non disponible
+                                @endif
+                            </div>
 
                             <!-- Lettre de motivation -->
                             <div class="mt-2 text-sm text-gray-700">
-                                {{ Str::limit($offer->pivot->cover_letter, 80) ?? 'Non fournie' }}
+                                @if ($offer->pivot && $offer->pivot->cover_letter)
+                                    {{ Str::limit($offer->pivot->cover_letter, 80) }}
+                                @else
+                                    Non fournie
+                                @endif
                             </div>
+
 
                             <!-- Actions -->
                             <div class="mt-4 flex flex-col gap-2">
-                                <a href="{{ Storage::url($offer->pivot->curriculum_vitae) }}"
-                                   target="_blank" class="btn btn-outline btn-sm w-full">
-                                    Voir mon CV
-                                </a>
+                                @if ($offer->pivot && $offer->pivot->curriculum_vitae)
+                                    <a href="{{ Storage::url($offer->pivot->curriculum_vitae) }}"
+                                       target="_blank"
+                                       class="btn btn-outline btn-sm">
+                                        Voir mon CV
+                                    </a>
+                                @else
+                                    <span class="text-sm text-gray-500 italic">CV non fourni</span>
+                                @endif
+
 
                                 <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">
                                     Retirer
@@ -149,17 +173,32 @@
                                 @endforeach
                             </td>
                             <td class="border px-4 py-2 text-center">
-                                <a href="{{ Storage::url($offer->pivot->curriculum_vitae) }}" target="_blank" class="btn btn-outline btn-sm">
-                                    Voir CV
-                                </a>
+                                @if ($offer->pivot && $offer->pivot->curriculum_vitae)
+                                    <a href="{{ Storage::url($offer->pivot->curriculum_vitae) }}"
+                                       target="_blank"
+                                       class="btn btn-outline btn-sm">
+                                        Voir mon CV
+                                    </a>
+                                @else
+                                    <span class="text-sm text-gray-500 italic">CV non fourni</span>
+                                @endif
+
                             </td>
 
                             <td class="border px-4 py-2">
-                                {{ Str::limit($offer->pivot->cover_letter, 80) ?? 'Non fournie' }}
+                                @if ($offer->pivot && $offer->pivot->cover_letter)
+                                    {{ Str::limit($offer->pivot->cover_letter, 80) }}
+                                @else
+                                    Non fournie
+                                @endif
                             </td>
 
                             <td class="border px-4 py-2 text-center text-gray-500">
-                                {{ $offer->pivot->created_at->format('d/m/Y à H:i') }}
+                                @if ($offer->pivot && $offer->pivot->created_at)
+                                    {{ $offer->pivot->created_at->format('d/m/Y') }}
+                                @else
+                                    Non disponible
+                                @endif
                             </td>
 
                             <td class="border px-4 py-2 text-center">

@@ -22,7 +22,7 @@
                 <div class="card bg-base-100">
                     <div class="card-body">
                         <h2 class="card-title">Recherche et filtres</h2>
-                        <form action="{{ route('offer.search') }}" method="GET">
+                        <form action="{{ route('offer.index') }}" method="GET">
                             {{-- Champ de recherche par titre de l'offre --}}
                             <div class="form-control mb-4">
                                 <input type="text" name="offer-title" placeholder="Titre de l'offre" class="input input-bordered" value="{{ request('offer-title') }}" />
