@@ -57,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
 //        'destroy' => 'admin.offer.destroy',
 //    ]);
     Route::resource('offer', OfferController::class);
-    Route::get('search/offer', [OfferController::class, 'search'])->name('offer.search');
     //Candidature
     Route::get('/offer/{offer}/apply', [ApplicationController::class, 'create'])->name('apply.create');
     Route::post('/offer/{offer}/apply', [ApplicationController::class, 'store'])->name('apply.store');
@@ -82,8 +81,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Route pour les utilisateurs avec la permission manage_students
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
+Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:pilot ou can:manage_students
     Route::resource('pilot/student', StudentController::class);
+    Route::get('pilot/apply', [ApplicationController::class, 'index'])->name('pilot.apply.index');
+    Route::delete('pilot/apply/{offer}/{user}', [ApplicationController::class, 'destroy'])->name('pilot.apply.remove');
 });
 
 
