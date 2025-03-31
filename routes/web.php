@@ -70,8 +70,8 @@ Route::middleware(['auth'])->group(function () {
 
     //Profile
     Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
-
     Route::get('pilot/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
 });
 
 // Route pour les utilisateurs avec la permission manage_students
@@ -83,5 +83,9 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:
 });
 
 
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    Route::resource('pilot/promotion', PromotionController::class);
+
+});
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
