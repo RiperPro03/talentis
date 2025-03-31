@@ -34,6 +34,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 //    Route::resource('admin/company', CompanyController::class)->names([
 //        'index' => 'admin.company.index',
 //        'show' => 'admin.company.show',
