@@ -29,35 +29,9 @@
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
 
-@foreach($students as $student)
-            <dialog id="modal-{{ $student->id }}" class="modal">
-                <div class="modal-box">
-                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                    <p class="py-4">
-                        Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
-                    </p>
-                    <div class="modal-action flex justify-between">
-                        <form action="{{ route('users.destroy', $student) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-error">Confirmer</button>
-                        </form>
-                        <form method="dialog">
-                            <button class="btn">Annuler</button>
-                        </form>
-                    </div>
-                </div>
 
 
-                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                <form method="dialog" class="modal-backdrop">
-                    <button class="cursor-default">Fermer</button>
-                </form>
-            </dialog>
-@endforeach
-
-
-        <!-- Version Mobile: Affichage en cartes -->
+            <!-- Version Mobile: Affichage en cartes -->
     </div>
 
 
@@ -69,13 +43,12 @@
                 <p class="text-gray-600">{{ $student->email }}</p>
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
-                        Modifier
-                    </a>
-
-                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
-                        Retirer
-                    </button>
+{{--                    <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary btn-sm">Voir</a>--}}
+{{--                    <form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
+{{--                        @csrf--}}
+{{--                        @method('DELETE')--}}
+                        <button class="btn btn-error btn-sm">Retirer</button>
+{{--                    </form>--}}
                 </div>
             </div>
         @endforeach
@@ -93,7 +66,6 @@
             </tr>
             </thead>
             <tbody>
-
             @foreach($students as $student)
                 <tr class="hover:bg-gray-50">
                     <td class="border px-4 py-2">{{ $student->name }}</td>
@@ -101,28 +73,19 @@
                     <td class="border px-4 py-2">
                         {{$student->email}}
                     </td>
-
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
-                            Modifier
-                        </a>
-
-                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
-                            Retirer
-                        </button>
-
-
-
+{{--                        <a href="{{ route('offer.show', $offer) }}" class="btn btn-sm btn-primary">Voir</a>--}}
+{{--                        //<form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
+{{--                            //@csrf--}}
+{{--                            //@method('DELETE')--}}
+                            <button class="btn btn-sm btn-error">Retirer</button>
+{{--                        </form>--}}
                     </td>
-
-
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
 
-    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
-        ← Retour
-    </a>
+
 @endsection

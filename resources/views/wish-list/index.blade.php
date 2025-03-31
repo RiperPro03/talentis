@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mes favoris - Talentis')
+@section('title', 'Wish-list d\'Offres')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
@@ -29,34 +29,6 @@
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Mes Favoris</h1>
 
-        @foreach($wishlist as $offer)
-            <!-- Modal de confirmation -->
-            <dialog id="modal-{{ $offer->id }}" class="modal">
-                <div class="modal-box">
-                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                    <p class="py-4">
-                        Êtes-vous sûr de vouloir retirer de la liste des favoris l'offre
-                        <strong>{{ $offer->title }}</strong> ?
-                    </p>
-                    <div class="modal-action">
-                        <form method="dialog">
-                            <button class="btn">Annuler</button>
-                        </form>
-                        <form action="{{ route('wishlist.remove', $offer) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-error">Confirmer</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                <form method="dialog" class="modal-backdrop">
-                    <button class="cursor-default">Fermer</button>
-                </form>
-            </dialog>
-        @endforeach
-
         @if($wishlist->isEmpty())
             <p class="text-center text-gray-500">Aucune offre ajoutée à votre liste de favoris.</p>
         @else
@@ -80,14 +52,14 @@
                                 {{ $location->city }}
                             </div>
                         @endforeach
-                        <p class="text-gray-600">{{ $offer->type }}</p>
-
                         <!-- Actions -->
                         <div class="mt-3 flex justify-between">
                             <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary btn-sm">Voir</a>
-                            <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">
-                                Retirer
-                            </button>
+                            <form action="{{ route('wishlist.remove', $offer) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-error btn-sm">Retirer</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
@@ -101,8 +73,6 @@
                         <th class="border px-4 py-2 text-center text-lg">Poste</th>
                         <th class="border px-4 py-2 text-center text-lg">Entreprise</th>
                         <th class="border px-4 py-2 text-center text-lg">Localisation</th>
-                        <th class="border px-4 py-2 text-center text-lg">Type d'offre</th>
-                        <th class="border px-4 py-2 text-center text-lg">Ajouté le</th>
                         <th class="border px-4 py-2 text-center text-lg">Actions</th>
                     </tr>
                     </thead>
@@ -127,18 +97,13 @@
                                     </div>
                                 @endforeach
                             </td>
-
-                            <td class="border px-4 py-2">{{ $offer->type }}</td>
-
-                            <td class="border px-4 py-2 text-center text-gray-500">
-                                {{ $offer->pivot->created_at->format('d/m/Y à H:i') }}
-                            </td>
-
                             <td class="border px-4 py-2 flex gap-2 justify-center">
                                 <a href="{{ route('offer.show', $offer) }}" class="btn btn-sm btn-primary">Voir</a>
-                                <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">
-                                    Retirer
-                                </button>
+                                <form action="{{ route('wishlist.remove', $offer) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-error">Retirer</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

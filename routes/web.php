@@ -89,3 +89,12 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
 });
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+Route::resource('pilot/company', CompanyController::class)->names([
+           'index' => 'pilot.company.index',
+           'show' => 'pilot.company.show',
+           'create' => 'pilot.company.create',
+           'edit' => 'pilot.company.edit',
+           'store' => 'pilot.company.store',
+           'update' => 'pilot.company.update',
+           'destroy' => 'pilot.company.destroy',
+       ]);
