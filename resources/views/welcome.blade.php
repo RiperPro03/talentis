@@ -18,7 +18,7 @@
 </div>
 
 <!-- SEARCH BAR -->
-<form action="{{ route('offer.search') }}" method="GET"
+<form action="{{ route('offer.index') }}" method="GET"
       class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 bg-white p-6 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-4">
 
     <!-- Input: titre de l'offre -->
