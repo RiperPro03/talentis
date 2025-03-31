@@ -19,9 +19,13 @@ class WishlistController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->hasRole('pilot')) {
+            return redirect()->back();
+        }
+
         // Vérifier si l'offre est déjà en favoris
         if ($user->offers()->where('offer_id', $offer->id)->exists()) {
-            return redirect()->route('wishlist.index')->with('error', 'Cette offre est déjà dans votre liste de favoris');
+            return redirect()->route('wishlist.index')->with('errors', 'Cette offre est déjà dans votre liste de favoris');
         }
 
         // Ajouter l'offre à la wish-list
@@ -33,6 +37,10 @@ class WishlistController extends Controller
     public function remove(Offer $offer)
     {
         $user = Auth::user();
+
+        if ($user->hasRole('pilot')) {
+            return redirect()->back();
+        }
 
         // Vérifier si l'offre est bien dans la wish-list de l'utilisateur
         if (!$user->offers()->where('offer_id', $offer->id)->exists()) {

@@ -63,9 +63,9 @@
                 <div class="card bg-base-100 shadow-xl">
                     @if($offer->companies && $offer->companies->logo_path)
                         <figure class="px-6 pt-6">
-                            <img src="{{ asset($offer->companies->logo_path) }}"
+                            <img src="{{ Storage::url($offer->companies->logo_path) }}"
                                  alt="{{ 'logo_' . $offer->companies->name }}"
-                                 class="rounded-xl w-auto h-24"/>
+                                 class="rounded-xl w-auto h-24" />
                         </figure>
                     @endif
                     <div class="card-body items-center text-center">

@@ -9,7 +9,7 @@
 
             <!-- Logo de l'entreprise -->
             <div class="flex justify-center mb-4">
-                <img src="{{ asset($offer->companies->logo_path) }}" alt="{{ 'logo_' . $offer->companies->name }}"
+                <img src="{{ Storage::url($offer->companies->logo_path) }}" alt="{{ 'logo_' . $offer->companies->name }}"
                     class="h-20 w-20 object-contain">
             </div>
 
@@ -98,21 +98,25 @@
                 📩 Nombre de candidatures : <span class="text-primary">{{ $offer->applies->count() }}</span>
             </div>
 
-            <!-- Bouton Ajouter aux Favoris -->
-            <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="mt-3">
-                @csrf
-                <input type="hidden" name="offer_id" value="{{ $offer->id }}">
-                <button type="submit" class="btn btn-outline w-full text-lg py-3 flex items-center justify-center gap-2">
-                    ❤️ Ajouter aux favoris
-                </button>
-            </form>
 
-            <!-- Bouton Postuler -->
-            <div class="card-actions mt-6">
-                <a href="{{ route('apply.create', $offer) }}" class="btn btn-primary w-full text-lg py-3 flex items-center justify-center">
-                    Postuler
-                </a>
-            </div>
+
+            @if (!auth()->user()->hasRole('pilot'))
+                <!-- Bouton Ajouter aux Favoris -->
+                <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="mt-3">
+                    @csrf
+                    <input type="hidden" name="offer_id" value="{{ $offer->id }}">
+                    <button type="submit" class="btn btn-outline w-full text-lg py-3 flex items-center justify-center gap-2">
+                        ❤️ Ajouter aux favoris
+                    </button>
+                </form>
+
+                <!-- Bouton Postuler -->
+                <div class="card-actions mt-6">
+                    <a href="{{ route('apply.create', $offer) }}" class="btn btn-primary w-full text-lg py-3 flex items-center justify-center">
+                        Postuler
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
