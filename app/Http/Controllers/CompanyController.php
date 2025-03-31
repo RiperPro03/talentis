@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Company;
 use App\Models\Industry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
@@ -13,12 +14,45 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::paginate(8);
+        if ($request->has('company') || $request->has('industry') || $request->has('location')) {
+            $request->validate([
+                'company'  => 'array|nullable',
+                'industry' => 'array|nullable',
+                'location' => 'array|nullable'
+            ]);
 
-        if (Route::currentRouteName() === 'admin.company.index') {
-            return view('admin.company.index', compact('companies'));
+            $filters = [
+                'company'  => (array) $request->query('company', []),
+                'industry' => (array) $request->query('industry', []),
+                'location' => (array) $request->query('location', [])
+            ];
+
+            $query = Company::query();
+
+            if (!empty($filters['company'])) {
+                $query->whereIn('name', $filters['company']);
+            }
+
+            $relations = [
+                'industries' => 'industry',
+                'addresses'  => 'location'
+            ];
+
+            foreach ($relations as $relation => $filterKey) {
+                if (!empty($filters[$filterKey])) {
+                    $query->whereHas($relation, function ($q) use ($filters, $filterKey) {
+                        $column = $filterKey === 'industry' ? 'name' : 'city';
+                        $q->whereIn($column, $filters[$filterKey]);
+                    });
+                }
+            }
+
+            $companies = $query->paginate(8);
+
+        } else {
+            $companies = Company::paginate(8);
         }
 
         if (request()->has('page') && request()->page > $companies->lastPage()) {
@@ -64,7 +98,13 @@ class CompanyController extends Controller
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
-        return view('company.show', compact('company'));
+        $appliesCount = DB::table('applies')
+            ->join('offers', 'applies.offer_id', '=', 'offers.id')
+            ->where('offers.company_id', $company->id)
+            ->distinct('applies.user_id')
+            ->count('applies.user_id');
+
+        return view('company.show', compact('company', 'appliesCount'));
     }
 
     /**
@@ -106,42 +146,16 @@ class CompanyController extends Controller
         return redirect()->route('company.index')->with('success', 'Entreprise supprimée');
     }
 
-    public function search(Request $request)
+    public function rate(Request $request, Company $company)
     {
-        // Récupération des filtres depuis la requête
-        $filters = [
-            'company'      => (array) $request->query('company', []),
-            'industry'     => (array) $request->query('industry', []),
-            'location'     => (array) $request->query('location', [])
-        ];
+        $request->validate([
+            'rating' => 'required|integer|between:1,5'
+        ]);
 
-        // Début de la requête sur Company
-        $query = Company::query();
+        $company->evaluations()->syncWithoutDetaching([
+            auth()->id() => ['rating' => $request->rating]
+        ]);
 
-        // Filtrer par plusieurs entreprises spécifiques
-        if (!empty($filters['company'])) {
-            $query->whereIn('name', $filters['company']);
-        }
-
-        // Filtrage dynamique sur relations (industries et addresses)
-        $relations = [
-            'industries' => 'name',
-            'addresses'  => 'city'
-        ];
-
-        foreach ($relations as $relation => $column) {
-            if (!empty($filters[$relation])) {
-                $query->whereHas($relation, fn($q) => $q->whereIn($column, $filters[$relation]));
-            }
-        }
-
-        // Récupération des entreprises avec pagination
-        $companies = $query->paginate(8);
-
-        // Récupération des valeurs pour les filtres
-        $industries = Industry::all(['name']);
-        $locations = Address::all(['city']);
-
-        return view('company.index', compact('companies', 'industries', 'locations'));
+        return redirect()->route('company.show', $company)->with('success', 'Note attribuée');
     }
 }

@@ -140,4 +140,33 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Utilisateur retiré avec succès.');
     }
 
+    public function profil()
+    {
+        $user = auth()->user();
+
+        // Récupération complète des relations
+        $wishlistCount = $user->offers()->count();
+        $appliesCount = $user->applies()->count();
+
+        // On ne récupère que les 3 premiers éléments
+        $wishlist = $user->offers()
+            ->with('companies')
+            ->latest('wishlists.created_at')
+            ->take(3)
+            ->get();
+
+        $applies = $user->applies()
+            ->with('companies')
+            ->orderByPivot('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('profile.show', compact(
+            'user',
+            'wishlist',
+            'applies',
+            'wishlistCount',
+            'appliesCount'
+        ));
+    }
 }
