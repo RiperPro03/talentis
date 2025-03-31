@@ -28,7 +28,7 @@ class CompanyResource extends Resource
 
     protected static ?string $navigationLabel = 'Entreprises';
 
-    protected static ?string $navigationGroup = 'Entreprise';
+    protected static ?string $navigationGroup = 'Entreprises';
 
     public static function form(Form $form): Form
     {
@@ -101,6 +101,7 @@ class CompanyResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

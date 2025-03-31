@@ -26,7 +26,7 @@ class OfferResource extends Resource
 
     protected static ?string $navigationLabel = 'Offres';
 
-    protected static ?string $navigationGroup = 'Gestion';
+    protected static ?string $navigationGroup = 'Offres';
 
     public static function form(Form $form): Form
     {
@@ -114,6 +114,7 @@ class OfferResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

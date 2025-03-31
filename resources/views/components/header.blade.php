@@ -44,11 +44,11 @@
                     @endif
 
                     @if($isAdmin)
-                        <li><a href="#1" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                        <li><a href="{{ route('filament.admin.pages.dashboard') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
                     @endif
 
                     @if($isPilot)
-                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                        <li><a href="{{ route('dashboard.index') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
                     @endif
 
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
@@ -104,11 +104,11 @@
                     @endif
 
                     @if($isAdmin)
-                        <li><a href="#1" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                        <li><a href="{{ route('filament.admin.pages.dashboard') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
                     @endif
 
                     @if($isPilot)
-                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                        <li><a href="{{ route('dashboard.index') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
                     @endif
 
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>

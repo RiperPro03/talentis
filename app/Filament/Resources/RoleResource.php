@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\IndustryResource\Pages;
-use App\Filament\Resources\IndustryResource\RelationManagers;
-use App\Models\Industry;
+use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\RelationManagers;
+use Spatie\Permission\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,29 +16,30 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IndustryResource extends Resource
+class RoleResource extends Resource
 {
-    protected static ?string $model = Industry::class;
+    protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
-    protected static ?string $navigationLabel = 'Secteurs d\'activité';
+    protected static ?string $navigationLabel = 'Rôles';
 
-    protected static ?string $navigationGroup = 'Entreprises';
+    protected static ?string $navigationGroup = 'Sécurité';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Nom du secteur')
+                    ->label('Nom du rôle')
                     ->required()
                     ->maxLength(255),
 
-                Select::make('companies')
-                    ->label('Entreprises associées')
-                    ->relationship('companies', 'name')
+                Select::make('permissions')
+                    ->label('Permissions')
                     ->multiple()
+                    ->relationship('permissions', 'name')
+                    ->preload()
                     ->searchable(),
             ]);
     }
@@ -48,20 +48,14 @@ class IndustryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label('Nom')
-                    ->sortable()
-                    ->searchable(),
-
-                TextColumn::make('companies.name')
-                    ->label('Entreprises associées')
+                TextColumn::make('name')->label('Nom')->sortable()->searchable(),
+                TextColumn::make('permissions.name')
+                    ->label('Permissions')
                     ->badge()
-                    ->sortable(),
+                    ->limit(20),
             ])
             ->filters([
-                Tables\Filters\Filter::make('name')
-                    ->label('Filtrer par Nom')
-                    ->query(fn ($query, $value) => $query->where('name', 'like', "%$value%")),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -84,9 +78,9 @@ class IndustryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListIndustries::route('/'),
-            'create' => Pages\CreateIndustry::route('/create'),
-            'edit' => Pages\EditIndustry::route('/{record}/edit'),
+            'index' => Pages\ListRoles::route('/'),
+            'create' => Pages\CreateRole::route('/create'),
+            'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
     }
 }
