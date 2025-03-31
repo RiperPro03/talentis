@@ -75,7 +75,7 @@ class PromotionController extends Controller
         $promotion->update($validatedData);
 
         // Redirection avec un message de succès
-        return redirect()->route('promotions.edit')->with('success', 'Promotion mise à jour avec succès');
+        return redirect()->route('promotion.edit',$promotion)->with('success', 'Promotion mise à jour avec succès');
     }
 
     /**

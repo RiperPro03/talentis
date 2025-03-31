@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Promotion;
 use App\Models\Sector;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,7 @@ class SectorController extends Controller
     public function index()
     {
         $sectors = Sector::all();
-//        return view('sector.index', compact('sectors'));
-        return response()->json($sectors);
+        return view('pilot.sector.index', compact('sectors'));
     }
 
     /**
@@ -22,7 +22,7 @@ class SectorController extends Controller
      */
     public function create()
     {
-//        return view('sectors.create');
+//        return view('offers.create');
     }
 
     /**
@@ -33,59 +33,63 @@ class SectorController extends Controller
         $request->validate([
 
         ]);
-        Sector::create([
+        Promotion::create([
 
         ]);
 
-        return redirect()->route('sector.index')->with('success', 'Secteur créé');
+        return redirect()->route('sector.index')->with('success', 'Secteur créée');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Sector $sector = null)
+    public function show(Promotion $promotion = null)
     {
-        if(!$sector) {
-            return redirect()->route('sector.index')->with('error', 'Secteur non trouvé');
+        if(!$promotion) {
+            return redirect()->route('sector.index')->with('error', 'Secteur non trouvée');
         }
-//        return view('sector.show', compact('sector'));
-        return response()->json($sector);
+
+//        return view('promotion.show', compact('promotion'));
+        return response()->json($promotion);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sector $sector = null)
+    public function edit(Sector $sector)
     {
-        if(!$sector) {
-            return redirect()->route('sector.index')->with('error', 'Secteur non trouvé');
-        }
-//        return view('sector.edit', compact('sector'));
+        return view('pilot.sector.edit', compact('sector',));
+    }
+
+
+    public function update(Request $request, Sector $sector)
+    {
+        // Validation des données
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique' . $sector->id,
+        ]);
+
+        // Mise à jour de la promotion
+        $sector->update($validatedData);
+
+        // Redirection avec un message de succès
+        return redirect()->route('sector.edit',$sector)->with('success', 'Promotion mise à jour avec succès');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sector $sector)
-    {
-        $request->validate([
 
-        ]);
-        $sector->update([
-
-        ]);
-        return redirect()->route('sector.index')->with('success', 'Secteur modifié');
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sector $sector = null)
+    public function destroy(Promotion $promotion = null)
     {
-        if(!$sector) {
-            return redirect()->route('sector.index')->with('error', 'Secteur non trouvé');
+        if(!$promotion) {
+            return redirect()->route('sector.index')->with('error', 'Secteur non trouvée');
         }
-        $sector->delete();
-        return redirect()->route('sector.index')->with('success', 'Secteur supprimé');
+        $promotion->delete();
+        return redirect()->route('sector.index')->with('success', 'Secteur supprimée');
     }
 }
