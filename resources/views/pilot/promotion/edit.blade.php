@@ -13,7 +13,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('promotions.update', $promotion) }}" method="POST" class="space-y-4">
+            <form action="{{ route('promotion.update', $promotion) }}" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
 
@@ -29,4 +29,7 @@
             </form>
         </div>
     </div>
+    <a href= "{{route('promotion.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
+        ← Retour
+    </a>
 @endsection

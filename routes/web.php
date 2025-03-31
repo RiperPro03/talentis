@@ -57,12 +57,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('my/wish-list/{offer}', [WishListController::class, 'remove'])->name('wishlist.remove');
 
 
-    Route::resource('address', AddressController::class);
-    Route::resource('industry', IndustryController::class);
-    Route::resource('skill', SkillController::class);
-    Route::resource('admin/user', UserController::class);
-    Route::resource('Promotion', PromotionController::class);
-    Route::resource('Sector', SectorController::class);
+
 });
 
 // Route pour les utilisateurs avec la permission manage_students
@@ -70,16 +65,12 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/student', StudentController::class);
 });
 
+
+
+
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
-    Route::resource('pilot/student', StudentController::class);
+    Route::resource('pilot/promotion', PromotionController::class);
+
 });
-Route::get('/pilot/promotion', [PromotionController::class, 'index'])->name('promotion.index');
-
-Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit'); // Méthode GET pour afficher le formulaire d'édition
-Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update'); // Méthode PUT pour la mise à jour
-
-Route::get('/promotions/{promotion}/edit', [PromotionController::class, 'edit'])->name('promotions.edit');
-Route::put('/promotions/{promotion}', [PromotionController::class, 'update'])->name('promotions.update');
-
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 

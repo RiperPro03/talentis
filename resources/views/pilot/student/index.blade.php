@@ -28,7 +28,31 @@
 
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
+@foreach($students as $student)
+            <dialog id="modal-{{ $student->id }}" class="modal">
+                <div class="modal-box">
+                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                    <p class="py-4">
+                        Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
+                    </p>
+                    <div class="modal-action flex justify-between">
+                        <form action="{{ route('users.destroy', $student) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-error">Confirmer</button>
+                        </form>
+                        <form method="dialog">
+                            <button class="btn">Annuler</button>
+                        </form>
+                    </div>
+                </div>
 
+                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
+                <form method="dialog" class="modal-backdrop">
+                    <button class="cursor-default">Fermer</button>
+                </form>
+            </dialog>
+@endforeach
 
 
         <!-- Version Mobile: Affichage en cartes -->
@@ -43,37 +67,13 @@
                 <p class="text-gray-600">{{ $student->email }}</p>
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
                         Modifier
                     </a>
 
                     <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
                         Retirer
                     </button>
-                    <dialog id="modal-{{ $student->id }}" class="modal">
-                        <div class="modal-box">
-                            <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                            <p class="py-4">
-                                Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
-                            </p>
-                            <div class="modal-action flex justify-between">
-                                <form action="{{ route('users.destroy', $student) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-error">Confirmer</button>
-                                </form>
-                                <form method="dialog">
-                                    <button class="btn">Annuler</button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                        <form method="dialog" class="modal-backdrop">
-                            <button class="cursor-default">Fermer</button>
-                        </form>
-                    </dialog>
-
                 </div>
             </div>
         @endforeach
@@ -101,36 +101,14 @@
                     </td>
 
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
                             Modifier
                         </a>
 
                         <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
                             Retirer
                         </button>
-                        <dialog id="modal-{{ $student->id }}" class="modal">
-                            <div class="modal-box">
-                                <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                                <p class="py-4">
-                                    Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
-                                </p>
-                                <div class="modal-action flex justify-between">
-                                    <form action="{{ route('users.destroy', $student) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-error">Confirmer</button>
-                                    </form>
-                                    <form method="dialog">
-                                        <button class="btn">Annuler</button>
-                                    </form>
-                                </div>
-                            </div>
 
-                            <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                            <form method="dialog" class="modal-backdrop">
-                                <button class="cursor-default">Fermer</button>
-                            </form>
-                        </dialog>
 
 
                     </td>
@@ -142,7 +120,7 @@
         </table>
     </div>
 
-    <a href="{{ url()->previous() }}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
+    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
         ← Retour
     </a>
 @endsection

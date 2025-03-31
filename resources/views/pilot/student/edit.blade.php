@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('students.update', $student) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('student.update', $student) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('PUT')
 
@@ -89,7 +89,7 @@
         </form>
     </div>
 
-    <a href="{{ url()->previous() }}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
+    <a href="{{route('student.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
         ← Retour
     </a>
 
