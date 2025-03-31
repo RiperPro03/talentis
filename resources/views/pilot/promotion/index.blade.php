@@ -28,7 +28,31 @@
 
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
+        @foreach($promotions as $promotion)
+            <dialog id="modal-{{ $promotion->id }}" class="modal">
+                <div class="modal-box">
+                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                    <p class="py-4">
+                        Êtes-vous sûr de vouloir retirer {{ $promotion->promotion_code }} ?
+                    </p>
+                    <div class="modal-action flex justify-between">
+                        <form action="{{ route('promotion.destroy', $promotion) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-error">Confirmer</button>
+                        </form>
+                        <form method="dialog">
+                            <button class="btn">Annuler</button>
+                        </form>
+                    </div>
+                </div>
 
+                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
+                <form method="dialog" class="modal-backdrop">
+                    <button class="cursor-default">Fermer</button>
+                </form>
+            </dialog>
+        @endforeach
 
 
         <!-- Version Mobile: Affichage en cartes -->
@@ -42,12 +66,13 @@
 
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    {{--                    <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary btn-sm">Voir</a>--}}
-                    {{--                    <form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
-                    {{--                        @csrf--}}
-                    {{--                        @method('DELETE')--}}
-                    <button class="btn btn-error btn-sm">Retirer</button>
-                    {{--                    </form>--}}
+                    <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
+                        Modifier
+                    </a>
+
+                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
+                        Retirer
+                    </button>
                 </div>
             </div>
         @endforeach
@@ -59,27 +84,35 @@
             <thead>
             <tr class="bg-gray-50">
                 <th class="border px-4 py-2 text-center text-lg">Code de promotion</th>
-                <th class="border px-4 py-2 text-center text-lg">Actions</th>
             </tr>
             </thead>
             <tbody>
+
             @foreach($promotions as $promotion)
                 <tr class="hover:bg-gray-50">
-                    <td class="border px-4 py-2">{{ $promotion->promotion_code }}</td>
+                    <td class="border px-4 py-2">{{ $promotion->promotion_code}}</td>
 
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        {{--                        <a href="{{ route('offer.show', $offer) }}" class="btn btn-sm btn-primary">Voir</a>--}}
-                        {{--                        //<form action="{{ route('wishlist.remove', $offer) }}" method="POST">--}}
-                        {{--                            //@csrf--}}
-                        {{--                            //@method('DELETE')--}}
-                        <button class="btn btn-sm btn-error">Retirer</button>
-                        {{--                        </form>--}}
+                        <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
+                            Modifier
+                        </a>
+
+                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
+                            Retirer
+                        </button>
+
+
+
                     </td>
+
+
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
 
-
+    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
+        ← Retour
+    </a>
 @endsection
