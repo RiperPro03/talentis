@@ -83,18 +83,20 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:
 });
 
 
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
+Route::middleware(['auth', 'can:manage_promotion'])->group(function () {
     Route::resource('pilot/promotion', PromotionController::class);
 
 });
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-Route::resource('pilot/company', CompanyController::class)->names([
-           'index' => 'pilot.company.index',
-           'show' => 'pilot.company.show',
-           'create' => 'pilot.company.create',
-           'edit' => 'pilot.company.edit',
-           'store' => 'pilot.company.store',
-           'update' => 'pilot.company.update',
-           'destroy' => 'pilot.company.destroy',
-       ]);
+Route::middleware(['auth', 'can:manage_company'])->group(function () {
+    Route::resource('pilot/company', CompanyController::class)->names([
+        'index' => 'pilot.company.index',
+        'show' => 'pilot.company.show',
+        'create' => 'pilot.company.create',
+        'edit' => 'pilot.company.edit',
+        'store' => 'pilot.company.store',
+        'update' => 'pilot.company.update',
+        'destroy' => 'pilot.company.destroy',
+    ]);
+});
