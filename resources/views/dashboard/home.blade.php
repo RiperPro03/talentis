@@ -1,60 +1,89 @@
-@extends('layouts.dashboard-admin')
+@extends('layouts.app')
 
-@section('title', 'Tableau de board - Talentis')
+@section('title', 'Tableau de bord - Talentis')
 
 @section('content')
 
-<div class="bg-base-200">
+<div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-7xl mx-auto p-10">
+        <!-- Titre des statistiques -->
+        <h1 id="statsTitle" class="text-4xl font-bold text-gray-800 mb-8 text-center bg-white py-2 px-4 shadow-md lg:text-5xl">
+            📊 Statistiques
+        </h1>
 
-    <div class="md:h-screen flex">
+        <!-- Conteneur des statistiques -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                <div class="stat-title text-lg">Nombre de Pilotes</div>
+                <div class="stat-value text-blue-600 text-5xl">120</div>
+                <div class="stat-desc text-gray-500">Mis à jour récemment</div>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                <div class="stat-title text-lg">Nombre d'Étudiants</div>
+                <div class="stat-value text-green-600 text-5xl">450</div>
+                <div class="stat-desc text-gray-500">↗︎ +10 cette semaine</div>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                <div class="stat-title text-lg">Offres publiées</div>
+                <div class="stat-value text-yellow-600 text-5xl">78</div>
+                <div class="stat-desc text-gray-500">↘︎ -5 cette semaine</div>
+            </div>
+        </div>
 
-        <!-- Contenu principal -->
-        <div class="flex-1 p-10 md:ml-64 mt-16">
-            <div class="w-full max-w-7xl mx-auto">
-                <!-- Titre des statistiques avec position dynamique sur défilement -->
-                <h1 id="statsTitle"
-                    class="text-4xl font-bold text-gray-800 mb-8 text-center sm:text-2xl z-40 bg-white py-2 px-4 shadow-md transition-all duration-300 ease-in-out sm:mt-20 lg:text-5xl">
-                    📊 Statistiques
-                </h1>
+        <!-- Deux autres statistiques en bas, centrées avec un espace plus grand au milieu -->
+        <div class="flex justify-center gap-x-12 mt-6">
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center w-96">
+                <div class="stat-title text-lg">Entreprises partenaires</div>
+                <div class="stat-value text-purple-600 text-5xl">35</div>
+                <div class="stat-desc text-gray-500">↗︎ +3 ce mois</div>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center w-96">
+                <div class="stat-title text-lg">Moyenne Offres/Jour</div>
+                <div class="stat-value text-red-600 text-5xl">5.2</div>
+                <div class="stat-desc text-gray-500">Stable cette semaine</div>
+            </div>
+        </div>
 
-                <!-- Conteneur des statistiques avec flex pour répartir les espaces -->
-                <div class="flex flex-wrap justify-center gap-6 mt-16 sm:mt-24">
-                    <!-- Première ligne : 3 stats -->
-                    <div class="w-full sm:w-1/3 lg:w-1/4 p-6 bg-white shadow-lg rounded-xl border text-center">
-                        <div class="stat-title text-lg sm:text-base lg:text-xl">Nombre de Pilotes</div>
-                        <div class="stat-value text-blue-600 text-5xl sm:text-3xl lg:text-6xl">120</div>
-                        <div class="stat-desc text-gray-500 lg:text-lg">Mis à jour récemment</div>
-                    </div>
-
-                    <div class="w-full sm:w-1/3 lg:w-1/4 p-6 bg-white shadow-lg rounded-xl border text-center">
-                        <div class="stat-title text-lg sm:text-base lg:text-xl">Nombre d'Étudiants</div>
-                        <div class="stat-value text-green-600 text-5xl sm:text-3xl lg:text-6xl">450</div>
-                        <div class="stat-desc text-gray-500 lg:text-lg">↗︎ +10 cette semaine</div>
-                    </div>
-
-                    <div class="w-full sm:w-1/3 lg:w-1/4 p-6 bg-white shadow-lg rounded-xl border text-center">
-                        <div class="stat-title text-lg sm:text-base lg:text-xl">Offres publiées</div>
-                        <div class="stat-value text-yellow-600 text-5xl sm:text-3xl lg:text-6xl">78</div>
-                        <div class="stat-desc text-gray-500 lg:text-lg">↘︎ -5 cette semaine</div>
-                    </div>
-
-                    <!-- Deuxième ligne : 2 stats -->
-                    <div class="w-full sm:w-1/2 lg:w-1/4 p-6 bg-white shadow-lg rounded-xl border text-center">
-                        <div class="stat-title text-lg sm:text-base lg:text-xl">Entreprises partenaires</div>
-                        <div class="stat-value text-purple-600 text-5xl sm:text-3xl lg:text-6xl">35</div>
-                        <div class="stat-desc text-gray-500 lg:text-lg">↗︎ +3 ce mois</div>
-                    </div>
-
-                    <div class="w-full sm:w-1/2 lg:w-1/4 p-6 bg-white shadow-lg rounded-xl border text-center">
-                        <div class="stat-title text-lg sm:text-base lg:text-xl">Moyenne Offres/Jour</div>
-                        <div class="stat-value text-red-600 text-5xl sm:text-3xl lg:text-6xl">5.2</div>
-                        <div class="stat-desc text-gray-500 lg:text-lg">Stable cette semaine</div>
-                    </div>
-                </div>
+        <!-- Cartes de redirection CRUD -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 mt-10">
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Student</a> --}}
+                <span class="text-gray-600">Gérer Student</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Company</a> --}}
+                <span class="text-gray-600">Gérer Company</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Offer</a> --}}
+                <span class="text-gray-600">Gérer Offer</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Promotion</a> --}}
+                <span class="text-gray-600">Gérer Promotion</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Skill</a> --}}
+                <span class="text-gray-600">Gérer Skill</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Sector</a> --}}
+                <span class="text-gray-600">Gérer Sector</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Industry</a> --}}
+                <span class="text-gray-600">Gérer Industry</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Address</a> --}}
+                <span class="text-gray-600">Gérer Address</span>
+            </div>
+            <div class="p-6 bg-white shadow-lg rounded-xl border text-center">
+                {{-- <a href="{{ route('#') }}" class="btn btn-primary">Gérer Apply</a> --}}
+                <span class="text-gray-600">Gérer Apply</span>
             </div>
         </div>
     </div>
-
 </div>
 
 @endsection
