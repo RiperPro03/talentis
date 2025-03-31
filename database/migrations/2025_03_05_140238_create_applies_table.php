@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('offer_id')->constrained('offers')->onDelete('cascade');
             $table->timestamps();
             $table->string('curriculum_vitae', 255);
-            $table->string('cover_letter', 255);
+            $table->string('cover_letter', 255)->nullable();
             $table->primary(['user_id', 'offer_id']);
         });
 

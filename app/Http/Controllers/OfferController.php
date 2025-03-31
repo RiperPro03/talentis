@@ -16,12 +16,71 @@ class OfferController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $offers = Offer::paginate(8);
+        if ($request->has('offer-title') || $request->has('company') || $request->has('industry')
+            || $request->has('location') || $request->has('skill') || $request->has('sector')
+            || $request->has('type'))
+        {
 
-        if (Route::currentRouteName() === 'admin.company.index') {
-            return view('admin.offer.index', compact('offers'));
+            $request->validate([
+                'offer-title' => 'string|nullable',
+                'company'     => 'array|nullable',
+                'industry'    => 'array|nullable',
+                'location'    => 'array|nullable',
+                'skill'       => 'array|nullable',
+                'sector'      => 'array|nullable',
+                'type'        => 'array|nullable',
+                'type.*'      => 'in:CDI,CDD,Stage,Alternance',
+            ]);
+
+            $filters = [
+                'offer-title' => $request->query('offer-title'),
+                'company'     => (array) $request->query('company', []),
+                'industry'    => (array) $request->query('industry', []),
+                'location'    => (array) $request->query('location', []),
+                'skill'      => (array) $request->query('skill', []),
+                'sector'     => (array) $request->query('sector', []),
+                'type'       => (array) $request->query('type', []),
+            ];
+
+            $query = Offer::query();
+
+            if (!empty($filters['offer-title'])) {
+                $query->where('title', 'like', '%' . $filters['offer-title'] . '%');
+            }
+
+            if (!empty($filters['type'])) {
+                $query->whereIn('type', $filters['type']);
+            }
+
+            $relations = [
+                'companies'  => 'company',
+                'sector'     => 'sector',
+                'skills'     => 'skill',
+                'companies.industries' => 'industry',
+                'companies.addresses'  => 'location',
+            ];
+
+            foreach ($relations as $relation => $filterKey) {
+                if (!empty($filters[$filterKey])) {
+                    $query->whereHas($relation, function ($q) use ($filters, $filterKey) {
+                        $column = match ($filterKey) {
+                            'company'  => 'name',
+                            'sector'   => 'name',
+                            'skill'    => 'skill_name',
+                            'industry' => 'name',
+                            'location' => 'city',
+                        };
+                        $q->whereIn($column, $filters[$filterKey]);
+                    });
+                }
+            }
+
+            $offers = $query->paginate(8);
+
+        } else {
+            $offers = Offer::paginate(8);
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
@@ -54,6 +113,10 @@ class OfferController extends Controller
         request()->validate([
 
         ]);
+
+        // TODO : Faire la vérif que Type est bien un de ces input ['CDI', 'CDD', 'Stage', 'Alternance']
+        // TODO : Pour l'input Type : Faire un select avec les options ['CDI', 'CDD', 'Stage', 'Alternance']
+
         Offer::create([
 
         ]);
@@ -111,53 +174,6 @@ class OfferController extends Controller
         }
         $offer->delete();
         return redirect()->route('offer.index')->with('success', 'Offre supprimée');
-    }
-
-    public function search(Request $request)
-    {
-        // Récupération des valeurs des filtres
-        $filters = [
-            'offer-title' => $request->query('offer-title'),
-            'companies'   => (array) $request->query('company', []),
-            'industry'    => (array) $request->query('industry', []),
-            'location'    => (array) $request->query('location', []),
-            'skill'       => (array) $request->query('skill', []),
-            'sector'      => (array) $request->query('sector', [])
-        ];
-
-        // Début de la requête
-        $query = Offer::query();
-
-        // Filtrer par titre de l'offre
-        if (!empty($filters['offer-title'])) {
-            $query->where('title', 'like', '%' . $filters['offer-title'] . '%');
-        }
-
-        // Définition des relations et des champs associés
-        $relations = [
-            'companies'  => 'name',
-            'sector'     => 'name',
-            'skills'     => 'skill_name'
-        ];
-
-        // Appliquer les filtres relationnels dynamiquement
-        foreach ($relations as $filterKey => $column) {
-            if (!empty($filters[$filterKey])) {
-                $query->whereHas($filterKey, fn($q) => $q->whereIn($column, $filters[$filterKey]));
-            }
-        }
-
-        // Récupération des offres avec pagination
-        $offers = $query->paginate(8);
-
-        // Récupération des filtres disponibles
-        $companies  = Company::all(['id', 'name']);
-        $industries = Industry::all(['name']);
-        $locations  = Address::all(['city']);
-        $skills     = Skill::all(['skill_name']);
-        $sectors    = Sector::all(['name']);
-
-        return view('offer.index', compact('offers', 'companies', 'industries', 'locations', 'skills', 'sectors'));
     }
 
 }

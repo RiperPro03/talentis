@@ -75,5 +75,6 @@
         <img src="{{ asset('img/3183183.jpg') }}" alt="Image de fond"
             class="w-full h-full object-cover">
     </div>
+    @RegisterServiceWorkerScript
 </body>
 @endsection
