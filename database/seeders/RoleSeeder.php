@@ -33,9 +33,10 @@ class RoleSeeder extends Seeder
             'manage_company',
             'manage_offers',
             'manage_apply', // Gestion des candidatures des étudiants (admin) et gestion des candidatures de ses offres (etudiant)
-            'manage_wishlist',
-            'access_student',
-            'access_pilot',
+            'manage_promotions',
+
+            'access_apply',
+            'access_wishlist',
         ];
 
         foreach ($permissions as $permission) {
@@ -43,7 +44,7 @@ class RoleSeeder extends Seeder
         }
 
         // Attribution des permissions aux rôles
-        Role::findByName('student')->givePermissionTo(['access_student', 'manage_apply', 'manage_wishlist']);
+        Role::findByName('student')->givePermissionTo(['access_apply', 'access_wishlist']);
         Role::findByName('pilot')->givePermissionTo(['manage_students', 'access_pilot', 'manage_company', 'manage_offers']);
         Role::findByName('admin')->givePermissionTo(Permission::all());
     }

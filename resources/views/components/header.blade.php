@@ -17,7 +17,7 @@
 
         <!-- Logo (centré en mobile) -->
         <a class="btn btn-ghost text-xl" href="{{ route('home') }}">
-            <img src="{{ asset('./img/logo/logo.png') }}" class="h-10 w-auto mr-2 rounded" alt="Logo">
+            <img src="{{ asset('img/logo/logo.png') }}" class="h-10 w-auto mr-2 rounded" alt="Logo">
             Talentis
         </a>
 
@@ -31,12 +31,27 @@
                              class="w-10 h-10 rounded-full">
                     </div>
                 </div>
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-                    <li><a>Profil</a></li>
-                    <li><a>Mes candidature</a></li>
-                    <li><a>Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a>Favori</a></li>
-                    <li><a href="{{ route('logout') }}" class="text-red-500">Déconnexion</a></li>
+                @php
+                    $isAdmin = auth()->user()->hasRole('admin');
+                    $isStudent = auth()->user()->hasRole('student');
+                    $isPilot = auth()->user()->hasRole('pilot');
+                @endphp
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
+                    <li><a href="{{ route('profil.show') }}" class="text-lg">Profile</a></li>
+                    @if($isAdmin || $isStudent)
+                        <li><a href="{{ route('apply.index') }}" class="text-lg">Mes candidatures</a></li>
+                        <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
+                    @endif
+
+                    @if($isAdmin)
+                        <li><a href="#1" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                    @endif
+
+                    @if($isPilot)
+                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                    @endif
+
+                    <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>
             </div>
         @endauth
@@ -61,16 +76,6 @@
                 <li><a href="{{ route('home') }}" class="text-2xl">Accueil</a></li>
                 <li><a href="{{ route('offer.index') }}" class="text-2xl">Offres</a></li>
                 <li><a href="{{ route('company.index') }}" class="text-2xl">Entreprises</a></li>
-
-{{--                <li>--}}
-{{--                    <details>--}}
-{{--                        <summary>Parent</summary>--}}
-{{--                        <ul class="p-2">--}}
-{{--                            <li class="p-4"><a>Submenu 1</a></li>--}}
-{{--                            <li class="p-4"><a>Submenu 2</a></li>--}}
-{{--                        </ul>--}}
-{{--                    </details>--}}
-{{--                </li>--}}
             </ul>
         </div>
 
@@ -85,11 +90,27 @@
                     </div>
                 </div>
 
-                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-10 mt-3 w-52 p-2 shadow">
-                    <li><a href="#" class="text-lg">Profil</a></li>
-                    <li><a href="#" class="text-lg">Mes candidature</a></li>
-                    <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
-                    <li><a href="#" class="text-lg">Favori</a></li>
+
+                @php
+                    $isAdmin = auth()->user()->hasRole('admin');
+                    $isStudent = auth()->user()->hasRole('student');
+                    $isPilot = auth()->user()->hasRole('pilot');
+                @endphp
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
+                    <li><a href="{{ route('profil.show') }}" class="text-lg">Profile</a></li>
+                    @if($isAdmin || $isStudent)
+                        <li><a href="{{ route('apply.index') }}" class="text-lg">Mes candidatures</a></li>
+                        <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
+                    @endif
+
+                    @if($isAdmin)
+                        <li><a href="#1" class="text-lg">Tableau de bord</a></li> {{-- Dashboard admin --}}
+                    @endif
+
+                    @if($isPilot)
+                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                    @endif
+
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
                 </ul>
             </div>
