@@ -22,17 +22,20 @@
                 <div class="card bg-base-100">
                     <div class="card-body">
                         <h2 class="card-title">Recherche et filtres</h2>
-                        <form action="{{ route('company.search') }}" method="GET">
+                        <form action="{{ route('company.index') }}" method="GET">
                             {{-- Champ de recherche par nom d'entreprise --}}
                             <div class="form-control mb-4">
-                                <input type="text" name="company-name" placeholder="Nom d'entreprise" class="input input-bordered" value="{{ request('company-name') }}" />
+                                {{-- Filtres par Entreprise --}}
+                                <x-multi-select-filter name="company" label="Entreprise" :items="$companies" key="name" />
+
+                                {{-- Filtres par industrie --}}
+                                <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
+
+                                {{-- Filtres par localisation --}}
+                                <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
                             </div>
 
-                            {{-- Filtres par industrie --}}
-                            <x-multi-select-filter name="industry" label="Secteur d'activité" :items="$industries" key="name" />
 
-                            {{-- Filtres par localisation --}}
-                            <x-multi-select-filter name="location" label="Localisation" :items="$locations" key="city" />
 
                             {{-- Boutons de filtre et reset --}}
                             <div class="form-control flex flex-row gap-2">
@@ -92,12 +95,9 @@
                                     @endforeach
 
                                     {{-- Note --}}
-                                    @php
-                                        $rating = round($company->averageRating()); // Note entre 1 et 5
-                                    @endphp
-                                    @if(!$rating == 0)
+                                    @if(!$company->getRate() == 0)
                                         <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                            {{ $rating }} ⭐
+                                            {{ $company->getRate() }} ⭐
                                         </div>
                                     @endif
 

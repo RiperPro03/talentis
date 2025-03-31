@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Promotion;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Storage;
 
 class UserController extends Controller
 {
@@ -55,28 +58,78 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user = null)
+    public function edit(User $user)
     {
-        if(!$user) {
-            return redirect()->route('user.index')->with('error', 'Utilisateur non trouvé');
-        }
-//        return view('user.edit', compact('user'));
+        $user->load('addresses', 'promotion'); // Charge aussi la promotion de l'utilisateur
+        $address = $user->addresses->first(); // Récupère la première adresse
+        $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
+
+        return view('pilot.student.edit', compact('user', 'promotions', 'address'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, User $user)
     {
-        $request->validate([
-
+        // Valider les données de la requête
+        $validatedData = $request->validate([
+            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'password' => 'nullable|string|min:8|confirmed',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'promotion_id' => 'nullable|exists:promotions,id',
+            'postal_code' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:255',
         ]);
-        $user->update([
 
-        ]);
+        // Traiter la photo de profil si elle est présente
+        if ($request->hasFile('profile_picture')) {
+            // Supprimer l'ancienne photo si elle existe
+            if ($user->profile_picture_path) {
+                Storage::delete($user->profile_picture_path);
+            }
+            // Enregistrer la nouvelle photo
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $validatedData['profile_picture_path'] = $path;
+        }
 
-        return redirect()->route('user.index')->with('success', 'Utilisateur modifié');
+        // Traiter le mot de passe si un nouveau mot de passe est fourni
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($request->password);
+        } else {
+            unset($validatedData['password']);
+        }
+
+        // Vérifier si les champs postal_code et city sont remplis
+        if ($request->filled('postal_code') && $request->filled('city')) {
+            // Vérifier si une adresse avec cette combinaison existe déjà
+            $address = Address::firstOrCreate(
+                ['postal_code' => $request->postal_code, 'city' => $request->city],
+                ['postal_code' => $request->postal_code, 'city' => $request->city]
+            );
+            // Associer l'adresse à l'utilisateur en utilisant la méthode 'addresses'
+            $user->addresses()->associate($address);
+        }
+
+        // Mettre à jour les informations de l'utilisateur
+        $user->update($validatedData);
+        if ($request->has('promotion')) {
+            $promotionCode = $request->promotion; // L'ID de la promotion choisie
+            $promotion = Promotion::where('promotion_code', $promotionCode)->first(); // Récupère la promotion par son code
+
+            if ($promotion) {
+                $user->promotion_id = $promotion->id; // Met à jour la promotion_id de l'utilisateur
+                $user->save(); // Sauvegarde les changements
+            }
+        }
+
+
+        // Rediriger vers la page d'édition avec un message de succès
+        return redirect()->route('users.edit', $user)->with('success', 'Utilisateur mis à jour avec succès.');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -89,4 +142,35 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('user.index')->with('success', 'Utilisateur supprimé');
     }
+
+    public function profil()
+    {
+        $user = auth()->user();
+
+        // Récupération complète des relations
+        $wishlistCount = $user->offers()->count();
+        $appliesCount = $user->applies()->count();
+
+        // On ne récupère que les 3 premiers éléments
+        $wishlist = $user->offers()
+            ->with('companies')
+            ->latest('wishlists.created_at')
+            ->take(3)
+            ->get();
+
+        $applies = $user->applies()
+            ->with('companies')
+            ->orderByPivot('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('profile.show', compact(
+            'user',
+            'wishlist',
+            'applies',
+            'wishlistCount',
+            'appliesCount'
+        ));
+    }
+
 }
