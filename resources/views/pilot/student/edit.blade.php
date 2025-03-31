@@ -89,7 +89,7 @@
         </form>
     </div>
 
-    <a href="{{ url()->previous() }}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
+    <a href="{{route('student.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
         ← Retour
     </a>
 
