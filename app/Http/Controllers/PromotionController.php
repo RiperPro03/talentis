@@ -13,8 +13,7 @@ class PromotionController extends Controller
     public function index()
     {
         $promotions = Promotion::all();
-//        return view('promotion.index', compact('promotions'));
-        return response()->json($promotions);
+        return view('pilot.promotion.index', compact('promotions'));
     }
 
     /**
@@ -56,29 +55,33 @@ class PromotionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Promotion $promotion = null)
+    public function edit(Promotion $promotion)
     {
-        if(!$promotion) {
-            return redirect()->route('promotion.index')->with('error', 'Promotion non trouvée');
-        }
 
-//        return view('promotion.edit', compact('promotion'));
+        $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
+
+        return view('pilot.promotion.edit', compact('promotion',));
+    }
+
+
+    public function update(Request $request, Promotion $promotion)
+    {
+        // Validation des données
+        $validatedData = $request->validate([
+            'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code,' . $promotion->id,
+        ]);
+
+        // Mise à jour de la promotion
+        $promotion->update($validatedData);
+
+        // Redirection avec un message de succès
+        return redirect()->route('promotions.edit')->with('success', 'Promotion mise à jour avec succès');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Promotion $promotion)
-    {
-        $request->validate([
 
-        ]);
-        $promotion->update([
-
-        ]);
-
-        return redirect()->route('promotion.index')->with('success', 'Promotion modifiée');
-    }
 
     /**
      * Remove the specified resource from storage.

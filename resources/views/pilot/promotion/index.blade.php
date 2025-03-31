@@ -28,16 +28,15 @@
 
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
-
-@foreach($students as $student)
-            <dialog id="modal-{{ $student->id }}" class="modal">
+        @foreach($promotions as $promotion)
+            <dialog id="modal-{{ $promotion->id }}" class="modal">
                 <div class="modal-box">
                     <h3 class="font-bold text-lg">Confirmer la suppression</h3>
                     <p class="py-4">
-                        Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
+                        Êtes-vous sûr de vouloir retirer {{ $promotion->promotion_code }} ?
                     </p>
                     <div class="modal-action flex justify-between">
-                        <form action="{{ route('users.destroy', $student) }}" method="POST">
+                        <form action="{{ route('promotion.destroy', $promotion) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-error">Confirmer</button>
@@ -48,13 +47,12 @@
                     </div>
                 </div>
 
-
                 <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
                 <form method="dialog" class="modal-backdrop">
                     <button class="cursor-default">Fermer</button>
                 </form>
             </dialog>
-@endforeach
+        @endforeach
 
 
         <!-- Version Mobile: Affichage en cartes -->
@@ -62,18 +60,17 @@
 
 
     <div class="md:hidden flex flex-col gap-4">
-        @foreach ($students as $student)
+        @foreach ($promotions as $promotion)
             <div class="bg-white shadow-md rounded-lg p-4">
-                <h2 class="text-lg font-semibold">{{ $student->name }}</h2>
-                <p class="text-gray-600">{{ $student->first_name }}</p>
-                <p class="text-gray-600">{{ $student->email }}</p>
+                <h2 class="text-lg font-semibold">{{ $promotion->promotion_code }}</h2>
+
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
                         Modifier
                     </a>
 
-                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
+                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
                         Retirer
                     </button>
                 </div>
@@ -86,28 +83,21 @@
         <table class="table w-full border-collapse border bg-white text-sm md:text-base">
             <thead>
             <tr class="bg-gray-50">
-                <th class="border px-4 py-2 text-center text-lg">Nom</th>
-                <th class="border px-4 py-2 text-center text-lg">Prénom</th>
-                <th class="border px-4 py-2 text-center text-lg">Mail</th>
-                <th class="border px-4 py-2 text-center text-lg">Actions</th>
+                <th class="border px-4 py-2 text-center text-lg">Code de promotion</th>
             </tr>
             </thead>
             <tbody>
 
-            @foreach($students as $student)
+            @foreach($promotions as $promotion)
                 <tr class="hover:bg-gray-50">
-                    <td class="border px-4 py-2">{{ $student->name }}</td>
-                    <td class="border px-4 py-2">{{ $student->first_name }}</td>
-                    <td class="border px-4 py-2">
-                        {{$student->email}}
-                    </td>
+                    <td class="border px-4 py-2">{{ $promotion->promotion_code}}</td>
 
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
                             Modifier
                         </a>
 
-                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
+                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
                             Retirer
                         </button>
 
