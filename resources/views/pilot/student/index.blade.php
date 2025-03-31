@@ -28,6 +28,7 @@
 
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
+
 @foreach($students as $student)
             <dialog id="modal-{{ $student->id }}" class="modal">
                 <div class="modal-box">
@@ -46,6 +47,7 @@
                         </form>
                     </div>
                 </div>
+
 
                 <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
                 <form method="dialog" class="modal-backdrop">
