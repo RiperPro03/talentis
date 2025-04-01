@@ -25,12 +25,16 @@ class StudentController extends Controller
     {
         // Charger les relations nécessaires
         $student->load('addresses', 'promotion'); // Charger les relations 'addresses' et 'promotion'
-        $address = $student->addresses->first(); // Récupère la première adresse associée
+
+        // Vérifier si l'utilisateur a une adresse, sinon mettre à null
+        $address = $student->addresses && $student->addresses->isNotEmpty() ? $student->addresses->first() : null;
+
         $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
 
         // Retourne la vue d'édition de l'étudiant avec les données nécessaires
         return view('pilot/student.edit', compact('student', 'promotions', 'address'));
     }
+
 
     /**
      * Update the specified student in storage.
@@ -46,8 +50,22 @@ class StudentController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'email' => 'required|email|max:255|unique:users,email,' . $student->id,
             'promotion_id' => 'nullable|exists:promotions,id',
-            'postal_code' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
+            'postal_code' => [
+                'nullable', 'string', 'max:10',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'Non assigné') {
+                        $fail('Veuillez assigner une valeur au code postal.');
+                    }
+                },
+            ],
+            'city' => [
+                'nullable', 'string', 'max:255',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'Non assigné') {
+                        $fail('Veuillez assigner une valeur à la ville.');
+                    }
+                },
+            ],
         ]);
 
         // Traiter la photo de profil si elle est présente
@@ -81,6 +99,7 @@ class StudentController extends Controller
 
         // Mettre à jour les informations de l'étudiant
         $student->update($validatedData);
+
         if ($request->has('promotion')) {
             $promotionCode = $request->promotion; // L'ID de la promotion choisie
             $promotion = Promotion::where('promotion_code', $promotionCode)->first(); // Récupère la promotion par son code
@@ -94,6 +113,7 @@ class StudentController extends Controller
         // Rediriger vers la page d'édition avec un message de succès
         return redirect()->route('student.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
     }
+
 
     public function create()
     {
