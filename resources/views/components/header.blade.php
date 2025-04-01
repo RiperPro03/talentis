@@ -9,9 +9,9 @@
                 </svg>
             </div>
             <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
-                <li><a href="{{ route('home') }}">Accueil</a></li>
-                <li><a href="{{ route('offer.index') }}">Offres</a></li>
-                <li><a href="{{ route('company.index') }}">Entreprises</a></li>
+                <li><a href="{{ route('home') }}" class="text-lg">Accueil</a></li>
+                <li><a href="{{ route('offer.index') }}" class="text-lg">Offres</a></li>
+                <li><a href="{{ route('company.index') }}" class="text-lg">Entreprises</a></li>
             </ul>
         </div>
 
@@ -48,7 +48,7 @@
                     @endif
 
                     @if($isPilot)
-                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                        <li><a href="{{ route('dashboard.index') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
                     @endif
 
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>
@@ -108,7 +108,7 @@
                     @endif
 
                     @if($isPilot)
-                        <li><a href="#" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
+                        <li><a href="{{ route('dashboard.index') }}" class="text-lg">Tableau de bord</a></li> {{-- Dashboard pilot --}}
                     @endif
 
                     <li><a href="{{ route('logout') }}" class="text-red-500 text-lg">Déconnexion</a></li>

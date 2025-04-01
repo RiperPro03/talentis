@@ -97,7 +97,6 @@
                     <td class="border px-4 py-2">
                         {{$student->email}}
                     </td>
-
                     <td class="border px-4 py-2 flex gap-2 justify-center">
                         <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
                             Modifier
