@@ -5,11 +5,13 @@ namespace App\Models;
 use Database\Factories\OfferFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Offer extends Model
 {
     /** @use HasFactory<OfferFactory> */
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -19,7 +21,7 @@ class Offer extends Model
         'start_offer',
         'end_offer',
         'company_id',
-        'sector_id'
+        'sector_id',
     ];
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
