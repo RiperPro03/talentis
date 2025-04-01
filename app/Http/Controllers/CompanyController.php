@@ -7,6 +7,8 @@ use App\Models\Company;
 use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
 {
@@ -15,6 +17,12 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
+
+        if (Route::currentRouteName() === 'pilot.company.index') {
+            $companies = Company::paginate(8);
+            return view('pilot.company.index', compact('companies'));
+        }
+
         if ($request->has('company') || $request->has('industry') || $request->has('location')) {
             $request->validate([
                 'company'  => 'array|nullable',
@@ -49,7 +57,6 @@ class CompanyController extends Controller
             }
 
             $companies = $query->paginate(8);
-
         } else {
             $companies = Company::paginate(8);
         }
@@ -69,7 +76,8 @@ class CompanyController extends Controller
      */
     public function create()
     {
-//        return view('company.create');
+        $companies = Company::all();
+        return view('pilot.company.create', compact('companies'));
     }
 
     /**
@@ -85,18 +93,23 @@ class CompanyController extends Controller
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = 'logo_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $logoPath = $file->storeAs('logos', $filename, 'public');
-        }
-
-        Company::create([
+        $company = Company::create([
             'name' => $request->name,
             'description' => $request->description,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
+            'logo_path' => null,
+        ]);
+
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $extension = $file->getClientOriginalExtension();
+            $filename = 'logo_' . $company->id . '_' . Str::uuid() . '.' . $extension;
+            $logoPath = $file->storeAs('logos_entreprise', $filename, 'public');
+        }
+
+        $company->update([
             'logo_path' => $logoPath,
         ]);
 
@@ -106,10 +119,10 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Company $company = null)
+    public function show(Company $company)
     {
-        if(!$company) {
-//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+        if (!$company) {
+            //            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
@@ -125,12 +138,12 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company = null)
+    public function edit(Company $company)
     {
-        if(!$company) {
-            return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
+        if (!$company) {
+            return back()->withErrors(['Pilot' => 'Entreprise non trouvée']);
         }
-
+        return view('pilot.company.edit', compact('company'));
     }
 
     /**
@@ -149,8 +162,9 @@ class CompanyController extends Controller
         $logoPath = $company->logo_path;
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
+            $extension = $file->getClientOriginalExtension();
             $filename = 'logo_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $logoPath = $file->storeAs('logos', $filename, 'public');
+            $logoPath = $file->storeAs('logos_entreprise', $filename, 'public');
         }
 
         $company->update([
@@ -169,7 +183,7 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company = null)
     {
-        if(!$company) {
+        if (!$company) {
             return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
         $company->delete();
