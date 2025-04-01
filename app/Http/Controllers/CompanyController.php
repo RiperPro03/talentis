@@ -141,7 +141,7 @@ class CompanyController extends Controller
     public function edit(Company $company)
     {
         if (!$company) {
-            return back()->withErrors(['Pilot' => 'Entreprise non trouvée']);
+            return back()->withErrors(['User' => 'Entreprise non trouvée']);
         }
         return view('pilot.company.edit', compact('company'));
     }

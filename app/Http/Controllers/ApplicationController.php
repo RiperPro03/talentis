@@ -89,7 +89,7 @@ class ApplicationController extends Controller
 
         //vérifier si l'utilisateur a déjà postulé
         if ($offer->applies()->where('user_id', $user->id)->exists()) {
-            return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
+            return back()->withErrors(['User' => 'Vous avez déjà postulé à cette offre.']);
         }
 
         $file = $request->file('cv');
@@ -97,11 +97,6 @@ class ApplicationController extends Controller
         $filename = 'cv_' . $user->id . '_' . Str::uuid() . '.' . $extension;
 
         $cvPath = $file->storeAs('cv', $filename, 'public');
-
-        // Vérifie si l'utilisateur a déjà postulé
-        if ($offer->applies()->where('user_id', $user->id)->exists()) {
-            return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
-        }
 
         // Enregistrer l'application dans la table pivot `applies`
         $offer->applies()->attach($user->id, [

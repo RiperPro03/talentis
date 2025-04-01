@@ -164,6 +164,15 @@ class StudentController extends Controller
         return redirect()->route('student.create')->with('success', 'Utilisateur créé avec succès.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->back()->with('success', 'Utilisateur retiré avec succès.');
+    }
+
 }
 
 
