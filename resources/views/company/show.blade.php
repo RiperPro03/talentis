@@ -18,8 +18,8 @@
         </a>
 
         <div class="mx-auto py-8 container w-5/6 h-auto overflow-hidden rounded-lg flex justify-center items-center">
-            <img src="{{ Storage::url($company->logo_path) }}"
-                 alt="{{ 'logo_' . $company->name }}"
+            <img src="{{ asset($company->logo_path) }}"
+                 alt="Logo de l'entreprise"
                  class="object-contain w-full max-h-64 rounded-lg">
         </div>
 

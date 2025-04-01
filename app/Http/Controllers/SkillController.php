@@ -13,8 +13,8 @@ class SkillController extends Controller
     public function index()
     {
         $skills = Skill::all();
-        return view('pilot/skill.index', compact('skills'));
-
+//        return view('skill.index', compact('skills'));
+        return response()->json($skills);
     }
 
     /**
@@ -22,9 +22,8 @@ class SkillController extends Controller
      */
     public function create()
     {
-        return view('pilot/skill.create');
+//        return view('skills.create');
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -32,14 +31,13 @@ class SkillController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'skill_name' => 'required|string|max:255|unique:skills,skill_name',
-        ]);
 
+        ]);
         Skill::create([
-            'skill_name' => $request->skill_name,
+
         ]);
 
-        return redirect()->route('skill.create')->with('success', 'Skill créée avec succès.');
+        return redirect()->route('skill.index')->with('success', 'Compétence créée');
     }
 
     /**
@@ -57,25 +55,27 @@ class SkillController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Skill $skill)
+    public function edit(Skill $skill = null)
     {
-        return view('pilot.skill.edit', compact('skill',));
+        if(!$skill){
+            return redirect()->route('skill.index')->with('error', 'Compétence non trouvée');
+        }
+//        return view('skill.edit', compact('skill'));
     }
 
-
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Skill $skill)
     {
-        // Validation des données
-        $validatedData = $request->validate([
-            'skill_name' => 'required|string|max:255|unique:skills,skill_name,' . $skill->id . ',id',
+        $request->validate([
+
+        ]);
+        $skill->update([
+
         ]);
 
-
-        // Mise à jour de la promotion
-        $skill->update($validatedData);
-
-        // Redirection avec un message de succès
-        return redirect()->route('skill.edit',$skill)->with('success', 'Skill mis à jour avec succès');
+        return redirect()->route('skill.index')->with('success', 'Compétence modifiée');
     }
 
     /**
