@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 
-@section('title', 'Modifier un étudiant')
+@section('title', 'test')
 
 @section('content')
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold mb-6">Modifier l'utilisateur</h2>
 
         @if (session('success'))
@@ -68,12 +68,6 @@
 
             <div>
                 <label class="block font-medium">Promotion</label>
-                @if ($student->promotion_id === null)
-                <div class="mt-4">
-                    <label for="no_promotion" class="block text-sm font-medium text-red-700">Cet étudiant n'a actuellement pas de promotion, veuillez lui en attribuer une.</label>
-
-                </div>
-                @endif
 
                 <x-multi-select-filter
                     name="promotion"

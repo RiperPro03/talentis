@@ -7,8 +7,6 @@ use App\Models\Company;
 use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
 {
@@ -17,12 +15,6 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-
-        if (Route::currentRouteName() === 'pilot.company.index') {
-            $companies = Company::paginate(8);
-            return view('pilot.company.index', compact('companies'));
-        }
-
         if ($request->has('company') || $request->has('industry') || $request->has('location')) {
             $request->validate([
                 'company'  => 'array|nullable',
@@ -57,6 +49,7 @@ class CompanyController extends Controller
             }
 
             $companies = $query->paginate(8);
+
         } else {
             $companies = Company::paginate(8);
         }
@@ -76,8 +69,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        $companies = Company::all();
-        return view('pilot.company.create', compact('companies'));
+//        return view('company.create');
     }
 
     /**
@@ -86,43 +78,22 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'email' => 'required|email|unique:companies,email',
-            'phone_number' => 'nullable|string|max:20|regex:/^\+?[0-9]{10,15}$/',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+        ]);
+        Company::create([
+
         ]);
 
-        $company = Company::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'logo_path' => null,
-        ]);
-
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'logo_' . $company->id . '_' . Str::uuid() . '.' . $extension;
-            $logoPath = $file->storeAs('logos_entreprise', $filename, 'public');
-        }
-
-        $company->update([
-            'logo_path' => $logoPath,
-        ]);
-
-        return redirect()->route('pilot.company.index')->with('success', 'Entreprise créée avec succès.');
+        return redirect()->route('company.index')->with('success', 'Entreprise créée');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(Company $company = null)
     {
-        if (!$company) {
-            //            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
+        if(!$company) {
+//            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
             return response()->json(['error' => 'Entreprise non trouvée']);
         }
 
@@ -138,12 +109,13 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
+    public function edit(Company $company = null)
     {
-        if (!$company) {
-            return back()->withErrors(['User' => 'Entreprise non trouvée']);
+        if(!$company) {
+            return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
-        return view('pilot.company.edit', compact('company'));
+
+//        return view('company.edit', compact('company'));
     }
 
     /**
@@ -152,30 +124,13 @@ class CompanyController extends Controller
     public function update(Request $request, Company $company)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'email' => 'required|email|unique:companies,email,' . $company->id,
-            'phone_number' => 'nullable|string|max:20|regex:/^\+?[0-9]{10,15}$/',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
         ]);
-
-        $logoPath = $company->logo_path;
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $extension = $file->getClientOriginalExtension();
-            $filename = 'logo_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $logoPath = $file->storeAs('logos_entreprise', $filename, 'public');
-        }
-
         $company->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'logo_path' => $logoPath,
+
         ]);
 
-        return redirect()->route('pilot.company.index')->with('success', 'Entreprise mise à jour avec succès.');
+        return redirect()->route('company.index')->with('success', 'Entreprise mise à jour');
     }
 
     /**
@@ -183,7 +138,7 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company = null)
     {
-        if (!$company) {
+        if(!$company) {
             return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
         }
         $company->delete();

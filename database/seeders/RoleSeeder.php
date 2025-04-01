@@ -34,7 +34,7 @@ class RoleSeeder extends Seeder
             'manage_offers',
             'manage_apply', // Gestion des candidatures des étudiants (admin) et gestion des candidatures de ses offres (etudiant)
             'manage_promotions',
-            'access_pilot',
+
             'access_apply',
             'access_wishlist',
         ];

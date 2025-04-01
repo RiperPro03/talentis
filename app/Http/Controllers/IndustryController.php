@@ -13,7 +13,8 @@ class IndustryController extends Controller
     public function index()
     {
         $industries = Industry::all();
-        return view('pilot/industry.index', compact('industries'));
+//        return view('industries.index', compact('industries'));
+        return response()->json($industries);
     }
 
     /**
@@ -21,9 +22,8 @@ class IndustryController extends Controller
      */
     public function create()
     {
-        return view('pilot/industry.create');
+//        return view('industries.create');
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -31,14 +31,13 @@ class IndustryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:industries,name',
-        ]);
 
+        ]);
         Industry::create([
-            'name' => $request->name,
-        ]);
 
-        return redirect()->route('industry.create')->with('success', 'Industrie créée avec succès.');
+        ]);;
+
+        return redirect()->route('industries.index')->with('success', 'Industrie créée');
     }
 
     /**
@@ -46,12 +45,11 @@ class IndustryController extends Controller
      */
     public function show(Industry $industry = null)
     {
-
         if(!$industry) {
-            return redirect()->route('industry.index')->with('error', 'Industrie non trouvée');
+            return redirect()->route('industries.index')->with('error', 'Industrie non trouvée');
         }
 
-//        return view('promotion.show', compact('promotion'));
+//        return view('industries.show', compact('industry'));
         return response()->json($industry);
     }
 
@@ -60,9 +58,11 @@ class IndustryController extends Controller
      */
     public function edit(Industry $industry = null)
     {
+        if (!$industry) {
+            return redirect()->route('industries.index')->with('error', 'Industrie non trouvée');
+        }
 
-
-        return view('pilot/industry.edit', compact('industry'));
+//        return view('industries.edit', compact('industry'));
     }
 
     /**
@@ -70,29 +70,25 @@ class IndustryController extends Controller
      */
     public function update(Request $request, Industry $industry)
     {
-        $validatedData = $request->validate([
-            'name' => 'max:255|unique:industries,name,' . $industry->id
+        $request->validate([
+
+        ]);
+        $industry->update([
 
         ]);
 
-
-        $industry->update($validatedData);
-
-        // Redirection avec un message de succès
-        return redirect()->route('industry.edit',$industry)->with('success', 'Industry mise à jour avec succès');
+        return redirect()->route('industries.index')->with('success', 'Industrie modifiée');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Industry $industry)
+    public function destroy(Industry $industry = null)
     {
         if (!$industry) {
-            return redirect()->route('industry.index')->with('error', 'Industrie non trouvée');
+            return redirect()->route('industries.index')->with('error', 'Industrie non trouvée');
         }
-
-        $industry->delete(); // Soft Delete
-
-        return redirect()->route('industry.index')->with('success', 'Industrie supprimée avec succès.');
+        $industry->delete();
+        return redirect()->route('industries.index')->with('success', 'Industrie supprimée');
     }
 }

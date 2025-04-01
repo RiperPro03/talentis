@@ -12,7 +12,7 @@
                 <div class="flex flex-col items-center space-y-6 sm:space-y-8">
                     <div class="avatar">
                         <div class="w-32 sm:w-36 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <img src="{{ Storage::url($user->profile_picture_path) }}" alt="Photo de profil">
+                            <img src="#" alt="Photo de profil">
                         </div>
                     </div>
                     <h3 class="text-lg sm:text-xl font-bold">{{$user->first_name}} {{$user->name}}</h3>

@@ -69,7 +69,11 @@
                                 @csrf
                                 <div class="tooltip tooltip-warning" data-tip="Ajouter aux favoris">
                                     <button class="btn btn-circle btn-outline btn-sm bg-white shadow-md hover:bg-warning">
-                                        ❤️
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none"
+                                             viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5 15l7-7 7 7"/>
+                                        </svg>
                                     </button>
                                 </div>
                             </form>
@@ -79,7 +83,7 @@
                                 @if($offer->companies && $offer->companies->logo_path)
                                     <figure class="bg-gray-100 flex items-center justify-center h-32">
                                         <img
-                                            src="{{ Storage::url($offer->companies->logo_path) }}"
+                                            src="{{ asset($offer->companies->logo_path) }}"
                                             alt="{{ 'logo_' . $offer->companies->name }}"
                                             class="max-h-full max-w-full object-contain"
                                         />

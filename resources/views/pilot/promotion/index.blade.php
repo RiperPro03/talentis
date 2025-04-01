@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Index des promotions')
+@section('title', 'Wish-list d\'Offres')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
@@ -27,7 +27,7 @@
         @endif
 
 
-        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les promotions</h1>
+        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
         @foreach($promotions as $promotion)
             <dialog id="modal-{{ $promotion->id }}" class="modal">
                 <div class="modal-box">
@@ -111,13 +111,8 @@
             </tbody>
         </table>
     </div>
-    <div class="flex justify-between mt-4">
 
-    <a href="{{route('dashboard.index')}}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
         ← Retour
     </a>
-    <a href="{{ route('promotion.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
-        Ajouter une promotion
-    </a>
-    </div>
 @endsection
