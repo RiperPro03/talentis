@@ -22,8 +22,9 @@ class SectorController extends Controller
      */
     public function create()
     {
-//        return view('offers.create');
+        return view('pilot/sector.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -31,26 +32,27 @@ class SectorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
-        ]);
-        Promotion::create([
-
+            'name' => 'required|string|max:255|unique:sectors,name',
         ]);
 
-        return redirect()->route('sector.index')->with('success', 'Secteur créée');
+        Sector::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect()->route('sector.create')->with('success', 'Secteur créée avec succès.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Promotion $promotion = null)
+    public function show(Sector $sector = null)
     {
-        if(!$promotion) {
+        if(!$sector) {
             return redirect()->route('sector.index')->with('error', 'Secteur non trouvée');
         }
 
 //        return view('promotion.show', compact('promotion'));
-        return response()->json($promotion);
+        return response()->json($sector);
     }
 
     /**
@@ -66,14 +68,14 @@ class SectorController extends Controller
     {
         // Validation des données
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique' . $sector->id,
+            'name' => 'required|string|max:255|unique:sectors,name,' . $sector->id,
         ]);
 
-        // Mise à jour de la promotion
+        // Mise à jour du secteur
         $sector->update($validatedData);
 
         // Redirection avec un message de succès
-        return redirect()->route('sector.edit',$sector)->with('success', 'Promotion mise à jour avec succès');
+        return redirect()->route('sector.edit', $sector)->with('success', 'Secteur mis à jour avec succès');
     }
 
     /**

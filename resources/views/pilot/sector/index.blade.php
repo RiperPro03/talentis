@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Wish-list d\'Offres')
+@section('title', 'Index des secteurs')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
@@ -112,7 +112,12 @@
         </table>
     </div>
 
-    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
-        ← Retour
-    </a>
+    <div class="flex justify-between mt-4">
+        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+            ← Retour
+        </a>
+        <a href="{{ route('sector.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
+            Ajouter un secteur
+        </a>
+    </div>
 @endsection

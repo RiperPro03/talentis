@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 
-@section('title', 'test')
+@section('title', 'Créer un compte étudiant')
 
 @section('content')
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10">

@@ -143,7 +143,7 @@ class StudentController extends Controller
         }
 
         // Créer l'utilisateur en lui attribuant l'adresse et l'ID de la promotion
-        DB::table('users')->insert([
+        $userId = DB::table('users')->insertGetId([
             'name' => $validatedData['name'],
             'first_name' => $validatedData['first_name'],
             'birthdate' => $validatedData['birthdate'],
@@ -155,6 +155,15 @@ class StudentController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('student.index')->with('success', 'Utilisateur créé avec succès.');
-    }}
+        // Récupérer l'utilisateur
+        $user = User::find($userId);
+
+        // Assigner le rôle 'student'
+        $user->assignRole('student');
+
+        return redirect()->route('student.create')->with('success', 'Utilisateur créé avec succès.');
+    }
+
+}
+
 

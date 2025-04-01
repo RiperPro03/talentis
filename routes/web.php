@@ -87,6 +87,16 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/promotion', PromotionController::class);
 
 });
+
+Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    Route::resource('pilot/industry', IndustryController::class);
+
+});
+Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    Route::resource('pilot/skill', SkillController::class);
+
+});
+
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/sector', SectorController::class);
 
