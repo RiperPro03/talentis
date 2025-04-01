@@ -20,4 +20,11 @@ class Promotion extends Model
     {
         return $this->hasMany(User::class, 'promotion_id', 'id');
     }
+    protected static function booted()
+    {
+        static::deleting(function ($promotion) {
+            // Met à jour les étudiants pour qu'ils n'aient plus de promotion
+            $promotion->users()->update(['promotion_id' => null]);
+        });
+    }
 }

@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('email', 255)->unique();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->onDelete('set null');
+            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->nullOnDelete();
         });
 
         Schema::create('sessions', function (Blueprint $table) {

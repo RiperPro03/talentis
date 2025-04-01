@@ -17,10 +17,10 @@ class FilamentAdminMiddleware
     {
         $user = auth()->user();
 
-        // Vérifie si l'utilisateur est authentifié et a un rôle autorisé
-        if (!$user || !$user->hasRole(['admin'])) {
-            abort(403, 'Accès refusé.');
-        }
+//        // Vérifie si l'utilisateur est authentifié et a un rôle autorisé
+//        if (!$user || !$user->hasRole(['admin'])) {
+//            abort(403, 'Accès refusé.');
+//        }
 
         return $next($request);
     }
