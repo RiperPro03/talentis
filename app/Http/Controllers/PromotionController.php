@@ -21,8 +21,9 @@ class PromotionController extends Controller
      */
     public function create()
     {
-//        return view('offers.create');
+        return view('pilot/promotion.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -30,13 +31,14 @@ class PromotionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-
+            'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code',
         ]);
+
         Promotion::create([
-
+            'promotion_code' => $request->promotion_code,
         ]);
 
-        return redirect()->route('promotion.index')->with('success', 'Promotion créée');
+        return redirect()->route('promotion.create')->with('success', 'Promotion créée avec succès.');
     }
 
     /**
@@ -75,7 +77,7 @@ class PromotionController extends Controller
         $promotion->update($validatedData);
 
         // Redirection avec un message de succès
-        return redirect()->route('promotions.edit')->with('success', 'Promotion mise à jour avec succès');
+        return redirect()->route('promotion.edit',$promotion)->with('success', 'Promotion mise à jour avec succès');
     }
 
     /**

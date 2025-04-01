@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Index des promotions')
+@section('title', 'Index des industries')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
@@ -27,16 +27,16 @@
         @endif
 
 
-        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les promotions</h1>
-        @foreach($promotions as $promotion)
-            <dialog id="modal-{{ $promotion->id }}" class="modal">
+        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les industries</h1>
+        @foreach($industries as $industry)
+            <dialog id="modal-{{ $industry->id }}" class="modal">
                 <div class="modal-box">
                     <h3 class="font-bold text-lg">Confirmer la suppression</h3>
                     <p class="py-4">
-                        Êtes-vous sûr de vouloir retirer {{ $promotion->promotion_code }} ?
+                        Êtes-vous sûr de vouloir retirer {{ $industry->name }} ?
                     </p>
                     <div class="modal-action flex justify-between">
-                        <form action="{{ route('promotion.destroy', $promotion) }}" method="POST">
+                        <form action="{{ route('industry.destroy', $industry) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-error">Confirmer</button>
@@ -60,17 +60,17 @@
 
 
     <div class="md:hidden flex flex-col gap-4">
-        @foreach ($promotions as $promotion)
+        @foreach ($industries as $industry)
             <div class="bg-white shadow-md rounded-lg p-4">
-                <h2 class="text-lg font-semibold">{{ $promotion->promotion_code }}</h2>
+                <h2 class="text-lg font-semibold">{{ $industry->name }}</h2>
 
                 <!-- Actions -->
                 <div class="mt-3 flex justify-between">
-                    <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('industry.edit', $industry->id) }}" class="btn btn-primary btn-sm">
                         Modifier
                     </a>
 
-                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
+                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $industry->id }}').showModal()">
                         Retirer
                     </button>
                 </div>
@@ -83,21 +83,21 @@
         <table class="table w-full border-collapse border bg-white text-sm md:text-base">
             <thead>
             <tr class="bg-gray-50">
-                <th class="border px-4 py-2 text-center text-lg">Code de promotion</th>
+                <th class="border px-4 py-2 text-center text-lg">Nom de l'industrie</th>
             </tr>
             </thead>
             <tbody>
 
-            @foreach($promotions as $promotion)
+            @foreach($industries as $industry)
                 <tr class="hover:bg-gray-50">
-                    <td class="border px-4 py-2">{{ $promotion->promotion_code}}</td>
+                    <td class="border px-4 py-2">{{ $industry->name}}</td>
 
                     <td class="border px-4 py-2 flex gap-2 justify-center">
-                        <a href="{{ route('promotion.edit', $promotion->id) }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('industry.edit', $industry->id) }}" class="btn btn-primary btn-sm">
                             Modifier
                         </a>
 
-                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
+                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $industry->id }}').showModal()">
                             Retirer
                         </button>
 
@@ -116,7 +116,7 @@
     <a href="{{route('dashboard.index')}}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
         ← Retour
     </a>
-    <a href="{{ route('promotion.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
+    <a href="{{ route('industry.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
         Ajouter une promotion
     </a>
     </div>
