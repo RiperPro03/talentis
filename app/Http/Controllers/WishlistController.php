@@ -10,7 +10,7 @@ class WishlistController extends Controller
 {
     public function index()
     {
-        $wishlist = Auth::user()->offers()->paginate(8);
+        $wishlist = Auth::user()->offers()->orderByPivot('created_at', 'desc')->paginate(8);
 
         return view('wish-list.index', compact('wishlist'));
     }
