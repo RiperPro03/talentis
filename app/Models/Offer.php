@@ -18,6 +18,8 @@ class Offer extends Model
         'type',
         'start_offer',
         'end_offer',
+        'company_id',
+        'sector_id',
     ];
 
     public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

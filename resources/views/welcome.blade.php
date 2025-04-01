@@ -18,24 +18,28 @@
 </div>
 
 <!-- SEARCH BAR -->
-<form action="{{ route('offer.search') }}" method="GET"
+<form action="{{ route('offer.index') }}" method="GET"
       class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 bg-white p-6 shadow-lg rounded-lg w-full max-w-4xl mx-auto mt-4">
 
     <!-- Input: titre de l'offre -->
     <input type="text" name="offer-title" placeholder="Vous cherchez ?"
-           class="input input-bordered w-full md:w-1/4"
-           value="{{ request('offer-title') }}" />
+           class="input input-bordered w-full md:w-1/4"/>
 
     <!-- Input: localisation -->
-    <input type="text" name="location[]" placeholder="Où ?"
-           class="input input-bordered w-full md:w-1/4"
-           value="{{ request('location.0') }}" />
+    <select name="location[]" class="select select-bordered w-full md:w-1/4">
+        <option disabled {{ empty(request('type')) ? 'selected' : '' }}>Type d'emploi</option>
+        @foreach($locations as $location)
+            <option value="{{ $location->city }}">
+                {{ $location->city }}
+            </option>
+        @endforeach
+    </select>
 
     <!-- Select: Type d'emploi -->
     <select name="type[]" class="select select-bordered w-full md:w-1/4">
         <option disabled {{ empty(request('type')) ? 'selected' : '' }}>Type d'emploi</option>
         @foreach(['CDI', 'CDD', 'Stage', 'Alternance'] as $type)
-            <option value="{{ $type }}" {{ in_array($type, (array) request('type')) ? 'selected' : '' }}>
+            <option value="{{ $type }}">
                 {{ $type }}
             </option>
         @endforeach

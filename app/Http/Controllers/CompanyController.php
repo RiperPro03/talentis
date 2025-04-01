@@ -7,7 +7,6 @@ use App\Models\Company;
 use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 
 class CompanyController extends Controller
 {

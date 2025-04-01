@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\PromotionController;
@@ -32,7 +33,6 @@ Route::middleware(['guest'])->group(function () {
 // Route pour les utilisateurs authentifiés
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
 
 //    Route::resource('admin/company', CompanyController::class)->names([
 //        'index' => 'admin.company.index',
@@ -69,23 +69,33 @@ Route::middleware(['auth'])->group(function () {
 
     //Profile
     Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
+    Route::get('pilot/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-
-    Route::resource('address', AddressController::class);
-    Route::resource('industry', IndustryController::class);
-    Route::resource('skill', SkillController::class);
-    Route::resource('admin/user', UserController::class);
-    Route::resource('Promotion', PromotionController::class);
-    Route::resource('Sector', SectorController::class);
 });
 
 // Route pour les utilisateurs avec la permission manage_students
 Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:pilot ou can:manage_students
     Route::resource('pilot/student', StudentController::class);
+
     Route::get('pilot/apply', [ApplicationController::class, 'index'])->name('pilot.apply.index');
     Route::delete('pilot/apply/{offer}/{user}', [ApplicationController::class, 'destroy'])->name('pilot.apply.remove');
 });
 
 
-Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::middleware(['auth', 'can:manage_promotion'])->group(function () {
+    Route::resource('pilot/promotion', PromotionController::class);
+
+});
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+Route::middleware(['auth', 'can:manage_company'])->group(function () {
+    Route::resource('pilot/company', CompanyController::class)->names([
+        'index' => 'pilot.company.index',
+        'show' => 'pilot.company.show',
+        'create' => 'pilot.company.create',
+        'edit' => 'pilot.company.edit',
+        'store' => 'pilot.company.store',
+        'update' => 'pilot.company.update',
+        'destroy' => 'pilot.company.destroy',
+    ]);
+});
