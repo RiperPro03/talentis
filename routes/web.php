@@ -83,8 +83,6 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
 
 });
 
-Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
 // Pilot CRUD companies
 Route::middleware(['auth', 'can:manage_company'])->group(function () {
     Route::resource('pilot/company', CompanyController::class)->names([
