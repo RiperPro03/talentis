@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ApplicationController;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,23 +71,18 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:
 
 // Pilot CRUD promotion
 Route::middleware(['auth', 'can:manage_promotion'])->group(function () {
-    Route::resource('pilot/promotion', PromotionController::class);
+
 
 });
 
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/industry', IndustryController::class);
-
-});
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/skill', SkillController::class);
-
-});
-
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/sector', SectorController::class);
+    Route::resource('pilot/promotion', PromotionController::class);
 
 });
+
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 // Pilot CRUD companies
@@ -101,3 +97,13 @@ Route::middleware(['auth', 'can:manage_company'])->group(function () {
         'destroy' => 'pilot.company.destroy',
     ]);
 });
+
+Route::resource('pilot/offer', OfferController::class)->names([
+    'index' => 'pilot.offer.index',
+    'show' => 'pilot.offer.show',
+    'create' => 'pilot.offer.create',
+    'edit' => 'pilot.offer.edit',
+    'store' => 'pilot.offer.store',
+    'update' => 'pilot.offer.update',
+    'destroy' => 'pilot.offer.destroy',
+]);
