@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ApplicationController;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -100,3 +101,13 @@ Route::middleware(['auth', 'can:manage_company'])->group(function () {
         'destroy' => 'pilot.company.destroy',
     ]);
 });
+
+Route::resource('pilot/offer', OfferController::class)->names([
+    'index' => 'pilot.offer.index',
+    'show' => 'pilot.offer.show',
+    'create' => 'pilot.offer.create',
+    'edit' => 'pilot.offer.edit',
+    'store' => 'pilot.offer.store',
+    'update' => 'pilot.offer.update',
+    'destroy' => 'pilot.offer.destroy',
+]);
