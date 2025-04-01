@@ -42,13 +42,13 @@
             <!-- Cartes de redirection CRUD -->
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 mt-10">
                 <button onclick="window.location='{{ route('student.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Student</button>
-                <button onclick="window.location='{{ route('company.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Company</button>
+                <button onclick="window.location='{{ route('pilot.company.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Company</button>
                 <button onclick="window.location='{{ route('offer.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Offer</button>
                 <button onclick="window.location='{{ route('promotion.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Promotion</button>
                 <button onclick="window.location='{{ route('skill.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Skill</button>
                 <button onclick="window.location='{{ route('sector.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Sector</button>
                 <button onclick="window.location='{{ route('industry.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Industry</button>
-                <button onclick="window.location='{{ route('apply.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Apply</button>
+                <button onclick="window.location='{{ route('pilot.apply.index') }}'" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Apply</button>
             </div>
         </div>
     </div>

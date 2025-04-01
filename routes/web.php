@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ApplicationController;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,47 +35,33 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-//    Route::resource('admin/company', CompanyController::class)->names([
-//        'index' => 'admin.company.index',
-//        'show' => 'admin.company.show',
-//        'create' => 'admin.company.create',
-//        'edit' => 'admin.company.edit',
-//        'store' => 'admin.company.store',
-//        'update' => 'admin.company.update',
-//        'destroy' => 'admin.company.destroy',
-//    ]);
+    //Company
     Route::resource('company', CompanyController::class);
     Route::post('company/{company}/rate', [CompanyController::class, 'rate'])->name('company.rate');
 
-//    Route::resource('admin/offer', OfferController::class)->names([
-//        'index' => 'admin.offer.index',
-//        'show' => 'admin.offer.show',
-//        'create' => 'admin.offer.create',
-//        'edit' => 'admin.offer.edit',
-//        'store' => 'admin.offer.store',
-//        'update' => 'admin.offer.update',
-//        'destroy' => 'admin.offer.destroy',
-//    ]);
+    //Offer
     Route::resource('offer', OfferController::class);
+
     //Candidature
     Route::get('/offer/{offer}/apply', [ApplicationController::class, 'create'])->name('apply.create');
     Route::post('/offer/{offer}/apply', [ApplicationController::class, 'store'])->name('apply.store');
     Route::get('my/applications', [ApplicationController::class, 'index'])->name('apply.index');
     Route::delete('/offer/{offer}/apply', [ApplicationController::class, 'destroy'])->name('apply.remove');
 
-
+    //Wishlist
     Route::get('my/wish-list', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('my/wish-list/{offer}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('my/wish-list/{offer}', [WishListController::class, 'remove'])->name('wishlist.remove');
 
     //Profile
     Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
+
+    //Pilot dashboard
     Route::get('pilot/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 });
 
-// Route pour les utilisateurs avec la permission manage_students
+// Pilot CRUD students and applications
 Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:pilot ou can:manage_students
     Route::resource('pilot/student', StudentController::class);
 
@@ -82,29 +69,42 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () { // auth:
     Route::delete('pilot/apply/{offer}/{user}', [ApplicationController::class, 'destroy'])->name('pilot.apply.remove');
 });
 
+// Pilot CRUD promotion
+Route::middleware(['auth', 'can:manage_promotion'])->group(function () {
 
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
-    Route::resource('pilot/promotion', PromotionController::class);
 
 });
 
 Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/industry', IndustryController::class);
-
-});
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/skill', SkillController::class);
-
-});
-
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/sector', SectorController::class);
-
-});
-
-Route::middleware(['auth', 'can:manage_students'])->group(function () {
+    Route::resource('pilot/promotion', PromotionController::class);
     Route::resource('pilot/address', AddressController::class);
 
 });
+
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+// Pilot CRUD companies
+Route::middleware(['auth', 'can:manage_company'])->group(function () {
+    Route::resource('pilot/company', CompanyController::class)->names([
+        'index' => 'pilot.company.index',
+        'show' => 'pilot.company.show',
+        'create' => 'pilot.company.create',
+        'edit' => 'pilot.company.edit',
+        'store' => 'pilot.company.store',
+        'update' => 'pilot.company.update',
+        'destroy' => 'pilot.company.destroy',
+    ]);
+});
+
+Route::resource('pilot/offer', OfferController::class)->names([
+    'index' => 'pilot.offer.index',
+    'show' => 'pilot.offer.show',
+    'create' => 'pilot.offer.create',
+    'edit' => 'pilot.offer.edit',
+    'store' => 'pilot.offer.store',
+    'update' => 'pilot.offer.update',
+    'destroy' => 'pilot.offer.destroy',
+]);

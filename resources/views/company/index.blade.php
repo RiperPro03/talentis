@@ -60,7 +60,7 @@
                             @if($company->logo_path)
                                 <figure class="bg-gray-100 flex items-center justify-center h-32">
                                     <img
-                                        src="{{ asset($company->logo_path) }}"
+                                        src="{{ Storage::url($company->logo_path) }}"
                                         alt="{{ 'logo_' . $company->name }}"
                                         class="max-h-full max-w-full object-contain"
                                     />
@@ -120,11 +120,6 @@
                         </div>
                     @endforeach
                 </div>
-
-{{--                <div class="mt-8 flex justify-center lg:justify-end">--}}
-{{--                    <x-pagination :paginator="$companies" />--}}
-
-{{--                </div>--}}
                 {{ $companies->links() }}
                 @endif
             </div>

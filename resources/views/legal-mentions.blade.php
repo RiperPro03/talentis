@@ -72,8 +72,8 @@
                     <ul class="list-disc list-inside ml-4 mt-2 text-gray-600">
                         <li>Christopher Asin</li>
                         <li>Enzo Casse</li>
-                        <li>Quentin</li>
-                        <li>Dagmawi</li>
+                        <li>Quentin Chabres</li>
+                        <li>Dagmawi Desta</li>
                     </ul>
                 </div>
             </div>

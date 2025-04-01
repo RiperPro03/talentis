@@ -37,7 +37,7 @@ class ApplicationController extends Controller
                         $q->whereHas('companies', fn($query) => $query->whereIn('name', $companies));
                     })
                     ->whereHas('applies')
-                    ->orderBy('created_at', 'desc')
+                    ->latest()
                     ->paginate(7);
             } else {
                 $offers = Offer::with([
@@ -47,7 +47,7 @@ class ApplicationController extends Controller
                     }
                 ])
                     ->whereHas('applies')
-                    ->orderBy('created_at', 'desc')
+                    ->latest()
                     ->paginate(7);
             }
 
@@ -66,6 +66,11 @@ class ApplicationController extends Controller
     // Afficher le formulaire de candidature
     public function create(Offer $offer)
     {
+        $user = Auth::user();
+        if ($user->hasRole('pilot')) {
+            return redirect()->route('offer.show', compact('offer'));
+        }
+
         if ($offer->applies()->where('user_id', Auth::id())->exists()) {
             return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
         }
@@ -84,7 +89,7 @@ class ApplicationController extends Controller
 
         //vérifier si l'utilisateur a déjà postulé
         if ($offer->applies()->where('user_id', $user->id)->exists()) {
-            return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
+            return back()->withErrors(['User' => 'Vous avez déjà postulé à cette offre.']);
         }
 
         $file = $request->file('cv');
@@ -92,11 +97,6 @@ class ApplicationController extends Controller
         $filename = 'cv_' . $user->id . '_' . Str::uuid() . '.' . $extension;
 
         $cvPath = $file->storeAs('cv', $filename, 'public');
-
-        // Vérifie si l'utilisateur a déjà postulé
-        if ($offer->applies()->where('user_id', $user->id)->exists()) {
-            return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
-        }
 
         // Enregistrer l'application dans la table pivot `applies`
         $offer->applies()->attach($user->id, [
