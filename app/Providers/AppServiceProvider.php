@@ -21,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('viewFilament', function ($user) {
-            return $user->hasRole('admin'); // ou plusieurs rôles
+            \Log::info('Gate check', ['user' => $user->id, 'roles' => $user->getRoleNames()]);
+            return $user->hasRole('admin');
         });
     }
 }
