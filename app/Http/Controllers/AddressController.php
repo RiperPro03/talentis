@@ -8,84 +8,63 @@ use Illuminate\Http\Request;
 class AddressController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show the form for creating a new address.
      */
+
     public function index()
     {
-        $addressies = Address::all();
-//        return view('address.index', compact('address'));
-        return response()->json($addressies);
+        $addresses = Address::all();
+        return view('pilot.address.index', compact('addresses'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-//        return view('address.create');
+        return view('pilot/address.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created address in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-
-        ]);
-        Address::create([
-
+            'postal_code' => 'required|string|max:20|unique:addresses',
+            'city' => 'required|string|max:255',
         ]);
 
-        return redirect()->route('address.index')->with('success', 'Localisation créée');
+        Address::create($request->only(['postal_code', 'city']));
+
+        return redirect()->route('address.create')->with('success', 'Address created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for editing the specified address.
      */
-    public function show(Address $address = null)
+    public function edit(Address $address)
     {
-        if(!$address) {
-            return redirect()->route('address.index')->with('error', 'Localisation non trouvée');
-        }
-//        return view('address.show', compact('address'));
+        return view('pilot/address.edit', compact('address'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Address $address = null)
-    {
-        if(!$address) {
-            return redirect()->route('address.index')->with('error', 'Localisation non trouvée');
-        }
-//        return view('address.edit', compact('address'));
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Update the specified address in storage.
      */
     public function update(Request $request, Address $address)
     {
         $request->validate([
-
-        ]);
-        $address->update([
-
+            'postal_code' => 'required|string|max:20|unique:addresses,postal_code,' . $address->id,
+            'city' => 'required|string|max:255',
         ]);
 
-        return redirect()->route('address.index')->with('success', 'Localisation mise à jour');
+        $address->update($request->only(['postal_code', 'city']));
+
+        return redirect()->route('address.edit',$address)->with('success', 'Address updated successfully.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified address from storage.
      */
-    public function destroy(Address $address = null)
+    public function destroy(Address $address)
     {
-        if (!$address) {
-            return redirect()->route('address.index')->with('error', 'Localisation non trouvée');
-        }
         $address->delete();
-        return redirect()->route('address.index')->with('success', 'Localisation supprimée');
+        return redirect()->route('address.index')->with('success', 'Address deleted successfully.');
     }
 }

@@ -7,13 +7,16 @@ use App\Models\Promotion;
 use App\Models\User; // Utilisation du modèle User
 use Illuminate\Http\Request;
 use Storage;
+use Illuminate\Support\Facades\DB;
+
+
 
 class StudentController extends Controller
 {
     public function index()
     {
         $students = User::role('student')->get();
-        return view('pilot.student.index', compact('students'));
+        return view('pilot/student.index', compact('students'));
     }
     /**
      * Show the form for editing the specified student.
@@ -22,12 +25,16 @@ class StudentController extends Controller
     {
         // Charger les relations nécessaires
         $student->load('addresses', 'promotion'); // Charger les relations 'addresses' et 'promotion'
-        $address = $student->addresses->first(); // Récupère la première adresse associée
+
+        // Vérifier si l'utilisateur a une adresse, sinon mettre à null
+        $address = $student->addresses && $student->addresses->isNotEmpty() ? $student->addresses->first() : null;
+
         $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
 
         // Retourne la vue d'édition de l'étudiant avec les données nécessaires
-        return view('pilot/student/edit', compact('student', 'promotions', 'address'));
+        return view('pilot/student.edit', compact('student', 'promotions', 'address'));
     }
+
 
     /**
      * Update the specified student in storage.
@@ -43,8 +50,22 @@ class StudentController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
             'email' => 'required|email|max:255|unique:users,email,' . $student->id,
             'promotion_id' => 'nullable|exists:promotions,id',
-            'postal_code' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
+            'postal_code' => [
+                'nullable', 'string', 'max:10',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'Non assigné') {
+                        $fail('Veuillez assigner une valeur au code postal.');
+                    }
+                },
+            ],
+            'city' => [
+                'nullable', 'string', 'max:255',
+                function ($attribute, $value, $fail) {
+                    if ($value === 'Non assigné') {
+                        $fail('Veuillez assigner une valeur à la ville.');
+                    }
+                },
+            ],
         ]);
 
         // Traiter la photo de profil si elle est présente
@@ -78,6 +99,7 @@ class StudentController extends Controller
 
         // Mettre à jour les informations de l'étudiant
         $student->update($validatedData);
+
         if ($request->has('promotion')) {
             $promotionCode = $request->promotion; // L'ID de la promotion choisie
             $promotion = Promotion::where('promotion_code', $promotionCode)->first(); // Récupère la promotion par son code
@@ -89,6 +111,88 @@ class StudentController extends Controller
         }
 
         // Rediriger vers la page d'édition avec un message de succès
-        return redirect()->route('students.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
+        return redirect()->route('student.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
     }
+
+
+    public function create()
+    {
+
+        $promotions = Promotion::all(); // Récupère toutes les promotions pour l'affichage dans le formulaire
+        return view('pilot/student.create', compact('promotions'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+            'postal_code' => 'nullable|string|max:10',
+            'city' => 'nullable|string|max:255',
+            'promotion' => 'nullable|exists:promotions,promotion_code',
+        ]);
+
+        // Vérifier si l'adresse existe déjà
+        $address = DB::table('addresses')->where([
+            'postal_code' => $validatedData['postal_code'],
+            'city' => $validatedData['city'],
+        ])->first();
+
+        // Si l'adresse n'existe pas, la créer
+        if (!$address) {
+            $addressId = DB::table('addresses')->insertGetId([
+                'postal_code' => $validatedData['postal_code'],
+                'city' => $validatedData['city'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } else {
+            $addressId = $address->id;
+        }
+
+        // Récupérer l'ID de la promotion à partir du promotion_code
+        $promotionId = null;
+        if (!empty($validatedData['promotion'])) {
+            $promotion = DB::table('promotions')->where('promotion_code', $validatedData['promotion'])->first();
+            if ($promotion) {
+                $promotionId = $promotion->id;
+            }
+        }
+
+        // Créer l'utilisateur en lui attribuant l'adresse et l'ID de la promotion
+        $userId = DB::table('users')->insertGetId([
+            'name' => $validatedData['name'],
+            'first_name' => $validatedData['first_name'],
+            'birthdate' => $validatedData['birthdate'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'address_id' => $addressId,
+            'promotion_id' => $promotionId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Récupérer l'utilisateur
+        $user = User::find($userId);
+
+        // Assigner le rôle 'student'
+        $user->assignRole('student');
+
+        return redirect()->route('student.create')->with('success', 'Utilisateur créé avec succès.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->back()->with('success', 'Utilisateur retiré avec succès.');
+    }
+
 }
+
+
