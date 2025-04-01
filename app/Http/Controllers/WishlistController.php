@@ -25,7 +25,8 @@ class WishlistController extends Controller
 
         // Vérifier si l'offre est déjà en favoris
         if ($user->offers()->where('offer_id', $offer->id)->exists()) {
-            return redirect()->route('wishlist.index')->with('errors', 'Cette offre est déjà dans votre liste de favoris');
+            return redirect()->route('wishlist.index')
+                ->withErrors(['User' => 'Cette offre est déjà dans votre liste de favoris']);
         }
 
         // Ajouter l'offre à la wish-list
@@ -44,7 +45,8 @@ class WishlistController extends Controller
 
         // Vérifier si l'offre est bien dans la wish-list de l'utilisateur
         if (!$user->offers()->where('offer_id', $offer->id)->exists()) {
-            return redirect()->route('wishlist.index')->with('errors', 'Offre introuvable dans votre liste de favoris');
+            return redirect()->route('wishlist.index')
+                    ->withErrors(['User' => 'Offre introuvable dans votre liste de favoris']);
         }
 
         // Supprimer l'offre de la wish-list
