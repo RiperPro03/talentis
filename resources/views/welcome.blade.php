@@ -27,7 +27,7 @@
 
     <!-- Input: localisation -->
     <select name="location[]" class="select select-bordered w-full md:w-1/4">
-        <option disabled {{ empty(request('type')) ? 'selected' : '' }}>Type d'emploi</option>
+        <option disabled {{ empty(request('type')) ? 'selected' : '' }}>Où ?</option>
         @foreach($locations as $location)
             <option value="{{ $location->city }}">
                 {{ $location->city }}
