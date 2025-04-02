@@ -16,13 +16,13 @@ return new class extends Migration {
             $table->id();
             $table->string('profile_picture_path')->nullable();
             $table->string('name');
-            $table->string('first_name')->nullable();
-            $table->date('birthdate')->nullable();
+            $table->string('first_name');
+            $table->date('birthdate');
             $table->string('password');
             $table->string('email', 255)->unique();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->onDelete('set null');
+            $table->foreignId('promotion_id')->nullable()->constrained('promotions')->nullOnDelete();
         });
 
         Schema::create('sessions', function (Blueprint $table) {

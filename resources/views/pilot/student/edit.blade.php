@@ -91,20 +91,16 @@
 
             <div>
                 <label class="block font-medium">Code Postal</label>
-                <input type="text" name="postal_code" value="{{ old('postal_code', $address->postal_code ?? '') }}"
-                    class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('postal_code')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
+                <input type="text" name="postal_code" value="{{ old('postal_code', $address->postal_code ?? 'Non assigné') }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                @error('postal_code') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium">Ville</label>
-                <input type="text" name="city" value="{{ old('postal_code', $address->city ?? '') }}"
-                    class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('city')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
+                <input type="text" name="city" value="{{ old('postal_code', $address->city ?? 'Non assigné') }}"  class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
+                @error('city') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
