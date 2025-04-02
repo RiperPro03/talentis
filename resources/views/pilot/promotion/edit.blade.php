@@ -39,9 +39,7 @@
                 <label class="block font-medium">Code de la promotion</label>
                 <input type="text" name="promotion_code" value="{{ old('promotion_code', $promotion->promotion_code) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('promotion_code')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>

@@ -38,7 +38,7 @@
                 <label class="block font-medium"> Skill </label>
                 <input type="text" name="skill_name" value="{{ old('skill_name', $skill->skill_name) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('skill_name')
+
                     <span class="text-red-500">{{ $message }}</span>
                 @enderror
             </div>
