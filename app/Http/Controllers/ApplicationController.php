@@ -72,7 +72,7 @@ class ApplicationController extends Controller
         }
 
         if ($offer->applies()->where('user_id', Auth::id())->exists()) {
-            return back()->with('errors', 'Vous avez déjà postulé à cette offre.');
+            return back()->withErrors(['User' => 'Vous avez déjà postulé à cette offre.']);
         }
         return view('apply.create', compact('offer'));
     }
@@ -149,5 +149,4 @@ class ApplicationController extends Controller
 
         return redirect()->route('apply.index')->with('success', 'Candidature retirée avec succès.');
     }
-
 }

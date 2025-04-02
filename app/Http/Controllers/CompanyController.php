@@ -122,8 +122,7 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         if (!$company) {
-            //            return redirect()->route('company.index')->with('error', 'Entreprise non trouvée');
-            return response()->json(['error' => 'Entreprise non trouvée']);
+            return redirect()->route('company.index')->withErrors(['User' => 'Entreprise non trouvée.']);
         }
 
         $appliesCount = DB::table('applies')
@@ -184,7 +183,7 @@ class CompanyController extends Controller
     public function destroy(Company $company = null)
     {
         if (!$company) {
-            return redirect()->route('company.index')->with('errors', 'Entreprise non trouvée');
+            return redirect()->route('company.index')->withErrors(['User' => 'Entreprise non trouvée.']);
         }
         $company->delete();
         return redirect()->route('company.index')->with('success', 'Entreprise supprimée');

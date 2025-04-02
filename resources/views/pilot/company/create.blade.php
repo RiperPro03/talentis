@@ -7,8 +7,26 @@
         <h2 class="text-2xl font-bold mb-6">Créer une entreprise</h2>
 
         @if (session('success'))
-            <div class="bg-green-500 text-white p-2 rounded mb-4">
+            <div class="alert alert-success shadow-lg mb-4">
                 {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-error shadow-lg mb-4">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <div>
+                        <ul class="mt-2 list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         @endif
 
@@ -45,7 +63,7 @@
                 <label class="block font-medium">Numéro de Téléphone</label>
                 <input type="text" name="phone_number" value="{{ old('phone_number') }}" 
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500"
-                    pattern="^\+?[0-9]{10,15}$" title="Veuillez entrer un numéro valide (10 à 15 chiffres, avec ou sans +)">
+                    pattern="^+?[0-9]{10,15}$" title="Veuillez entrer un numéro valide (10 à 15 chiffres, avec ou sans +)">
                 @error('phone_number') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
