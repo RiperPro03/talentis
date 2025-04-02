@@ -80,6 +80,8 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/sector', SectorController::class);
     Route::resource('pilot/promotion', PromotionController::class);
 
+
+
 });
 
 // Pilot CRUD companies
@@ -94,3 +96,13 @@ Route::middleware(['auth', 'can:manage_company'])->group(function () {
         'destroy' => 'pilot.company.destroy',
     ]);
 });
+
+Route::resource('pilot/offer', OfferController::class)->names([
+    'index' => 'pilot.offer.index',
+    'show' => 'pilot.offer.show',
+    'create' => 'pilot.offer.create',
+    'edit' => 'pilot.offer.edit',
+    'store' => 'pilot.offer.store',
+    'update' => 'pilot.offer.update',
+    'destroy' => 'pilot.offer.destroy',
+]);

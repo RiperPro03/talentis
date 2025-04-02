@@ -1,13 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Wish-list d\'Offres')
+@section('title', 'Liste d\'étudiants')
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
-        {{--        <!-- Bouton de retour -->--}}
-        {{--        <div class="flex justify-start mb-4">--}}
-        {{--            <a href="{{ url()->previous() }}" class="btn btn-secondary">← Retour</a>--}}
-        {{--        </div>--}}
 
         @if ($errors->any())
             <div class="alert alert-error shadow-lg mb-4">
@@ -120,8 +116,14 @@
             </tbody>
         </table>
     </div>
+    <div class="flex justify-between mt-4">
+        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+            ← Retour
+        </a>
+        <a href="{{ route('student.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
+            Ajouter un étudiant
+        </a>
+    </div>
 
-    <a href="{{route('dashboard.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
-        ← Retour
-    </a>
+
 @endsection
