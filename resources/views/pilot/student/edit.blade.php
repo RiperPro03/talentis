@@ -42,45 +42,35 @@
                 <label class="block font-medium">Nom</label>
                 <input type="text" name="name" value="{{ old('name', $student->name) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('name')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Prénom</label>
                 <input type="text" name="first_name" value="{{ old('first_name', $student->first_name) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('first_name')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Date de naissance</label>
                 <input type="date" name="birthdate" value="{{ old('birthdate', $student->birthdate) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('birthdate')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Email</label>
                 <input type="email" name="email" value="{{ old('email', $student->email) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('email')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
                 <input type="password" name="password"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('password')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
@@ -93,14 +83,12 @@
                 <label class="block font-medium">Code Postal</label>
 
                 <input type="text" name="postal_code" value="{{ old('postal_code', $student->addresses->postal_code ?? 'Non assigné') }}" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('postal_code') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block font-medium">Ville</label>
 
                 <input type="text" name="city" value="{{ old('postal_code', $student->addresses->city ?? 'Non assigné') }}"  class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('city') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>

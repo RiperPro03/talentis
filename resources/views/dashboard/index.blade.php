@@ -49,6 +49,7 @@
                 <a href="{{ route('sector.index') }}" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Sector</a>
                 <a href="{{ route('industry.index') }}" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Industry</a>
                 <a href="{{ route('pilot.apply.index') }}" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Apply</a>
+                <a href="{{ route('address.index') }}" class="p-6 bg-white shadow-lg rounded-xl border text-center">Gérer Address</a>
             </div>
         </div>
     </div>

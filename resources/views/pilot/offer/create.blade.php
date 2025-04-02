@@ -36,26 +36,20 @@
                 <label class="block font-medium">Titre</label>
                 <input type="text" name="title" value="{{ old('title') }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('title')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Description</label>
                 <textarea name="description" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">{{ old('description') }}</textarea>
-                @error('description')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Salaire de base</label>
                 <input type="number" name="base_salary" value="{{ old('base_salary') }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('base_salary')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
@@ -67,18 +61,14 @@
                     <option value="Stage" {{ old('type') == 'Stage' ? 'selected' : '' }}>Stage</option>
                     <option value="Alternance" {{ old('type') == 'Alternance' ? 'selected' : '' }}>Alternance</option>
                 </select>
-                @error('type')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Date de début</label>
                 <input type="date" name="start_offer" value="{{ old('start_offer') }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('start_offer')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
@@ -97,9 +87,7 @@
                         </option>
                     @endforeach
                 </select>
-                @error('company_id')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
@@ -112,18 +100,14 @@
                         </option>
                     @endforeach
                 </select>
-                @error('sector_id')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Compétences</label>
                 <x-multi-select-filter name="skills" label="Compétences" :items="$skills" key="skill_name" :default="implode(',', $skills->pluck('id')->toArray())"
                     :multiple="true" />
-                @error('skills')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div class="flex justify-between">

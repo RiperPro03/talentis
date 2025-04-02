@@ -39,26 +39,20 @@
                 <label class="block font-medium">Nom</label>
                 <input type="text" name="name" value="{{ old('name', $company->name) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('name')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Description</label>
                 <textarea name="description" class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">{{ old('description', $company->description) }}</textarea>
-                @error('description')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
                 <label class="block font-medium">Email</label>
                 <input type="email" name="email" value="{{ old('email', $company->email) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('email')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
@@ -67,7 +61,6 @@
                 <input type="text" name="phone_number" value="{{ old('phone_number', $company->phone_number) }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500"
                     pattern="^\+?[0-9]{10,15}$" title="Veuillez entrer un numéro valide (10 à 15 chiffres, avec ou sans +)">
-                @error('phone_number') <span class="text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>

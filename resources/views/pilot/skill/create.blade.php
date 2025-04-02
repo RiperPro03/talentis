@@ -38,9 +38,7 @@
                 <label class="block font-medium"> Nom du skill </label>
                 <input type="text" name="name" placeholder="Nom du skill"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
-                @error('name')
-                    <span class="text-red-500">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <div>
