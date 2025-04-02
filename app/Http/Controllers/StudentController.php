@@ -6,6 +6,8 @@ use App\Models\Address;
 use App\Models\Promotion;
 use App\Models\User; // Utilisation du modèle User
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +43,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, User $student)
     {
-        // Valider les données de la requête
+        // Validation
         $validatedData = $request->validate([
             'profile_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'required|string|max:255',
@@ -68,50 +70,54 @@ class StudentController extends Controller
             ],
         ]);
 
-        // Traiter la photo de profil si elle est présente
+        // Gestion de la photo de profil
         if ($request->hasFile('profile_picture')) {
-            // Supprimer l'ancienne photo si elle existe
             if ($student->profile_picture_path) {
-                Storage::delete($student->profile_picture_path);
+                Storage::disk('public')->delete($student->profile_picture_path);
             }
-            // Enregistrer la nouvelle photo
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+
+            $path = $this->uploadFile($request->file('profile_picture'), 'profile_' . $student->id, 'logos');
             $validatedData['profile_picture_path'] = $path;
         }
 
-        // Traiter le mot de passe si un nouveau mot de passe est fourni
+        // Traitement du mot de passe
         if ($request->filled('password')) {
-            $validatedData['password'] = bcrypt($request->password);
+            $validatedData['password'] = Hash::make($request->password);
         } else {
             unset($validatedData['password']);
         }
 
-        // Vérifier si les champs postal_code et city sont remplis
-        if ($request->filled('postal_code') && $request->filled('city')) {
-            // Vérifier si une adresse avec cette combinaison existe déjà
+        // Association de l'adresse si présente
+        if ($request->filled(['postal_code', 'city'])) {
             $address = Address::firstOrCreate(
-                ['postal_code' => $request->postal_code, 'city' => $request->city],
                 ['postal_code' => $request->postal_code, 'city' => $request->city]
             );
-            // Associer l'adresse à l'utilisateur (étudiant)
             $student->addresses()->associate($address);
         }
 
-        // Mettre à jour les informations de l'étudiant
+        // Mise à jour des infos de l'étudiant
         $student->update($validatedData);
 
-        if ($request->has('promotion')) {
-            $promotionCode = $request->promotion; // L'ID de la promotion choisie
-            $promotion = Promotion::where('promotion_code', $promotionCode)->first(); // Récupère la promotion par son code
-
+        // Mise à jour de la promotion par code si fournie
+        if ($request->filled('promotion')) {
+            $promotion = Promotion::where('promotion_code', $request->promotion)->first();
             if ($promotion) {
-                $student->promotion_id = $promotion->id; // Met à jour la promotion_id de l'étudiant
-                $student->save(); // Sauvegarde les changements
+                $student->promotion_id = $promotion->id;
+                $student->save();
             }
         }
 
-        // Rediriger vers la page d'édition avec un message de succès
         return redirect()->route('student.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
+    }
+
+    /**
+     * Upload un fichier avec un nom propre
+     */
+    private function uploadFile($file, $prefix, $folder)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = $prefix . '_' . Str::uuid() . '.' . $extension;
+        return $file->storeAs($folder, $filename, 'public');
     }
 
 
