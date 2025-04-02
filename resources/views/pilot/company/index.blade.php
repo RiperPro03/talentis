@@ -4,6 +4,13 @@
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
+
+        @if (session('success'))
+            <div class="alert alert-success shadow-lg mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-error shadow-lg mb-4">
                 <div class="flex items-center">
@@ -26,7 +33,8 @@
 
         <!-- Bouton Ajouter une entreprise placé sous le titre -->
         <div class="flex justify-end mb-6">
-            <a href="{{ route('company.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+            <a href="{{ route('company.create') }}"
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
                 Ajouter une entreprise
             </a>
         </div>
@@ -73,13 +81,17 @@
                         <td class="border px-4 py-2">{{ $company->description }}</td>
                         <td class="border px-4 py-2">{{ $company->email }}</td>
                         <td class="border px-4 py-2">{{ $company->phone_number }}</td>
-                        <td class="border px-4 py-2 flex gap-2 justify-center">
-                            <a href="{{ route('company.edit', $company) }}" class="btn btn-sm btn-primary">Modifier</a>
-                            <form action="{{ route('company.destroy', $company) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-error">Retirer</button>
-                            </form>
+                        <td class="border px-4 py-2">
+                            <div class="mt-3 flex gap-2">
+                                <a href="{{ route('company.show', $company) }}" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="{{ route('company.edit', $company) }}"
+                                    class="btn btn-secondary btn-sm">Modifier</a>
+                                <form action="{{ route('company.destroy', $company) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-error btn-sm">Retirer</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

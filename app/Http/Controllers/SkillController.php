@@ -48,7 +48,7 @@ class SkillController extends Controller
     public function show(Skill $skill = null)
     {
         if(!$skill){
-            return redirect()->route('skill.index')->with('error', 'Compétence non trouvée');
+            return redirect()->route('skill.index')->withErrors(['User' => 'Compétence non trouvée.']);
         }
 //        return view('skill.show', compact('skill'));
         return response()->json($skill);
@@ -84,7 +84,7 @@ class SkillController extends Controller
     public function destroy(Skill $skill = null)
     {
         if (!$skill) {
-            return redirect()->route('skill.index')->with('error', 'Compétence non trouvée');
+            return redirect()->route('skill.index')->withErrors(['User' => 'Compétence non trouvée.']);
         }
         $skill->delete();
         return redirect()->route('skill.index')->with('success', 'Compétence supprimée');

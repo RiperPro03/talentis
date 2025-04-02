@@ -3,35 +3,40 @@
 @section('title', 'Offres d\'emploi')
 
 @section('content')
-    <div class="container mx-auto py-6 px-4">
-        @if ($errors->any())
-            <div class="alert alert-error shadow-lg mb-4">
-                <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <div>
-                        <ul class="mt-2 list-disc list-inside text-sm">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+    @if (session('success'))
+        <div class="alert alert-success shadow-lg mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-error shadow-lg mb-4">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <div>
+                    <ul class="mt-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
-        @endif
-
-        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les Offres d'Emploi</h1>
-
-        <!-- Bouton Ajouter une offre -->
-        <div class="flex justify-end mb-6">
-            <a href="{{ route('offer.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
-                Ajouter une offre
-            </a>
         </div>
+    @endif
 
-        <!-- Version Mobile: Affichage en cartes -->
+    <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les Offres d'Emploi</h1>
+
+    <!-- Bouton Ajouter une offre -->
+    <div class="flex justify-end mb-6">
+        <a href="{{ route('offer.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+            Ajouter une offre
+        </a>
+    </div>
+
+    <!-- Version Mobile: Affichage en cartes -->
     </div>
 
     <div class="md:hidden flex flex-col gap-4">

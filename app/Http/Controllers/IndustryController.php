@@ -48,7 +48,7 @@ class IndustryController extends Controller
     {
 
         if(!$industry) {
-            return redirect()->route('industry.index')->with('error', 'Industrie non trouvée');
+            return redirect()->route('industry.index')->withErrors(['User' => 'Industrie non trouvée.']);
         }
 
 //        return view('promotion.show', compact('promotion'));
@@ -88,7 +88,7 @@ class IndustryController extends Controller
     public function destroy(Industry $industry)
     {
         if (!$industry) {
-            return redirect()->route('industry.index')->with('error', 'Industrie non trouvée');
+            return redirect()->route('industry.index')->withErrors(['User' => 'Industrie non trouvée.']);
         }
 
         $industry->delete(); // Soft Delete
