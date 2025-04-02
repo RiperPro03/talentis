@@ -86,9 +86,20 @@
             </dialog>
         @endforeach
 
+        <div class="flex justify-between mb-6">
+            <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+                ← Retour
+            </a>
+
+            <a href="{{ route('industry.create') }}"
+               class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+                Ajouter une entreprise
+            </a>
+        </div>
+
 
         <!-- Version Mobile: Affichage en cartes -->
-    </div>
+
 
 
     <div class="md:hidden flex flex-col gap-4">
@@ -145,13 +156,6 @@
             </tbody>
         </table>
     </div>
-    <div class="flex justify-between mt-4">
-
-        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
-            ← Retour
-        </a>
-        <a href="{{ route('industry.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
-            Ajouter une promotion
-        </a>
+    {{ $industries->links() }}
     </div>
 @endsection

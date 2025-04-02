@@ -30,12 +30,67 @@
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les promotions</h1>
 
+            @foreach($promotions as $promotion)
+                <!-- Modal de confirmation -->
+                <dialog id="modal-{{ $promotion->id }}" class="modal">
+                    <div class="modal-box">
+                        <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                        <p class="py-4">
+                            Êtes-vous sûr de vouloir supprimer l'offre
+                            <strong>{{ $promotion->title }}</strong> ?
+                        </p>
+                        <div class="modal-action">
+                            <form method="dialog">
+                                <button class="btn">Annuler</button>
+                            </form>
+                            <form action="{{ route('promotion.destroy', $promotion) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-error">Confirmer</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
+                    <form method="dialog" class="modal-backdrop">
+                        <button class="cursor-default">Fermer</button>
+                    </form>
+                </dialog>
+            @endforeach
+
         <!-- Formulaire de recherche -->
         <form method="GET" action="{{ route('promotion.index') }}" class="mb-6 flex items-center gap-2">
             <input type="text" name="promotion_code" value="{{ request('promotion_code') }}"
                    placeholder="Rechercher une promotion" class="input input-bordered w-full max-w-xs">
             <button type="submit" class="btn btn-primary">Rechercher</button>
         </form>
+
+            <div class="flex justify-between mb-6">
+                <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+                    ← Retour
+                </a>
+
+                <a href="{{ route('promotion.create') }}"
+                   class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+                    Ajouter une entreprise
+                </a>
+            </div>
+
+        <div class="md:hidden flex flex-col gap-4">
+            @foreach ($promotions as $promotion)
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h2 class="text-lg font-semibold">{{ $promotion->promotion_code }}</h2>
+                    <!-- Actions -->
+                    <div class="mt-3 flex justify-between">
+                        <a href="{{ route('promotion.edit', $promotion) }}"
+                           class="btn btn-secondary btn-sm">Modifier</a>
+                        <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">
+                            Retirer
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
 
         <div class="hidden md:block overflow-x-auto">
             <table class="table w-full border-collapse border bg-white text-sm md:text-base">

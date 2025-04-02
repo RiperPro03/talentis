@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form action="{{ route('offer.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('pilot.offer.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <div>

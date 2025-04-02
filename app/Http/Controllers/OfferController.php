@@ -211,7 +211,7 @@ class OfferController extends Controller
     public function edit(Offer $offer)
     {
         if (!$offer) {
-            return redirect()->route('offer.index')->withErrors(['User' => 'Offre non trouvée.']);
+            return redirect()->route('pilot.offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
         // Récupérer les secteurs et entreprises disponibles
@@ -277,11 +277,11 @@ class OfferController extends Controller
     public function destroy(Offer $offer)
     {
         if (!$offer) {
-            return redirect()->route('offer.index')->withErrors(['User' => 'Offre non trouvée.']);
+            return redirect()->route('pilot.offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
         $offer->delete();
 
-        return redirect()->route('offer.index')->with('success', 'Offre supprimée avec succès');
+        return redirect()->route('pilot.offer.index')->with('success', 'Offre supprimée avec succès');
     }
 }

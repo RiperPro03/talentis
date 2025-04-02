@@ -31,6 +31,17 @@
             <button type="submit" class="btn btn-primary ml-2">Rechercher</button>
         </form>
 
+            <div class="flex justify-between mb-6">
+                <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+                    ← Retour
+                </a>
+
+                <a href="{{ route('skill.create') }}"
+                   class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
+                    Ajouter une entreprise
+                </a>
+            </div>
+
         @foreach ($skills as $skill)
             <dialog id="modal-{{ $skill->id }}" class="modal">
                 <div class="modal-box">
@@ -53,6 +64,22 @@
             </dialog>
         @endforeach
 
+            <div class="md:hidden flex flex-col gap-4">
+                @foreach ($skills as $skill)
+                    <div class="bg-white shadow-md rounded-lg p-4">
+                        <h2 class="text-lg font-semibold">{{ $skill->skill_name }}</h2>
+                        <!-- Actions -->
+                        <div class="mt-3 flex justify-between">
+                            <a href="{{ route('skill.edit', $skill) }}"
+                               class="btn btn-secondary btn-sm">Modifier</a>
+                            <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $skill->id }}').showModal()">
+                                Retirer
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
         <div class="hidden md:block overflow-x-auto">
             <table class="table w-full border-collapse border bg-white text-sm md:text-base">
                 <thead>
@@ -73,10 +100,6 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="flex justify-between mt-4">
-            <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">← Retour</a>
-            <a href="{{ route('skill.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">Ajouter un skill</a>
-        </div>
+        {{ $skills->links() }}
     </div>
 @endsection

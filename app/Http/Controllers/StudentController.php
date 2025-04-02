@@ -105,10 +105,9 @@ class StudentController extends Controller
     public function edit(User $student)
     {
         $student->load('addresses', 'promotion');
-        $address = $student->addresses->first();
         $promotions = Promotion::all('promotion_code', 'id');
 
-        return view('pilot.student.edit', compact('student', 'promotions', 'address'));
+        return view('pilot.student.edit', compact('student', 'promotions'));
     }
 
     public function update(Request $request, User $student)

@@ -30,7 +30,7 @@
             </div>
         @endif
 
-        <form action="{{ route('company.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('pilot.company.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <div>
@@ -61,7 +61,7 @@
 
             <div>
                 <label class="block font-medium">Numéro de Téléphone</label>
-                <input type="text" name="phone_number" value="{{ old('phone_number') }}" 
+                <input type="text" name="phone_number" value="{{ old('phone_number') }}"
                     class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500"
                     pattern="^+?[0-9]{10,15}$" title="Veuillez entrer un numéro valide (10 à 15 chiffres, avec ou sans +)">
                 @error('phone_number') <span class="text-red-500">{{ $message }}</span> @enderror
