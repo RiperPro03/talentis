@@ -38,6 +38,15 @@
             <button type="submit" class="btn btn-primary">Rechercher</button>
         </form>
 
+            <div class="flex justify-between mt-4">
+                <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+                    ← Retour
+                </a>
+                <a href="{{ route('student.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
+                    Ajouter un étudiant
+                </a>
+            </div>
+
         @foreach($students as $student)
             <dialog id="modal-{{ $student->id }}" class="modal">
                 <div class="modal-box">
@@ -65,7 +74,7 @@
         @endforeach
 
         <!-- Version Mobile: Affichage en cartes -->
-    </div>
+
 
     <div class="md:hidden flex flex-col gap-4">
         @foreach ($students as $student)
@@ -118,12 +127,6 @@
             </tbody>
         </table>
     </div>
-    <div class="flex justify-between mt-4">
-        <a href="{{ route('dashboard.index') }}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
-            ← Retour
-        </a>
-        <a href="{{ route('student.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
-            Ajouter un étudiant
-        </a>
+    {{ $students->links() }}
     </div>
 @endsection

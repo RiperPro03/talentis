@@ -191,10 +191,10 @@ class CompanyController extends Controller
     public function destroy(Company $company = null)
     {
         if (!$company) {
-            return redirect()->route('company.index')->withErrors(['User' => 'Entreprise non trouvée.']);
+            return redirect()->route('pilot.company.index')->withErrors(['User' => 'Entreprise non trouvée.']);
         }
         $company->delete();
-        return redirect()->route('company.index')->with('success', 'Entreprise supprimée');
+        return redirect()->route('pilot.company.index')->with('success', 'Entreprise supprimée');
     }
 
     public function rate(Request $request, Company $company)

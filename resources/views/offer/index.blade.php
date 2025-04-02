@@ -64,15 +64,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach ($offers as $offer)
                         <div class="relative">
-                            <!-- Bouton Ajouter aux Favoris -->
-                            <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="absolute top-2 right-2 z-10">
-                                @csrf
-                                <div class="tooltip tooltip-warning" data-tip="Ajouter aux favoris">
-                                    <button class="btn btn-circle btn-outline btn-sm bg-white shadow-md hover:bg-warning">
-                                        ❤️
-                                    </button>
-                                </div>
-                            </form>
+                            @if (!auth()->user()->hasRole('pilot'))
+                                <!-- Bouton Ajouter aux Favoris -->
+                                <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="absolute top-2 right-2 z-10">
+                                    @csrf
+                                    <div class="tooltip tooltip-warning" data-tip="Ajouter aux favoris">
+                                        <button class="btn btn-circle btn-outline btn-sm bg-white shadow-md hover:bg-warning">
+                                            ❤️
+                                        </button>
+                                    </div>
+                                </form>
+                            @endif
 
                             <!-- Carte de l'Offre -->
                             <div class="card card-bordered shadow-md bg-base-100 relative h-full flex flex-col">
