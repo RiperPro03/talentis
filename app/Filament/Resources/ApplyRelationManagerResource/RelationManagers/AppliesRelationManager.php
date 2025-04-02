@@ -34,7 +34,7 @@ class AppliesRelationManager extends RelationManager
 
                 FileUpload::make('curriculum_vitae')
                     ->label('CV')
-                    ->directory('cvs')
+                    ->directory('cv')
                     ->acceptedFileTypes(['application/pdf'])
                     ->required(),
 
