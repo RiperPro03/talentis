@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ApplicationController;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,10 +80,11 @@ Route::middleware(['auth', 'can:manage_students'])->group(function () {
     Route::resource('pilot/skill', SkillController::class);
     Route::resource('pilot/sector', SectorController::class);
     Route::resource('pilot/promotion', PromotionController::class);
-
-
+    Route::resource('pilot/address', AddressController::class);
 
 });
+
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 // Pilot CRUD companies
 Route::middleware(['auth', 'can:manage_company'])->group(function () {
