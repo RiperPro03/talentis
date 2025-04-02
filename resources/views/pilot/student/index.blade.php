@@ -33,7 +33,7 @@
                         Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
                     </p>
                     <div class="modal-action flex justify-between">
-                        <form action="{{ route('users.destroy', $student) }}" method="POST">
+                        <form action="{{ route('student.destroy', $student) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-error">Confirmer</button>

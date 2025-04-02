@@ -8,6 +8,11 @@
 {{--        <div class="flex justify-start mb-4">--}}
 {{--            <a href="{{ url()->previous() }}" class="btn btn-secondary">← Retour</a>--}}
 {{--        </div>--}}
+        @if (session('success'))
+            <div class="alert alert-success shadow-lg mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
 
         @if ($errors->any())
             <div class="alert alert-error shadow-lg mb-4">
