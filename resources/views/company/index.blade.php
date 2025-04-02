@@ -53,79 +53,74 @@
                         <p>Aucune entreprise disponible.</p>
                     </div>
                 @else
-                {{-- Liste des entreprises --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    @foreach ($companies as $company)
-                        <div class="card card-bordered shadow-md bg-base-100">
-                            @if($company->logo_path)
-                                <figure class="bg-gray-100 flex items-center justify-center h-32">
-                                    <img
-                                        src="{{ asset($company->logo_path) }}"
-                                        alt="{{ 'logo_' . $company->name }}"
-                                        class="max-h-full max-w-full object-contain"
-                                    />
-                                </figure>
-                            @endif
+                    {{-- Liste des entreprises --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        @foreach ($companies as $company)
+                            <div class="card card-bordered shadow-md bg-base-100">
+                                @if($company->logo_path)
+                                    <figure class="bg-gray-100 flex items-center justify-center h-32">
+                                        <img
+                                            src="{{ Storage::url($company->logo_path) }}"
+                                            alt="{{ 'logo_' . $company->name }}"
+                                            class="max-h-full max-w-full object-contain"
+                                        />
+                                    </figure>
+                                @endif
 
-                            {{-- Corps de la carte --}}
-                            <div class="card-body">
-                                <h2 class="card-title">
-                                    {{ $company->name }}
-                                </h2>
-                                <p class="text-sm text-gray-600 text-left">
-                                    {{ Str::limit($company->description, 80) }}
-                                </p>
+                                {{-- Corps de la carte --}}
+                                <div class="card-body">
+                                    <h2 class="card-title">
+                                        {{ $company->name }}
+                                    </h2>
+                                    <p class="text-sm text-gray-600 text-left">
+                                        {{ Str::limit($company->description, 80) }}
+                                    </p>
 
-                                {{-- Badges --}}
-                                <div class="flex flex-wrap items-center gap-2 mt-3">
-                                    {{-- Location --}}
-                                    @foreach($company->addresses as $location)
-                                        <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                            <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                                </path>
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                      d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                                </path>
-                                            </svg>
-                                            {{ $location->city }}
+                                    {{-- Badges --}}
+                                    <div class="flex flex-wrap items-center gap-2 mt-3">
+                                        {{-- Location --}}
+                                        @foreach($company->addresses as $location)
+                                            <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
+                                                <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
+                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
+                                                    </path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                          d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
+                                                    </path>
+                                                </svg>
+                                                {{ $location->city }}
+                                            </div>
+                                        @endforeach
+
+                                        {{-- Note --}}
+                                        @if(!$company->getRate() == 0)
+                                            <div class="badge badge-xl badge-secondary whitespace-nowrap">
+                                                {{ $company->getRate() }} ⭐
+                                            </div>
+                                        @endif
+
+
+                                        {{-- Nombre d'offres --}}
+                                        <div class="badge badge-xl badge-success whitespace-nowrap">
+                                            {{ $company->offers->count() }} offre(s)
                                         </div>
-                                    @endforeach
-
-                                    {{-- Note --}}
-                                    @if(!$company->getRate() == 0)
-                                        <div class="badge badge-xl badge-secondary whitespace-nowrap">
-                                            {{ $company->getRate() }} ⭐
-                                        </div>
-                                    @endif
+                                    </div>
 
 
-                                    {{-- Nombre d'offres --}}
-                                    <div class="badge badge-xl badge-success whitespace-nowrap">
-                                        {{ $company->offers->count() }} offre(s)
+                                    {{-- Bouton d'action --}}
+                                    <div class="card-actions justify-end mt-4">
+                                        <a href="{{ route('company.show', $company) }}"
+                                           class="btn btn-sm btn-primary">
+                                            Voir
+                                        </a>
                                     </div>
                                 </div>
-
-
-                                {{-- Bouton d'action --}}
-                                <div class="card-actions justify-end mt-4">
-                                    <a href="{{ route('company.show', $company) }}"
-                                       class="btn btn-sm btn-primary">
-                                        Voir
-                                    </a>
-                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-
-{{--                <div class="mt-8 flex justify-center lg:justify-end">--}}
-{{--                    <x-pagination :paginator="$companies" />--}}
-
-{{--                </div>--}}
-                {{ $companies->links() }}
+                        @endforeach
+                    </div>
+                    {{ $companies->links() }}
                 @endif
             </div>
         </div>

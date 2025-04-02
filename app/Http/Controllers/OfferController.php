@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Sector;
 use App\Models\Skill;
 use App\Models\Offer;
+use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -18,12 +19,15 @@ class OfferController extends Controller
      */
     public function index(Request $request)
     {
-        if (
-            $request->has('offer-title') || $request->has('company') || $request->has('industry')
-            || $request->has('location') || $request->has('skill') || $request->has('sector')
-            || $request->has('type')
-        ) {
+        if (Route::currentRouteName() === 'pilot.offer.index') {
+            $offers = Offer::paginate(8);
+            return view('pilot.offer.index', compact('offers'));
+        }
 
+        if ($request->has('offer-title') || $request->has('company') || $request->has('industry')
+            || $request->has('location') || $request->has('skill') || $request->has('sector')
+            || $request->has('type'))
+        {
 
             $request->validate([
                 'offer-title' => 'string|nullable',
@@ -80,24 +84,23 @@ class OfferController extends Controller
             }
 
             $offers = $query->paginate(8);
+
         } else {
             $offers = Offer::paginate(8);
-
-
-            if (Route::currentRouteName() === 'pilot.offer.index') {
-                return view('pilot.offer.index', compact('offers'));
-            }
-
-            if (request()->has('page') && request()->page > $offers->lastPage()) {
-                return redirect()->route('offer.index', ['page' => $offers->lastPage()]);
-            }
-
-            $skills = Skill::all('skill_name');
-            $sectors = Sector::all('name');
-            $companies = Company::all('name');
-
-            return view('offer.index', compact('offers', 'skills', 'sectors', 'companies'));
         }
+
+        if (request()->has('page') && request()->page > $offers->lastPage()) {
+            return redirect()->route('offers.index', ['page' => $offers->lastPage()]);
+        }
+
+        $industries = Industry::all('name');
+        $locations = Address::all('city');
+        $skills = Skill::all('skill_name');
+        $sectors = Sector::all('name');
+        $companies = Company::all('name');
+
+        return view('offer.index',
+            compact('offers', 'industries', 'locations', 'skills', 'sectors', 'companies'));
     }
 
     /**
@@ -146,11 +149,11 @@ class OfferController extends Controller
         if ($request->has('skills')) {
             // Récupérer les IDs des skills en fonction des noms envoyés
             $skillsIds = Skill::whereIn('skill_name', $request->input('skills'))->pluck('id')->toArray();
-        
+
             // Associer les compétences à l'offre
             $offer->skills()->sync($skillsIds);
         }
-        
+
 
 
         // Rediriger vers la liste des offres avec un message de succès
@@ -192,7 +195,7 @@ class OfferController extends Controller
      */
     public function update(Request $request, Offer $offer)
     {
-        
+
         // Valider les données de la requête
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
@@ -221,7 +224,7 @@ class OfferController extends Controller
         if ($request->has('skills')) {
             // Récupérer les IDs des skills en fonction des noms envoyés
             $skillsIds = Skill::whereIn('skill_name', $request->input('skills'))->pluck('id')->toArray();
-        
+
             // Associer les compétences à l'offre
             $offer->skills()->sync($skillsIds);
         }
