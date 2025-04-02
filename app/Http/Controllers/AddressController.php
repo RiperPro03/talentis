@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 
 class AddressController extends Controller
 {
@@ -11,11 +13,30 @@ class AddressController extends Controller
      * Show the form for creating a new address.
      */
 
-    public function index()
+
+
+
+    public function index(Request $request)
     {
-        $addresses = Address::all();
+        // Récupérer les valeurs de recherche
+        $city = $request->query('city');
+        $postalCode = $request->query('postal_code');
+
+        $addresses = Address::when($city, function ($query) use ($city) {
+            $query->where('city', 'like', "%$city%");
+        })
+            ->when($postalCode, function ($query) use ($postalCode) {
+                $query->where('postal_code', 'like', "%$postalCode%");
+            })
+            ->paginate(10);
+
         return view('pilot.address.index', compact('addresses'));
     }
+
+
+
+
+
     public function create()
     {
         return view('pilot/address.create');

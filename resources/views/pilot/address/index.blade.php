@@ -21,6 +21,46 @@
             </div>
         @endif
 
+            <form action="{{ route('address.index') }}" method="GET" class="mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <!-- Titre de l'offre -->
+                    <div class="form-control w-full">
+                        <label class="label" for="city">
+                            <span class="label-text">Ville</span>
+                        </label>
+                        <input
+                                type="text"
+                                name="city"
+                                id="city"
+                                value="{{ request('city') }}"
+                                class="input input-bordered w-full"
+                                placeholder="Ex : Montauban..."
+                        />
+                    </div>
+
+
+
+                        <!-- Titre de l'offre -->
+                        <div class="form-control w-full">
+                            <label class="label" for="postal_code">
+                                <span class="label-text">Code postale</span>
+                            </label>
+                            <input
+                                    type="text"
+                                    name="postal_code"
+                                    id="postal_code"
+                                    value="{{ request('postal_code') }}"
+                                    class="input input-bordered w-full"
+                                    placeholder="Ex : 46000..."
+                            />
+                        </div>
+                    </div>
+
+                <div class="flex justify-end mt-4">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </form>
+
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les addresses</h1>
         @foreach($addresses as $address)

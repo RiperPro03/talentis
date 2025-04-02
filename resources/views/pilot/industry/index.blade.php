@@ -34,7 +34,32 @@
         @endif
 
 
+
+
+
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les industries</h1>
+        <form action="{{ route('industry.index') }}" method="GET" class="mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <!-- Champ de recherche par nom -->
+                <div class="form-control w-full">
+                    <label class="label" for="name">
+                        <span class="label-text">Nom de l'industrie</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value="{{ request('name') }}"
+                        class="input input-bordered w-full"
+                        placeholder="Ex : Technologie..."
+                    />
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <button type="submit" class="btn btn-primary">Rechercher</button>
+            </div>
+        </form>
         @foreach ($industries as $industry)
             <dialog id="modal-{{ $industry->id }}" class="modal">
                 <div class="modal-box">

@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
-
         @if (session('success'))
             <div class="alert alert-success shadow-lg mb-4">
                 {{ session('success') }}
@@ -15,7 +14,7 @@
             <div class="alert alert-error shadow-lg mb-4">
                 <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
+                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <div>
@@ -29,41 +28,44 @@
             </div>
         @endif
 
-
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
 
+        <!-- Formulaire de recherche -->
+        <form method="GET" action="{{ route('student.index') }}" class="mb-6 flex flex-wrap gap-4 justify-center">
+            <input type="text" name="name" placeholder="Nom" value="{{ request('name') }}" class="input input-bordered">
+            <input type="text" name="first_name" placeholder="Prénom" value="{{ request('first_name') }}" class="input input-bordered">
+            <input type="email" name="email" placeholder="Email" value="{{ request('email') }}" class="input input-bordered">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+
         @foreach($students as $student)
-                <dialog id="modal-{{ $student->id }}" class="modal">
-                    <div class="modal-box">
-                        <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                        <p class="py-4">
-                            Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
-                        </p>
-                        <div class="modal-action flex justify-between">
-                            <form action="{{ route('student.destroy', $student) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-error">Confirmer</button>
-                            </form>
-                            <form method="dialog">
-                                <button class="btn">Annuler</button>
-                            </form>
-                        </div>
+            <dialog id="modal-{{ $student->id }}" class="modal">
+                <div class="modal-box">
+                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                    <p class="py-4">
+                        Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
+                    </p>
+                    <div class="modal-action flex justify-between">
+                        <form action="{{ route('student.destroy', $student) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-error">Confirmer</button>
+                        </form>
+                        <form method="dialog">
+                            <button class="btn">Annuler</button>
+                        </form>
                     </div>
+                </div>
 
-
-
-                    <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                    <form method="dialog" class="modal-backdrop">
-                        <button class="cursor-default">Fermer</button>
-                    </form>
-                </dialog>
+                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
+                <form method="dialog" class="modal-backdrop">
+                    <button class="cursor-default">Fermer</button>
+                </form>
+            </dialog>
         @endforeach
-
 
         <!-- Version Mobile: Affichage en cartes -->
     </div>
-
 
     <div class="md:hidden flex flex-col gap-4">
         @foreach ($students as $student)
@@ -76,9 +78,8 @@
                     <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
                         Modifier
                     </a>
-
                     <button class="btn btn-error btn-sm"
-                        onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
+                            onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
                         Retirer
                     </button>
                 </div>
@@ -90,39 +91,30 @@
     <div class="hidden md:block overflow-x-auto">
         <table class="table w-full border-collapse border bg-white text-sm md:text-base">
             <thead>
-                <tr class="bg-gray-50">
-                    <th class="border px-4 py-2 text-center text-lg">Nom</th>
-                    <th class="border px-4 py-2 text-center text-lg">Prénom</th>
-                    <th class="border px-4 py-2 text-center text-lg">Mail</th>
-                    <th class="border px-4 py-2 text-center text-lg">Actions</th>
-                </tr>
+            <tr class="bg-gray-50">
+                <th class="border px-4 py-2 text-center text-lg">Nom</th>
+                <th class="border px-4 py-2 text-center text-lg">Prénom</th>
+                <th class="border px-4 py-2 text-center text-lg">Mail</th>
+                <th class="border px-4 py-2 text-center text-lg">Actions</th>
+            </tr>
             </thead>
             <tbody>
-
-                @foreach ($students as $student)
-                    <tr class="hover:bg-gray-50">
-                        <td class="border px-4 py-2">{{ $student->name }}</td>
-                        <td class="border px-4 py-2">{{ $student->first_name }}</td>
-                        <td class="border px-4 py-2">
-                            {{ $student->email }}
-                        </td>
-                        <td class="border px-4 py-2 flex gap-2 justify-center">
-                            <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
-                                Modifier
-                            </a>
-
-                            <button class="btn btn-error btn-sm"
+            @foreach ($students as $student)
+                <tr class="hover:bg-gray-50">
+                    <td class="border px-4 py-2">{{ $student->name }}</td>
+                    <td class="border px-4 py-2">{{ $student->first_name }}</td>
+                    <td class="border px-4 py-2">{{ $student->email }}</td>
+                    <td class="border px-4 py-2 flex gap-2 justify-center">
+                        <a href="{{ route('student.edit', $student->id) }}" class="btn btn-primary btn-sm">
+                            Modifier
+                        </a>
+                        <button class="btn btn-error btn-sm"
                                 onclick="document.getElementById('modal-{{ $student->id }}').showModal()">
-                                Retirer
-                            </button>
-
-
-
-                        </td>
-
-
-                    </tr>
-                @endforeach
+                            Retirer
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>
@@ -134,6 +126,4 @@
             Ajouter un étudiant
         </a>
     </div>
-
-
 @endsection
