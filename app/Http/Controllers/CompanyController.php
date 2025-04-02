@@ -19,8 +19,16 @@ class CompanyController extends Controller
     {
 
         if (Route::currentRouteName() === 'pilot.company.index') {
-            $companies = Company::paginate(8);
-            return view('pilot.company.index', compact('companies'));
+            $query = Company::query();
+
+            // Vérifier si un filtre par nom est appliqué
+            if ($request->has('name') && !empty($request->name)) {
+                $query->where('name', 'like', '%' . $request->name . '%');
+            }
+
+            $companies = $query->latest()->paginate(10);
+
+            return view('pilot/company.index', compact('companies'));
         }
 
         if ($request->has('company') || $request->has('industry') || $request->has('location')) {

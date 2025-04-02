@@ -10,11 +10,22 @@ class PromotionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $promotions = Promotion::all();
-        return view('pilot.promotion.index', compact('promotions'));
+        $query = Promotion::query();
+
+        // Filtrer par code de promotion
+        if ($request->filled('promotion_code')) {
+            $query->where('promotion_code', 'like', '%' . $request->input('promotion_code') . '%');
+        }
+
+        // Récupération des promotions paginées
+        $promotions = $query->paginate(10);
+
+        // Retourner la vue avec les résultats
+        return view('pilot/promotion.index', compact('promotions'));
     }
+
 
     /**
      * Show the form for creating a new resource.

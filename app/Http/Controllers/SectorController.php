@@ -11,10 +11,20 @@ class SectorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sectors = Sector::all();
-        return view('pilot.sector.index', compact('sectors'));
+        $query = Sector::query();
+
+        // Filtrer par nom si une recherche est effectuée
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        // Récupération des secteurs paginés
+        $sectors = $query->paginate(10);
+
+        // Retourner la vue avec les résultats
+        return view('pilot/sector.index', compact('sectors'));
     }
 
     /**

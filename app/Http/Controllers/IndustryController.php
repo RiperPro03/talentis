@@ -10,9 +10,17 @@ class IndustryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $industries = Industry::all();
+        $query = Industry::query();
+
+        // Vérifier si un filtre par nom est appliqué
+        if ($request->has('name') && !empty($request->name)) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        $industries = $query->latest()->paginate(10);
+
         return view('pilot/industry.index', compact('industries'));
     }
 

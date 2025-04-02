@@ -20,8 +20,42 @@ class OfferController extends Controller
     public function index(Request $request)
     {
         if (Route::currentRouteName() === 'pilot.offer.index') {
-            $offers = Offer::paginate(8);
-            return view('pilot.offer.index', compact('offers'));
+            $query = Offer::query();
+
+            // Filtrer par titre si un titre est fourni
+            if ($request->filled('title')) {
+                $query->where('title', 'like', '%' . $request->input('title') . '%');
+            }
+
+            // Filtrer par salaire minimum si une valeur est fournie
+            if ($request->filled('min_salary')) {
+                $query->where('base_salary', '>=', $request->input('min_salary'));
+            }
+
+            // Filtrer par type d'offre (stage, CDI, CDD, etc.)
+            if ($request->filled('type')) {
+                $query->where('type', $request->input('type'));
+            }
+
+            // Filtrer par secteur d'activité
+            if ($request->filled('sector_id')) {
+                $query->where('sector_id', $request->input('sector_id'));
+            }
+            if ($request->filled('company')) {
+                $query->whereHas('companies', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->input('company') . '%');
+                });
+            }
+
+
+            // Récupérer les offres avec pagination
+            $offers = $query->paginate(10);
+
+            // Récupérer les secteurs pour le champ de filtre
+            $sectors = Sector::all();
+
+            // Retourner la vue avec les résultats et les filtres sélectionnés
+            return view('pilot/offer.index', compact('offers', 'sectors'));
         }
 
         if ($request->has('offer-title') || $request->has('company') || $request->has('industry')

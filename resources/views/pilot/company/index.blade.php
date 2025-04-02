@@ -30,6 +30,10 @@
         @endif
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les entreprises</h1>
+            <form method="GET" action="{{ route('pilot.company.index') }}" class="mb-6 flex justify-center">
+                <input type="text" name="name" placeholder="Rechercher par nom" value="{{ request('name') }}" class="input input-bordered w-full max-w-xs">
+                <button type="submit" class="btn btn-primary ml-2">Rechercher</button>
+            </form>
 
         <!-- Bouton Ajouter une entreprise placé sous le titre -->
         <div class="flex justify-end mb-6">

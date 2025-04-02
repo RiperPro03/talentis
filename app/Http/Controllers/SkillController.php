@@ -10,11 +10,17 @@ class SkillController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $skills = Skill::all();
-        return view('pilot/skill.index', compact('skills'));
+        $query = Skill::query();
 
+        if ($request->has('search')) {
+            $query->where('skill_name', 'like', '%' . $request->search . '%');
+        }
+
+        $skills = $query->paginate(10);
+
+        return view('pilot/skill.index', compact('skills'));
     }
 
     /**
