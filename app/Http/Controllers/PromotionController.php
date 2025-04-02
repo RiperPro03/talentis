@@ -47,7 +47,7 @@ class PromotionController extends Controller
     public function show(Promotion $promotion = null)
     {
         if(!$promotion) {
-            return redirect()->route('promotion.index')->with('error', 'Promotion non trouvée');
+            return redirect()->route('promotion.index')->withErrors(['User' => 'Promotion non trouvée.']);
         }
 
 //        return view('promotion.show', compact('promotion'));
@@ -91,7 +91,7 @@ class PromotionController extends Controller
     public function destroy(Promotion $promotion = null)
     {
         if(!$promotion) {
-            return redirect()->route('promotion.index')->with('error', 'Promotion non trouvée');
+            return redirect()->route('promotion.index')->withErrors(['User' => 'Promotion non trouvée.']);
         }
         $promotion->delete();
         return redirect()->route('promotion.index')->with('success', 'Promotion supprimée');

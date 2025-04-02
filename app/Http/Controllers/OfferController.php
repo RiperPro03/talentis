@@ -90,7 +90,7 @@ class OfferController extends Controller
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
-            return redirect()->route('offers.index', ['page' => $offers->lastPage()]);
+            return redirect()->route('offer.index', ['page' => $offers->lastPage()]);
         }
 
         $industries = Industry::all('name');
@@ -129,7 +129,7 @@ class OfferController extends Controller
             'base_salary' => 'nullable|numeric|min:0',
             'type' => 'required|in:CDI,CDD,Stage,Alternance',
             'start_offer' => 'required|date|after_or_equal:today',
-            'end_offer' => 'date|after:start_offer',
+            'end_offer' => 'nullable|date|after:start_offer',
             'company_id' => 'required|exists:companies,id',
             'sector_id' => 'required|exists:sectors,id',
         ]);
@@ -165,7 +165,7 @@ class OfferController extends Controller
     public function show(Offer $offer)
     {
         if (!$offer) {
-            return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
+            return redirect()->route('offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
         return view('offer.show', compact('offer'));
@@ -177,7 +177,7 @@ class OfferController extends Controller
     public function edit(Offer $offer)
     {
         if (!$offer) {
-            return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
+            return redirect()->route('offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
         // Récupérer les secteurs et entreprises disponibles
@@ -243,7 +243,7 @@ class OfferController extends Controller
     public function destroy(Offer $offer)
     {
         if (!$offer) {
-            return redirect()->route('offer.index')->with('error', 'Offre non trouvée');
+            return redirect()->route('offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
         $offer->delete();

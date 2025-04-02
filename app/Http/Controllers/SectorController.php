@@ -48,7 +48,7 @@ class SectorController extends Controller
     public function show(Sector $sector = null)
     {
         if(!$sector) {
-            return redirect()->route('sector.index')->with('error', 'Secteur non trouvée');
+            return redirect()->route('sector.index')->withErrors(['User' => 'Secteur non trouvée.']);
         }
 
 //        return view('promotion.show', compact('promotion'));
@@ -89,7 +89,7 @@ class SectorController extends Controller
     public function destroy(Promotion $promotion = null)
     {
         if(!$promotion) {
-            return redirect()->route('sector.index')->with('error', 'Secteur non trouvée');
+            return redirect()->route('sector.index')->withErrors(['User' => 'Secteur non trouvée.']);
         }
         $promotion->delete();
         return redirect()->route('sector.index')->with('success', 'Secteur supprimée');
