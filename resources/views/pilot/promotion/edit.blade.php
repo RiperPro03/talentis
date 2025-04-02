@@ -3,8 +3,8 @@
 @section('title', 'Modifier la Promotion')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
-        <div class="max-w-4xl w-full bg-white p-6 rounded-lg shadow-md">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10 flex flex-col items-center">
+
             <h2 class="text-2xl font-bold mb-6">Modifier la promotion</h2>
 
             @if (session('success'))
@@ -28,7 +28,7 @@
                 </div>
             </form>
         </div>
-    </div>
+
     <a href= "{{route('promotion.index')}}" class="btn btn-secondary w-fit mx-auto mt-4 px-6 py-2 flex items-center justify-center">
         ← Retour
     </a>
