@@ -25,32 +25,32 @@
 
         <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les étudiants</h1>
 
-@foreach($students as $student)
-            <dialog id="modal-{{ $student->id }}" class="modal">
-                <div class="modal-box">
-                    <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                    <p class="py-4">
-                        Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
-                    </p>
-                    <div class="modal-action flex justify-between">
-                        <form action="{{ route('student.destroy', $student) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-error">Confirmer</button>
-                        </form>
-                        <form method="dialog">
-                            <button class="btn">Annuler</button>
-                        </form>
+        @foreach($students as $student)
+                <dialog id="modal-{{ $student->id }}" class="modal">
+                    <div class="modal-box">
+                        <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                        <p class="py-4">
+                            Êtes-vous sûr de vouloir retirer {{ $student->first_name }} {{ $student->name }} ?
+                        </p>
+                        <div class="modal-action flex justify-between">
+                            <form action="{{ route('student.destroy', $student) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-error">Confirmer</button>
+                            </form>
+                            <form method="dialog">
+                                <button class="btn">Annuler</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
 
-                <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                <form method="dialog" class="modal-backdrop">
-                    <button class="cursor-default">Fermer</button>
-                </form>
-            </dialog>
-@endforeach
+                    <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
+                    <form method="dialog" class="modal-backdrop">
+                        <button class="cursor-default">Fermer</button>
+                    </form>
+                </dialog>
+        @endforeach
 
 
         <!-- Version Mobile: Affichage en cartes -->
