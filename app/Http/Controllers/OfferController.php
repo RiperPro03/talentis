@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Sector;
 use App\Models\Skill;
 use App\Models\Offer;
+use App\Models\Industry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -92,11 +93,13 @@ class OfferController extends Controller
                 return redirect()->route('offer.index', ['page' => $offers->lastPage()]);
             }
 
+            $industries = Industry::all();
+            $locations = Address::all();
             $skills = Skill::all('skill_name');
             $sectors = Sector::all('name');
             $companies = Company::all('name');
 
-            return view('offer.index', compact('offers', 'skills', 'sectors', 'companies'));
+            return view('offer.index', compact('offers', 'skills', 'sectors', 'companies', 'industries', 'locations'));
         }
     }
 
