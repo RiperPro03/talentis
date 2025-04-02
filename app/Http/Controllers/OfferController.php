@@ -90,7 +90,7 @@ class OfferController extends Controller
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
-            return redirect()->route('offers.index', ['page' => $offers->lastPage()]);
+            return redirect()->route('offer.index', ['page' => $offers->lastPage()]);
         }
 
         $industries = Industry::all('name');
