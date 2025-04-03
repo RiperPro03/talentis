@@ -5,70 +5,55 @@
         <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Statistiques des Offres</h1>
 
         <!-- Nombre d'offres par secteur -->
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-semibold text-gray-700">Nombre d'offres par secteur</h2>
-            <div class="hidden sm:block">
-                <table class="w-full mt-3 border-collapse border border-gray-300">
-                    <thead>
-                    <tr class="bg-gray-200">
-                        @foreach($sectorOffers as $sector)
-                            <th class="p-3 border border-gray-300">{{ $sector->sector_name }}</th>
-                        @endforeach
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        @foreach($sectorOffers as $sector)
-                            <td class="p-3 border border-gray-300 text-center font-bold">{{ $sector->count }}</td>
-                        @endforeach
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="mt-4">
-                    {{ $sectorOffers->links() }}
+
+        <div class="relative w-full max-w-6xl mx-auto mt-6 mb-20 ">
+
+            <div class="carousel-wrapper">
+                <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
+                    @foreach($sectorOffers as $sector)
+                        <div class="carousel-item w-80 snap-center shrink-0 mx-10">
+                            <div class="card bg-base-100 shadow-xl flex flex-col h-full w-full">
+                                <div class="stats shadow flex-grow">
+                                    <div class="stat">
+                                        <div class="stat-title">{{$sector->sector_name}}</div>
+                                        <div class="stat-value text-success">{{$sector->count}}</div>
+                                        <div class="stat-desc">offres</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    @endforeach
                 </div>
-            </div>
-            <div class="sm:hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-                @foreach($sectorOffers as $sector)
-                    <div class="bg-white shadow-lg rounded-lg p-4 text-center">
-                        <h3 class="text-xl font-semibold text-gray-700">{{ $sector->sector_name }}</h3>
-                        <p class="text-lg font-bold text-blue-600">{{ $sector->count }} offres</p>
-                    </div>
-                @endforeach
+
+                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮</button>
+                <button class="carousel-next hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯</button>
+
             </div>
         </div>
 
+
         <!-- Nombre d'offres par compétence -->
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-semibold text-gray-700">Nombre d'offres par compétence</h2>
-            <div class="hidden sm:block">
-                <table class="w-full mt-3 border-collapse border border-gray-300">
-                    <thead>
-                    <tr class="bg-gray-200">
-                        @foreach($skillsOffers as $skill)
-                            <th class="p-3 border border-gray-300">{{ $skill->skill_name }}</th>
-                        @endforeach
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        @foreach($skillsOffers as $skill)
-                            <td class="p-3 border border-gray-300 text-center font-bold">{{ $skill->count }}</td>
-                        @endforeach
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="mt-4">
-                    {{ $skillsOffers->links() }}
+        <div class="relative w-full max-w-6xl mx-auto my-20">
+            <div class="carousel-wrapper">
+                <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
+                    @foreach($skillsOffers as $skill)
+                        <div class="carousel-item w-80 snap-center shrink-0 mx-10">
+                            <div class="card bg-base-100 shadow-xl flex flex-col h-full w-full">
+                                <div class="stats shadow flex-grow">
+                                    <div class="stat">
+                                        <div class="stat-title">{{$sector->sector_name}}</div>
+                                        <div class="stat-value text-error">{{$sector->count}}</div>
+                                        <div class="stat-desc">offres</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-            </div>
-            <div class="sm:hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-                @foreach($skillsOffers as $skill)
-                    <div class="bg-white shadow-lg rounded-lg p-4 text-center">
-                        <h3 class="text-xl font-semibold text-gray-700">{{ $skill->skill_name }}</h3>
-                        <p class="text-lg font-bold text-green-600">{{ $skill->count }} offres</p>
-                    </div>
-                @endforeach
+
+                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮</button>
+                <button class="carousel-next hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯</button>
             </div>
         </div>
 
@@ -91,8 +76,8 @@
         <!-- Offres de stage -->
         <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
             <h2 class="text-2xl font-semibold text-gray-700">Offres de stage</h2>
-            <p class="mt-3 text-lg">Plus de 3 mois : <span class="font-bold text-green-600">{{ $internships3Months }}</span> offres</p>
-            <p class="mt-3 text-lg">Plus de 6 mois : <span class="font-bold text-red-600">{{ $internships6Months }}</span> offres</p>
+            <p class="mt-3 text-lg">Plus de 3 mois : <span class="font-bold text-success">{{ $internships3Months }}</span> offres</p>
+            <p class="mt-3 text-lg">Plus de 6 mois : <span class="font-bold text-error">{{ $internships6Months }}</span> offres</p>
         </div>
 
         <!-- Top 3 des offres les mieux payées -->
