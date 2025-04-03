@@ -59,18 +59,20 @@
             <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
                 @foreach($offers as $offer)
                     <div class="carousel-item w-80 snap-center shrink-0">
-                        <div class="card bg-base-100 shadow-xl">
+                        <div class="card bg-base-100 shadow-xl min-h-[360px] w-full flex flex-col justify-between">
                             @if($offer->companies && $offer->companies->logo_path)
                                 <figure class="px-6 pt-6">
                                     <img src="{{ Storage::url($offer->companies->logo_path) }}"
                                          alt="{{ 'logo_' . $offer->companies->name }}"
-                                         class="rounded-xl w-auto h-24" />
+                                         class="rounded-xl w-auto h-24 object-contain" />
                                 </figure>
                             @endif
-                            <div class="card-body items-center text-center">
+
+                            <div class="card-body flex flex-col items-center text-center justify-between flex-1">
                                 <h2 class="card-title">{{ $offer->title }}</h2>
-                                <p>{{ Str::limit($offer->description, 80) }}</p>
-                                <div class="card-actions">
+                                <p class="text-sm text-gray-600">{{ Str::limit($offer->description, 80) }}</p>
+
+                                <div class="card-actions mt-auto">
                                     <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary">En savoir plus</a>
                                 </div>
                             </div>

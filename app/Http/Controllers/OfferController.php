@@ -73,6 +73,8 @@ class OfferController extends Controller
                 'sector'      => 'array|nullable',
                 'type'        => 'array|nullable',
                 'type.*'      => 'in:CDI,CDD,Stage,Alternance',
+                'min_salary' => 'nullable|numeric|min:0',
+                'max_salary' => 'nullable|numeric|min:0',
             ]);
 
             $filters = [
@@ -94,6 +96,15 @@ class OfferController extends Controller
             if (!empty($filters['type'])) {
                 $query->whereIn('type', $filters['type']);
             }
+
+            if ($request->filled('min_salary')) {
+                $query->where('base_salary', '>=', $request->min_salary);
+            }
+
+            if ($request->filled('max_salary')) {
+                $query->where('base_salary', '<=', $request->max_salary);
+            }
+
 
             $relations = [
                 'companies'  => 'company',
@@ -133,9 +144,12 @@ class OfferController extends Controller
         $skills = Skill::all('skill_name');
         $sectors = Sector::all('name');
         $companies = Company::all('name');
+        $minBaseSalary = Offer::min('base_salary') ?? 0;
+        $maxBaseSalary = Offer::max('base_salary') ?? 10000;
+
 
         return view('offer.index',
-            compact('offers', 'industries', 'locations', 'skills', 'sectors', 'companies'));
+            compact('offers', 'industries', 'locations', 'skills', 'sectors', 'companies', 'minBaseSalary', 'maxBaseSalary'));
     }
 
     /**
