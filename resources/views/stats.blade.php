@@ -1,53 +1,49 @@
 @extends('layouts.app')
 
+@section('title', 'Statistiques des Offres - Talentis')
+
 @section('content')
-    <div class="container mx-auto p-6 bg-gray-100 min-h-screen">
-        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Statistiques des Offres</h1>
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <h1 class="text-4xl font-bold text-center text-primary mb-12">📈 Statistiques des Offres</h1>
 
-        <!-- Nombre d'offres par secteur -->
-
-        <div class="relative w-full max-w-6xl mx-auto mt-10 mb-20 ">
-            <h2 class="text-2xl font-semibold text-gray-700">Nombres d'offres par secteur</h2>
-
-
+        {{-- 1. Nombre d'offres par secteur --}}
+        <section class="relative w-full max-w-6xl mx-auto mt-20 mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Offres par secteur</h2>
             <div class="carousel-wrapper">
                 <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
                     @foreach($sectorOffers as $sector)
                         <div class="carousel-item w-80 snap-center shrink-0 mx-10">
                             <div class="card bg-base-100 shadow-xl flex flex-col h-full w-full">
                                 <div class="stats shadow flex-grow">
-                                    <div class="stat">
-                                        <div class="stat-title">{{$sector->sector_name}}</div>
-                                        <div class="stat-value text-success">{{$sector->count}}</div>
-                                        <div class="stat-desc">offres</div>
+                                    <div class="stat text-center">
+                                        <div class="stat-title text-lg">{{ $sector->sector_name }}</div>
+                                        <div class="stat-value text-success text-4xl">{{ $sector->count }}</div>
+                                        <div class="stat-desc text-sm">offres disponibles</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     @endforeach
                 </div>
 
-                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮</button>
+                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary">❮</button>
                 <button class="carousel-next hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯</button>
-
             </div>
-        </div>
+        </section>
 
-
-        <!-- Nombre d'offres par compétence -->
-        <div class="relative w-full max-w-6xl mx-auto mt-20 mb-10">
-            <h2 class="text-2xl font-semibold text-gray-700">Nombre d'offres par compétences</h2>
+        {{-- 2. Nombre d'offres par compétence --}}
+        <section class="relative w-full max-w-6xl mx-auto mt-20 mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Offres par compétence</h2>
             <div class="carousel-wrapper">
                 <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
                     @foreach($skillsOffers as $skill)
                         <div class="carousel-item w-80 snap-center shrink-0 mx-10">
                             <div class="card bg-base-100 shadow-xl flex flex-col h-full w-full">
                                 <div class="stats shadow flex-grow">
-                                    <div class="stat">
-                                        <div class="stat-title">{{$skill->skill_name}}</div>
-                                        <div class="stat-value text-error">{{$skill->count}}</div>
-                                        <div class="stat-desc">offres</div>
+                                    <div class="stat text-center">
+                                        <div class="stat-title text-lg">{{ $skill->skill_name }}</div>
+                                        <div class="stat-value text-error text-4xl">{{ $skill->count }}</div>
+                                        <div class="stat-desc text-sm">offres demandées</div>
                                     </div>
                                 </div>
                             </div>
@@ -55,61 +51,65 @@
                     @endforeach
                 </div>
 
-                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮</button>
+                <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary">❮</button>
                 <button class="carousel-next hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯</button>
             </div>
-        </div>
+        </section>
 
-        <!-- Top 3 des offres les plus en wishlist -->
-        <div class="rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-semibold text-gray-700">Top 3 des offres les plus en wishlist</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+
+        {{-- 3. Top 3 des offres en wishlist --}}
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🔥 Offres les plus en wishlist</h2>
+            <div class="grid md:grid-cols-3 gap-6">
                 @foreach($topWishlistedOffers as $offer)
-                    <div class="bg-white shadow-lg rounded-lg p-4 text-center">
-                        <h3 class="text-xl font-semibold text-gray-700">
-                            <a href="{{ route('offer.show', $offer->id) }}" class="text-blue-600 hover:underline">{{ $offer->title }}</a>
-                        </h3>
-                        <p class="text-lg text-gray-700">Entreprise: <span class="font-bold">{{ $offer->company_name }}</span></p>
-                        <p class="text-lg font-bold text-blue-600">{{ $offer->count }} wishlists</p>
+                    <div class="card bg-base-100 shadow-lg border">
+                        <div class="card-body items-center text-center">
+                            <h3 class="card-title">
+                                <a href="{{ route('offer.show', $offer->id) }}" class="text-primary hover:underline">
+                                    {{ $offer->title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-700">Entreprise : <strong>{{ $offer->company_name }}</strong></p>
+                            <p class="text-success font-bold text-lg">{{ $offer->count }} wishlist(s)</p>
+                        </div>
                     </div>
                 @endforeach
             </div>
-        </div>
+        </section>
 
-        <h2 class="text-2xl font-semibold text-gray-700">Stages par durée</h2>
-
-        <!-- Offres de stage -->
-        <div class="stats shadow mt-5 mb-10">
-            <div class="stat">
-
-                <div class="stat-title">Stage de plus de 3 mois</div>
-                <div class="stat-value text-success">{{$internships3Months}}</div>
-
+        {{-- 4. Stages par durée --}}
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">📅 Stages par durée</h2>
+            <div class="stats stats-vertical lg:stats-horizontal shadow w-full">
+                <div class="stat">
+                    <div class="stat-title">Stage > 3 mois</div>
+                    <div class="stat-value text-success">{{ $internships3Months }}</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-title">Stage > 6 mois</div>
+                    <div class="stat-value text-error">{{ $internships6Months }}</div>
+                </div>
             </div>
+        </section>
 
-            <div class="stat">
-
-                <div class="stat-title">Stage de plus de 6 mois</div>
-                <div class="stat-value  text-error">{{$internships3Months}}</div>
-
-            </div>
-
-        </div>
-
-        <!-- Top 3 des offres les mieux payées -->
-        <div class="rounded-lg p-6">
-            <h2 class="text-2xl font-semibold text-gray-700">Top 3 des offres les mieux payées</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
+        {{-- 5. Top 3 des offres les mieux payées --}}
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">💰 Offres les mieux rémunérées</h2>
+            <div class="grid md:grid-cols-3 gap-6">
                 @foreach($topPayingOffers as $offer)
-                    <div class="bg-white shadow-lg rounded-lg p-4 text-center">
-                        <h3 class="text-xl font-semibold text-gray-700">
-                            <a href="{{ route('offer.show', $offer->id) }}" class="text-blue-600 hover:underline">{{ $offer->title }}</a>
-                        </h3>
-                        <p class="text-lg text-gray-700">Entreprise: <span class="font-bold">{{ $offer->company_name }}</span></p>
-                        <p class="text-lg font-bold text-green-600">{{ number_format($offer->base_salary, 2) }}€</p>
+                    <div class="card bg-white border shadow-md">
+                        <div class="card-body text-center">
+                            <h3 class="card-title">
+                                <a href="{{ route('offer.show', $offer->id) }}" class="text-blue-600 hover:underline">
+                                    {{ $offer->title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-700">Entreprise : <strong>{{ $offer->company_name }}</strong></p>
+                            <p class="text-green-600 text-lg font-bold">{{ number_format($offer->base_salary, 2) }} €</p>
+                        </div>
                     </div>
                 @endforeach
             </div>
-        </div>
+        </section>
     </div>
 @endsection

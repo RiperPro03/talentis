@@ -12,6 +12,7 @@
                 <li><a href="{{ route('home') }}">Accueil</a></li>
                 <li><a href="{{ route('offer.index') }}">Offres</a></li>
                 <li><a href="{{ route('company.index') }}">Entreprises</a></li>
+                <li><a href="{{ route('stats.index') }}">Statistique</a></li>
             </ul>
         </div>
 
@@ -76,6 +77,7 @@
                 <li><a href="{{ route('home') }}" class="text-2xl">Accueil</a></li>
                 <li><a href="{{ route('offer.index') }}" class="text-2xl">Offres</a></li>
                 <li><a href="{{ route('company.index') }}" class="text-2xl">Entreprises</a></li>
+                <li><a href="{{ route('stats.index') }}" class="text-2xl">Statistique</a></li>
             </ul>
         </div>
 

@@ -47,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Profile
     Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
+
+    //Statistiques
+    Route::get('stats', [StatController::class, 'index'])->name('stats.index');
 });
 
 Route::middleware(['auth', 'can:access_apply'])->group(function () {
@@ -113,10 +116,6 @@ Route::middleware(['auth', 'can:manage_offers'])->group(function () {
         'update' => 'pilot.offer.update',
         'destroy' => 'pilot.offer.destroy',
     ]);
-});
-Route::middleware(['auth'])->group(function () {
-    //Pilot dashboard
-    Route::get('stats', [StatController::class, 'index'])->name('offer.stats');
 });
 
 
