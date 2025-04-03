@@ -80,11 +80,11 @@ class OfferResource extends Resource
                     ->multiple()
                     ->searchable(),
 
-                DatePicker::make('start_date')
+                DatePicker::make('start_offer')
                     ->label('Date de début')
                     ->required(),
 
-                DatePicker::make('end_date')
+                DatePicker::make('end_offer')
                     ->label('Date de fin'),
             ]);
     }
