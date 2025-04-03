@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
-        <h2 class="text-2xl font-bold mb-6">Modifier l'utilisateur</h2>
+        <h2 class="text-2xl font-bold mb-6">Créer un utilisateur</h2>
 
         @if (session('success'))
             <div class="alert alert-success shadow-lg mb-4">
@@ -101,6 +101,12 @@
 
 
 
+            </div>
+
+            <div>
+                <label class="block font-medium">Photo de profil</label>
+                <input type="file" name="profile_picture" accept="image/png, image/jpeg"
+                       class="w-full p-2 border-gray-300 rounded-lg bg-gray-100 focus:ring-2 focus:ring-blue-500">
             </div>
 
 
