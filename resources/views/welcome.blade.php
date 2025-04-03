@@ -54,38 +54,33 @@
 
 
 
-    <!-- Container principal du carousel -->
     <div class="relative w-full max-w-6xl mx-auto mt-6">
-        <!-- Carousel avec cartes -->
-        <div id="carousel" class="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
-            @foreach($offers as $offer)
-                <div class="carousel-item w-80 snap-center shrink-0">
-                    <div class="card bg-base-100 shadow-xl">
-                        @if($offer->companies && $offer->companies->logo_path)
-                            <figure class="px-6 pt-6">
-                                <img src="{{ Storage::url($offer->companies->logo_path) }}"
-                                     alt="{{ 'logo_' . $offer->companies->name }}"
-                                     class="rounded-xl w-auto h-24" />
-                            </figure>
-                        @endif
-                        <div class="card-body items-center text-center">
-                            <h2 class="card-title">{{ $offer->title }}</h2>
-                            <p>{{ Str::limit($offer->description, 80) }}</p>
-                            <div class="card-actions">
-                                <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary">En savoir plus</a>
+        <div class="carousel-wrapper">
+            <div class="carousel flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 scroll-smooth">
+                @foreach($offers as $offer)
+                    <div class="carousel-item w-80 snap-center shrink-0">
+                        <div class="card bg-base-100 shadow-xl">
+                            @if($offer->companies && $offer->companies->logo_path)
+                                <figure class="px-6 pt-6">
+                                    <img src="{{ Storage::url($offer->companies->logo_path) }}"
+                                         alt="{{ 'logo_' . $offer->companies->name }}"
+                                         class="rounded-xl w-auto h-24" />
+                                </figure>
+                            @endif
+                            <div class="card-body items-center text-center">
+                                <h2 class="card-title">{{ $offer->title }}</h2>
+                                <p>{{ Str::limit($offer->description, 80) }}</p>
+                                <div class="card-actions">
+                                    <a href="{{ route('offer.show', $offer) }}" class="btn btn-primary">En savoir plus</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
-        <!-- Boutons de navigation visibles uniquement sur PC (`lg:`) -->
-        <button id="prev"
-                class="hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮
-        </button>
-        <button id="next"
-                class="hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯
-        </button>
+            <button class="carousel-prev hidden lg:flex absolute left-0 top-1/2 btn btn-circle btn-primary ">❮</button>
+            <button class="carousel-next hidden lg:flex absolute right-0 top-1/2 btn btn-circle btn-primary">❯</button>
+        </div>
     </div>
 @endsection
