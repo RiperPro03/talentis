@@ -121,7 +121,7 @@ class OfferController extends Controller
             $offers = $query->paginate(8);
 
         } else {
-            $offers = Offer::paginate(8);
+            $offers = Offer::latest()->paginate(8);
         }
 
         if (request()->has('page') && request()->page > $offers->lastPage()) {
@@ -320,7 +320,7 @@ class OfferController extends Controller
             $offer->skills()->detach();
         }
 
-        return redirect()->route('pilot.offer.edit', $offer)->with('success', 'Offre mise à jour avec succès.');
+        return redirect()->route('pilot.offer.index')->with('success', 'Offre mise à jour avec succès.');
     }
 
     /**
