@@ -170,7 +170,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $extension = $file->getClientOriginalExtension();
-            $filename = 'logo_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $filename = 'logo_' . Str::uuid() . '.' . $extension;
             $logoPath = $file->storeAs('logos_entreprise', $filename, 'public');
         }
 

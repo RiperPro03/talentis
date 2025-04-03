@@ -3,6 +3,24 @@
 @section('content')
     <div class="flex justify-center items-center min-h-[80vh] p-6">
         <div class="card w-full max-w-lg bg-base-100 shadow-xl p-6 rounded-2xl flex flex-col h-full">
+            @if (session('success'))
+                <div class="alert alert-success shadow-lg mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-error shadow-lg mb-4">
+                    <div class="flex items-center">
+                        <ul class="mt-2 list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
             <a href="{{ route('offer.index') }}" class="absolute top-4 left-4 btn btn-outline btn-primary">
                 ← Retour
             </a>
