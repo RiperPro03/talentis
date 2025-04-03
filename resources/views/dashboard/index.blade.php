@@ -38,15 +38,15 @@
 
         <!-- Liens CRUD -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <a href="{{ route('student.index') }}" class="btn btn-outline btn-primary w-full">Gérer Student</a>
-            <a href="{{ route('pilot.company.index') }}" class="btn btn-outline btn-secondary w-full">Gérer Company</a>
-            <a href="{{ route('pilot.offer.index') }}" class="btn btn-outline btn-accent w-full">Gérer Offer</a>
-            <a href="{{ route('promotion.index') }}" class="btn btn-outline btn-info w-full">Gérer Promotion</a>
-            <a href="{{ route('skill.index') }}" class="btn btn-outline btn-success w-full">Gérer Skill</a>
-            <a href="{{ route('sector.index') }}" class="btn btn-outline btn-warning w-full">Gérer Sector</a>
-            <a href="{{ route('industry.index') }}" class="btn btn-outline btn-error w-full">Gérer Industry</a>
-            <a href="{{ route('pilot.apply.index') }}" class="btn btn-outline btn-neutral w-full">Gérer Apply</a>
-            <a href="{{ route('address.index') }}" class="btn btn-outline w-full">Gérer Address</a>
+            <a href="{{ route('student.index') }}" class="btn btn btn-primary w-full">Gérer Student</a>
+            <a href="{{ route('pilot.company.index') }}" class="btn btn btn-secondary w-full">Gérer Company</a>
+            <a href="{{ route('pilot.offer.index') }}" class="btn btn btn-accent w-full">Gérer Offer</a>
+            <a href="{{ route('promotion.index') }}" class="btn btn btn-info w-full">Gérer Promotion</a>
+            <a href="{{ route('skill.index') }}" class="btn btn btn-success w-full">Gérer Skill</a>
+            <a href="{{ route('sector.index') }}" class="btn btn btn-warning w-full">Gérer Sector</a>
+            <a href="{{ route('industry.index') }}" class="btn btn btn-error w-full">Gérer Industry</a>
+            <a href="{{ route('pilot.apply.index') }}" class="btn btn btn-neutral w-full">Gérer Apply</a>
+            <a href="{{ route('address.index') }}" class="btn btn w-full">Gérer Address</a>
         </div>
     </div>
 @endsection

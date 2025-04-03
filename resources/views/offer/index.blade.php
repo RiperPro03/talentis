@@ -35,6 +35,22 @@
                             {{-- Champ de recherche par titre de l'offre --}}
                             <div class="form-control mb-4">
                                 <input type="text" name="offer-title" placeholder="Titre de l'offre" class="input input-bordered" value="{{ request('offer-title') }}" />
+
+                                <div class="mt-6 mb-4">
+                                    <label class="block font-semibold mb-2">Plage de salaire (€)</label>
+                                    <div id="slider" class="mb-4"></div>
+
+                                    <div class="flex gap-4">
+                                        <input type="number" name="min_salary" id="minSalaryInput"
+                                               class="input input-bordered w-1/2 hidden"
+                                               value="{{ request('min_salary', $minBaseSalary) }}" readonly>
+                                        <input type="number" name="max_salary" id="maxSalaryInput"
+                                               class="input input-bordered w-1/2 hidden"
+                                               value="{{ request('max_salary', $maxBaseSalary) }}" readonly>
+                                    </div>
+                                </div>
+
+
                                 <x-multi-select-filter name="company" label="Entreprise" :items="$companies" key="name" />
 
                                 <div class="form-control w-full mb-4">
@@ -161,4 +177,46 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slider = document.getElementById('slider');
+            const minInput = document.getElementById('minSalaryInput');
+            const maxInput = document.getElementById('maxSalaryInput');
+
+            noUiSlider.create(slider, {
+                start: [Number(minInput.value), Number(maxInput.value)],
+                connect: true,
+                step: 100,
+                range: {
+                    min: {{ $minBaseSalary }},
+                    max: {{ $maxBaseSalary }}
+                },
+                tooltips: [true, true],
+                format: {
+                    to: value => Math.round(value),
+                    from: value => Number(value)
+                }
+            });
+
+            // ➡️ Slider → Input
+            slider.noUiSlider.on('update', (values, handle) => {
+                const value = Math.round(values[handle]);
+                if (handle === 0) {
+                    minInput.value = value;
+                } else {
+                    maxInput.value = value;
+                }
+            });
+
+            // ⬅️ Input → Slider
+            minInput.addEventListener('change', () => {
+                slider.noUiSlider.set([minInput.value, null]);
+            });
+
+            maxInput.addEventListener('change', () => {
+                slider.noUiSlider.set([null, maxInput.value]);
+            });
+        });
+    </script>
 @endsection
