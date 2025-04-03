@@ -42,8 +42,8 @@
                             <div class="card bg-base-100 shadow-xl flex flex-col h-full w-full">
                                 <div class="stats shadow flex-grow">
                                     <div class="stat">
-                                        <div class="stat-title">{{$sector->sector_name}}</div>
-                                        <div class="stat-value text-error">{{$sector->count}}</div>
+                                        <div class="stat-title">{{$skill->skill_name}}</div>
+                                        <div class="stat-value text-error">{{$skill->count}}</div>
                                         <div class="stat-desc">offres</div>
                                     </div>
                                 </div>
