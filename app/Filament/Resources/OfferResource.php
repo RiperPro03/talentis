@@ -43,6 +43,14 @@ class OfferResource extends Resource
                     ->maxLength(1000)
                     ->columnSpanFull(),
 
+                TextInput::make('base_salary')
+                    ->label('Salaire de base')
+                    ->numeric()
+                    ->required()
+                    ->minValue(0)
+                    ->maxValue(1000000)
+                    ->placeholder('Entrez le salaire de base'),
+
                 Select::make('company_id')
                     ->label('Entreprise')
                     ->relationship('companies', 'name')
