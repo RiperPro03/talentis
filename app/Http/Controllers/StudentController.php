@@ -136,7 +136,7 @@ class StudentController extends Controller
 
         $student->assignRole('student');
 
-        return redirect()->route('student.create')->with('success', 'Étudiant créé avec succès.');
+        return redirect()->route('student.index')->with('success', 'Étudiant créé avec succès.');
     }
 
 
@@ -254,13 +254,13 @@ class StudentController extends Controller
         // Mise à jour de l'utilisateur
         $student->update($validatedData);
 
-        return redirect()->route('student.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
+        return redirect()->route('student.index', $student)->with('success', 'Étudiant mis à jour avec succès.');
     }
 
     public function destroy(User $student)
     {
         $student->delete();
-        return redirect()->back()->with('success', 'Étudiant retiré avec succès.');
+        return redirect()->route('student.index')->with('success', 'Étudiant retiré avec succès.');
     }
 
     /**
@@ -271,6 +271,41 @@ class StudentController extends Controller
         $extension = $file->getClientOriginalExtension();
         $filename = $prefix . Str::uuid() . '.' . $extension;
         return $file->storeAs($folder, $filename, 'public');
+    }
+
+    public function show(User $student)
+    {
+        $user = $student;
+        if (!($user->hasRole('student'))) {
+            return redirect()->route('student.index')->withErrors([
+                'User' => 'Cet utilisateur n\'est pas un étudiant.'
+            ]);
+        }
+
+        // Récupération complète des relations
+        $wishlistCount = $user->offers()->count();
+        $appliesCount = $user->applies()->count();
+
+        // On ne récupère que les 3 premiers éléments
+        $wishlist = $user->offers()
+            ->with('companies')
+            ->latest('wishlists.created_at')
+            ->take(3)
+            ->get();
+
+        $applies = $user->applies()
+            ->with('companies')
+            ->orderByPivot('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('pilot.student.show', compact(
+            'user',
+            'wishlist',
+            'applies',
+            'wishlistCount',
+            'appliesCount'
+        ));
     }
 
 }

@@ -91,6 +91,8 @@
                         <td class="border px-4 py-2 text-center">{{ $student->first_name }}</td>
                         <td class="border px-4 py-2 text-center">{{ $student->email }}</td>
                         <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
+                            <a href="{{ route('student.show', $student->id) }}" class="btn btn-info btn-sm">
+                                Détails
                             <a href="{{ route('student.edit', $student->id) }}" class="btn btn-warning btn-sm">
                                 Modifier
                             </a>

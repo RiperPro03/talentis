@@ -50,6 +50,15 @@ class OfferResource extends Resource
                     ->preload()
                     ->required(),
 
+                Select::make('type')
+                    ->label('Type de contrat')
+                    ->options([
+                        'CDI' => 'CDI',
+                        'CDD' => 'CDD',
+                        'Stage' => 'Stage',
+                        'Alternance' => 'Alternance',
+                    ])
+                    ->required(),
 
                 Select::make('sector_id')
                     ->label('Secteur')
