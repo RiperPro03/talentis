@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\StatController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
@@ -115,6 +116,10 @@ Route::middleware(['auth', 'can:manage_offers'])->group(function () {
         'update' => 'pilot.offer.update',
         'destroy' => 'pilot.offer.destroy',
     ]);
+});
+Route::middleware(['auth'])->group(function () {
+    //Pilot dashboard
+    Route::get('stats', [StatController::class, 'index'])->name('offer.stats');
 });
 
 
