@@ -1,5 +1,4 @@
 import './bootstrap';
-import './radio_button';
 
 $(document).ready(function() {
     $('.js-select2').select2({
@@ -12,34 +11,38 @@ $(document).ready(function() {
 
 
 
-const carousel = document.getElementById('carousel');
-const prevButton = document.getElementById('prev');
-const nextButton = document.getElementById('next');
+document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+    const carousel = wrapper.querySelector('.carousel');
+    const prevButton = wrapper.querySelector('.carousel-prev');
+    const nextButton = wrapper.querySelector('.carousel-next');
 
-function updateButtons() {
-    if (window.innerWidth >= 1024) { // Vérifie si on est sur PC (lg:)
+    function updateButtons() {
+        const isDesktop = window.innerWidth >= 1024;
+
+        if (!isDesktop) {
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+            return;
+        }
+
         prevButton.style.display = carousel.scrollLeft > 0 ? 'flex' : 'none';
         nextButton.style.display = carousel.scrollLeft < (carousel.scrollWidth - carousel.clientWidth) ? 'flex' : 'none';
-    } else {
-        prevButton.style.display = 'none';
-        nextButton.style.display = 'none';
     }
-}
 
-// Défilement fluide au clic
-nextButton.addEventListener('click', () => {
-    carousel.scrollBy({ left: 250, behavior: 'smooth' });
-    setTimeout(updateButtons, 300);
+    // Event listeners
+    nextButton.addEventListener('click', () => {
+        carousel.scrollBy({ left: 250, behavior: 'smooth' });
+        setTimeout(updateButtons, 300);
+    });
+
+    prevButton.addEventListener('click', () => {
+        carousel.scrollBy({ left: -250, behavior: 'smooth' });
+        setTimeout(updateButtons, 300);
+    });
+
+    carousel.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+
+    // Init
+    updateButtons();
 });
-
-prevButton.addEventListener('click', () => {
-    carousel.scrollBy({ left: -250, behavior: 'smooth' });
-    setTimeout(updateButtons, 300);
-});
-
-// Mettre à jour les boutons au chargement et lors du redimensionnement
-updateButtons();
-window.addEventListener('resize', updateButtons);
-
-// Mettre à jour les boutons lors du scroll manuel
-carousel.addEventListener('scroll', updateButtons);

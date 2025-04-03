@@ -41,15 +41,21 @@ class SectorController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:sectors,name',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255|unique:sectors,name',
+            ],
+            [
+                'name.required' => 'Le nom du secteur est obligatoire.',
+                'name.string' => 'Le nom du secteur doit être une chaîne de caractères.',
+                'name.max' => 'Le nom du secteur ne doit pas dépasser 255 caractères.',
+                'name.unique' => 'Ce secteur existe déjà.',
+            ]
+        );
 
-        Sector::create([
-            'name' => $request->name,
-        ]);
+        Sector::create($validatedData);
 
-        return redirect()->route('sector.create')->with('success', 'Secteur créée avec succès.');
+        return redirect()->route('sector.create')->with('success', 'Secteur créé avec succès.');
     }
 
     /**
@@ -76,16 +82,24 @@ class SectorController extends Controller
 
     public function update(Request $request, Sector $sector)
     {
-        // Validation des données
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:sectors,name,' . $sector->id,
-        ]);
+        // Validation avec messages personnalisés
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255|unique:sectors,name,' . $sector->id,
+            ],
+            [
+                'name.required' => 'Le nom du secteur est obligatoire.',
+                'name.string' => 'Le nom du secteur doit être une chaîne de caractères.',
+                'name.max' => 'Le nom du secteur ne doit pas dépasser 255 caractères.',
+                'name.unique' => 'Ce secteur existe déjà.',
+            ]
+        );
 
-        // Mise à jour du secteur
+        // Mise à jour
         $sector->update($validatedData);
 
-        // Redirection avec un message de succès
-        return redirect()->route('sector.edit', $sector)->with('success', 'Secteur mis à jour avec succès');
+        // Redirection avec succès
+        return redirect()->route('sector.index')->with('success', 'Secteur mis à jour avec succès.');
     }
 
     /**

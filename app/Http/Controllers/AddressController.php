@@ -47,14 +47,29 @@ class AddressController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'postal_code' => 'required|string|max:20|unique:addresses',
+        $validatedData = $request->validate([
+            'postal_code' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^\d{5}$/',
+                'unique:addresses,postal_code',
+            ],
             'city' => 'required|string|max:255',
+        ], [
+            'postal_code.required' => 'Le code postal est obligatoire.',
+            'postal_code.string' => 'Le code postal doit être une chaîne de caractères.',
+            'postal_code.max' => 'Le code postal ne doit pas dépasser 20 caractères.',
+            'postal_code.regex' => 'Le code postal doit être un code postal français valide (5 chiffres).',
+            'postal_code.unique' => 'Ce code postal existe déjà.',
+            'city.required' => 'La ville est obligatoire.',
+            'city.string' => 'Le nom de la ville doit être une chaîne de caractères.',
+            'city.max' => 'Le nom de la ville ne doit pas dépasser 255 caractères.',
         ]);
 
-        Address::create($request->only(['postal_code', 'city']));
+        Address::create($validatedData);
 
-        return redirect()->route('address.create')->with('success', 'Address created successfully.');
+        return redirect()->route('address.index')->with('success', 'Adresse créée avec succès.');
     }
 
     /**
@@ -70,14 +85,29 @@ class AddressController extends Controller
      */
     public function update(Request $request, Address $address)
     {
-        $request->validate([
-            'postal_code' => 'required|string|max:20|unique:addresses,postal_code,' . $address->id,
+        $validatedData = $request->validate([
+            'postal_code' => [
+                'required',
+                'string',
+                'max:20',
+                'regex:/^\d{5}$/',
+                'unique:addresses,postal_code,' . $address->id,
+            ],
             'city' => 'required|string|max:255',
+        ], [
+            'postal_code.required' => 'Le code postal est obligatoire.',
+            'postal_code.string' => 'Le code postal doit être une chaîne de caractères.',
+            'postal_code.max' => 'Le code postal ne doit pas dépasser 20 caractères.',
+            'postal_code.regex' => 'Le code postal doit être un code postal français valide (5 chiffres).',
+            'postal_code.unique' => 'Ce code postal est déjà utilisé.',
+            'city.required' => 'La ville est obligatoire.',
+            'city.string' => 'Le nom de la ville doit être une chaîne de caractères.',
+            'city.max' => 'Le nom de la ville ne doit pas dépasser 255 caractères.',
         ]);
 
-        $address->update($request->only(['postal_code', 'city']));
+        $address->update($validatedData);
 
-        return redirect()->route('address.edit',$address)->with('success', 'Address updated successfully.');
+        return redirect()->route('address.index')->with('success', 'Adresse mise à jour avec succès.');
     }
 
     /**

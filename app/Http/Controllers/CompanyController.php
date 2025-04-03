@@ -283,11 +283,17 @@ class CompanyController extends Controller
 
             // Détacher les anciennes adresses et attacher la nouvelle (si besoin)
             $company->addresses()->sync([$address->id]);
+        } else {
+            // Si l'adresse n'est pas fournie, détacher toutes les adresses
+            $company->addresses()->detach();
         }
 
         // Mise à jour de l'industrie
         if (!empty($validatedData['industry_id'])) {
             $company->industries()->sync([$validatedData['industry_id']]);
+        } else {
+            // Si l'industrie n'est pas fournie, détacher toutes les industries
+            $company->industries()->detach();
         }
 
         return redirect()->route('pilot.company.index')->with('success', 'Entreprise mise à jour avec succès.');

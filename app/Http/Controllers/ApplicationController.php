@@ -79,33 +79,41 @@ class ApplicationController extends Controller
 
     public function store(Request $request, Offer $offer)
     {
-        // Valider les données
-        $request->validate([
-            'cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        $validatedData = $request->validate([
+            'cv' => [
+                'required',
+                'file',
+                'mimes:pdf,doc,docx',
+                'max:2048',
+            ],
             'cl' => 'nullable|string|max:255',
+        ], [
+            'cv.required' => 'Le CV est obligatoire.',
+            'cv.file' => 'Le fichier doit être un document valide.',
+            'cv.mimes' => 'Le CV doit être au format PDF, DOC ou DOCX.',
+            'cv.max' => 'Le CV ne doit pas dépasser 2 Mo.',
+            'cl.string' => 'La lettre de motivation doit être une chaîne de caractères.',
+            'cl.max' => 'La lettre de motivation ne doit pas dépasser 255 caractères.',
         ]);
 
         $user = Auth::user();
 
-        //vérifier si l'utilisateur a déjà postulé
+        // Vérifier si l'utilisateur a déjà postulé
         if ($offer->applies()->where('user_id', $user->id)->exists()) {
-            return back()->withErrors(['User' => 'Vous avez déjà postulé à cette offre.']);
+            return back()->withErrors(['user' => 'Vous avez déjà postulé à cette offre.']);
         }
 
-        $file = $request->file('cv');
-        $extension = $file->getClientOriginalExtension();
-        $filename = 'cv_' . $user->id . '_' . Str::uuid() . '.' . $extension;
+        // Upload du CV
+        $filename = 'cv_' . $user->id . '_' . Str::uuid() . '.' . $request->file('cv')->getClientOriginalExtension();
+        $cvPath = $request->file('cv')->storeAs('cv', $filename, 'public');
 
-        $cvPath = $file->storeAs('cv', $filename, 'public');
-
-        // Enregistrer l'application dans la table pivot `applies`
+        // Sauvegarde dans la table pivot applies
         $offer->applies()->attach($user->id, [
             'curriculum_vitae' => $cvPath,
-            'cover_letter' => $request->input('cl'),
+            'cover_letter' => $validatedData['cl'],
         ]);
 
-
-        return redirect()->route('apply.index')->with('success', 'Candidature envoyée avec succès!');
+        return redirect()->route('apply.index')->with('success', 'Candidature envoyée avec succès !');
     }
 
     public function destroy(Offer $offer, User $user = null)

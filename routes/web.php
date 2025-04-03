@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     //Company
     Route::get('company', [CompanyController::class, 'index'])->name('company.index');
     Route::get('company/{company}', [CompanyController::class, 'show'])->name('company.show');
+    Route::post('company/{company}/rate', [CompanyController::class, 'rate'])->name('company.rate');
 
     //Offer
     Route::get('offer', [OfferController::class, 'index'])->name('offer.index');
@@ -54,10 +55,6 @@ Route::middleware(['auth', 'can:access_apply'])->group(function () {
     Route::post('/offer/{offer}/apply', [ApplicationController::class, 'store'])->name('apply.store');
     Route::get('my/applications', [ApplicationController::class, 'index'])->name('apply.index');
     Route::delete('/offer/{offer}/apply', [ApplicationController::class, 'destroy'])->name('apply.remove');
-});
-
-Route::middleware(['auth', 'can:access_rate'])->group(function () {
-    Route::post('company/{company}/rate', [CompanyController::class, 'rate'])->name('company.rate');
 });
 
 Route::middleware(['auth', 'can:access_wishlist'])->group(function () {

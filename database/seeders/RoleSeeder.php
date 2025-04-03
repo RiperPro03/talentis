@@ -34,7 +34,6 @@ class RoleSeeder extends Seeder
             'access_dashboard',
             'access_apply',
             'access_wishlist',
-            'access_rate',
         ];
 
         foreach ($permissions as $permission) {
@@ -42,7 +41,7 @@ class RoleSeeder extends Seeder
         }
 
         // Attribution des permissions aux rôles
-        Role::findByName('student')->givePermissionTo(['access_apply', 'access_wishlist', 'access_rate']);
+        Role::findByName('student')->givePermissionTo(['access_apply', 'access_wishlist']);
         Role::findByName('pilot')->givePermissionTo(['manage_students', 'access_dashboard', 'manage_company', 'manage_offers']);
         Role::findByName('admin')->givePermissionTo(Permission::all());
     }

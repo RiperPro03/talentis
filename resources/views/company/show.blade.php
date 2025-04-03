@@ -74,28 +74,26 @@
 
                     <br>
 
-                    @if (!auth()->user()->hasRole('pilot'))
-                        <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
+                    <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
-                        <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
-                            @csrf
+                    <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
+                        @csrf
 
-                            @php
-                                $existingRating = $company->evaluations->where('id', auth()->id())->first()?->pivot->rating;
-                            @endphp
+                        @php
+                            $existingRating = $company->evaluations->where('id', auth()->id())->first()?->pivot->rating;
+                        @endphp
 
-                            <div class="rating">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <input type="radio" name="rating"
-                                           class="mask mask-star-2 bg-orange-400"
-                                           value="{{ $i }}"
-                                        {{ ($existingRating !== null && $existingRating == $i) || ($existingRating === null && $i == 5) ? 'checked' : '' }} />
-                                @endfor
-                            </div>
+                        <div class="rating">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <input type="radio" name="rating"
+                                       class="mask mask-star-2 bg-orange-400"
+                                       value="{{ $i }}"
+                                    {{ ($existingRating !== null && $existingRating == $i) || ($existingRating === null && $i == 5) ? 'checked' : '' }} />
+                            @endfor
+                        </div>
 
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
-                        </form>
-                    @endif
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
+                    </form>
 
 
                     <br>

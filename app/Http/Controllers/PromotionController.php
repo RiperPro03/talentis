@@ -19,12 +19,17 @@ class PromotionController extends Controller
             $query->where('promotion_code', 'like', '%' . $request->input('promotion_code') . '%');
         }
 
+        // Ajouter un count des étudiants avec rôle student
+        $query->withCount(['users as students_count' => function ($q) {
+            $q->role('student');
+        }]);
+
         // Récupération des promotions paginées
         $promotions = $query->paginate(10);
 
-        // Retourner la vue avec les résultats
-        return view('pilot/promotion.index', compact('promotions'));
+        return view('pilot.promotion.index', compact('promotions'));
     }
+
 
 
     /**
@@ -41,15 +46,21 @@ class PromotionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code',
+            ],
+            [
+                'promotion_code.required' => 'Le code de promotion est obligatoire.',
+                'promotion_code.string' => 'Le code de promotion doit être une chaîne de caractères.',
+                'promotion_code.max' => 'Le code de promotion ne doit pas dépasser 255 caractères.',
+                'promotion_code.unique' => 'Ce code de promotion existe déjà.',
+            ]
+        );
 
-        Promotion::create([
-            'promotion_code' => $request->promotion_code,
-        ]);
+        Promotion::create($validatedData);
 
-        return redirect()->route('promotion.create')->with('success', 'Promotion créée avec succès.');
+        return redirect()->route('promotion.index')->with('success', 'Promotion créée avec succès.');
     }
 
     /**
@@ -71,24 +82,29 @@ class PromotionController extends Controller
     public function edit(Promotion $promotion)
     {
 
-        $promotions = Promotion::all('promotion_code', 'id'); // Récupère toutes les promotions
-
         return view('pilot.promotion.edit', compact('promotion',));
     }
 
 
     public function update(Request $request, Promotion $promotion)
     {
-        // Validation des données
-        $validatedData = $request->validate([
-            'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code,' . $promotion->id,
-        ]);
+        // Validation des données avec messages personnalisés
+        $validatedData = $request->validate(
+            [
+                'promotion_code' => 'required|string|max:255|unique:promotions,promotion_code,' . $promotion->id,
+            ],
+            [
+                'promotion_code.required' => 'Le code de promotion est obligatoire.',
+                'promotion_code.string' => 'Le code de promotion doit être une chaîne de caractères.',
+                'promotion_code.max' => 'Le code de promotion ne doit pas dépasser 255 caractères.',
+                'promotion_code.unique' => 'Ce code de promotion existe déjà.',
+            ]
+        );
 
-        // Mise à jour de la promotion
+        // Mise à jour
         $promotion->update($validatedData);
 
-        // Redirection avec un message de succès
-        return redirect()->route('promotion.edit',$promotion)->with('success', 'Promotion mise à jour avec succès');
+        return redirect()->route('promotion.index')->with('success', 'Promotion mise à jour avec succès.');
     }
 
     /**
