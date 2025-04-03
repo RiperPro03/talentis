@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('locates', function (Blueprint $table) {
             $table->foreignId('company_id')
-                ->nullable() // Permet à company_id d'accepter NULL
                 ->constrained('companies')
-                ->onDelete('set null'); // Met à NULL lors de la suppression
+                ->onDelete('cascade'); // Met à NULL lors de la suppression
 
             $table->foreignId('address_id')
                 ->constrained('addresses')
