@@ -1,0 +1,24 @@
+{
+    "name": "Talentis",
+    "short_name": "Talentis",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "description": "Talentis est une plateforme de gestion des offres, des candidatures et des talents.",
+    "theme_color": "#0e7490",
+    "orientation": "portrait",
+    "splash": [],
+    "custom": [],
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/img/logo/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/logo/logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
