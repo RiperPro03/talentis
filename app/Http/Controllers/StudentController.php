@@ -57,23 +57,8 @@ class StudentController extends Controller
             'postal_code' => 'nullable|string|max:10',
             'city' => 'nullable|string|max:255',
             'promotion' => 'nullable|exists:promotions,promotion_code',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
-        // Gestion de l'adresse
-        $address = null;
-        if (!empty($validatedData['postal_code']) && !empty($validatedData['city'])) {
-            $address = Address::create([
-                'postal_code' => $validatedData['postal_code'],
-                'city' => $validatedData['city'],
-            ]);
-        }
-
-        // Gestion de la promotion
-        $promotion = null;
-        if (!empty($validatedData['promotion'])) {
-            $promotion = Promotion::where('promotion_code', $validatedData['promotion'])->first();
-        }
 
         // Gestion de la photo de profil
         $profilePicturePath = null;
@@ -88,19 +73,15 @@ class StudentController extends Controller
             'birthdate' => $validatedData['birthdate'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
-            'profile_picture_path' => $profilePicturePath,
-            'promotion_id' => $promotion?->id,
+            'profile_picture_path' => $profilePicturePath, // Stocke le chemin dans la base de données
+            'promotion_id' => optional(Promotion::where('promotion_code', $validatedData['promotion'])->first())->id,
         ]);
-
-        if ($address) {
-            $student->addresses()->associate($address);
-            $student->save();
-        }
 
         $student->assignRole('student');
 
         return redirect()->route('student.create')->with('success', 'Étudiant créé avec succès.');
     }
+
 
     public function edit(User $student)
     {
@@ -141,11 +122,20 @@ class StudentController extends Controller
 
         // Gestion de la photo de profil
         if ($request->hasFile('profile_picture')) {
+            // Supprimer l'ancienne image si elle existe
             if ($student->profile_picture_path) {
                 Storage::disk('public')->delete($student->profile_picture_path);
             }
-            $path = $this->uploadFile($request->file('profile_picture'), 'profile_' . $student->id, 'profile_pictures');
-            $validatedData['profile_picture_path'] = $path;
+            // Sauvegarde de la nouvelle image
+            $profilePicturePath = $this->uploadFile($request->file('profile_picture'), 'profile_' . $student->id, 'profile_pictures');
+            $validatedData['profile_picture_path'] = $profilePicturePath;
+        }
+
+        // Mise à jour du mot de passe si fourni
+        if ($request->filled('password')) {
+            $validatedData['password'] = Hash::make($request->password);
+        } else {
+            unset($validatedData['password']);
         }
 
         // Traitement du mot de passe
