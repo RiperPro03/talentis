@@ -79,20 +79,22 @@
                                     {{-- Badges --}}
                                     <div class="flex flex-wrap items-center gap-2 mt-3">
                                         {{-- Location --}}
-                                        @foreach($company->addresses as $location)
-                                            <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                                <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                                    </path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                                    </path>
-                                                </svg>
-                                                {{ $location->city }}
-                                            </div>
-                                        @endforeach
+                                        @if ($company->companies && $company->companies->addresses && $company->companies->addresses->isNotEmpty())
+                                            @foreach ($company->companies->addresses as $location)
+                                                <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
+                                                    <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
+                                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
+                                                        </path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
+                                                        </path>
+                                                    </svg>
+                                                    {{ $location->city }}
+                                                </div>
+                                            @endforeach
+                                        @endif
 
                                         {{-- Note --}}
                                         @if(!$company->getRate() == 0)

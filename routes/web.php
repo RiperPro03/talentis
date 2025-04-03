@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\StatController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
@@ -46,6 +47,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Profile
     Route::get('my/profil', [UserController::class, 'profil'])->name('profil.show');
+
+    //Statistiques
+    Route::get('stats', [StatController::class, 'index'])->name('stats.index');
 });
 
 Route::middleware(['auth', 'can:access_apply'])->group(function () {
