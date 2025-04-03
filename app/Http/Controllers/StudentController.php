@@ -48,23 +48,79 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'birthdate' => 'required|date',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'postal_code' => 'nullable|string|max:10',
-            'city' => 'nullable|string|max:255',
-            'promotion' => 'nullable|exists:promotions,promotion_code',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
+                'birthdate' => 'required|date',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8|confirmed',
+                'postal_code' => ['nullable', 'string', 'max:10', 'regex:/^\d{5}$/'],
+                'city' => 'nullable|string|max:255',
+                'promotion' => 'nullable|exists:promotions,promotion_code',
+                'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ],
+            [
+                'name.required' => 'Le nom est obligatoire.',
+                'name.string' => 'Le nom doit être une chaîne de caractères.',
+                'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
 
-        // Gestion de la photo de profil
-        $profilePicturePath = null;
-        if ($request->hasFile('profile_picture')) {
-            $profilePicturePath = $this->uploadFile($request->file('profile_picture'), 'profile_', 'profile_pictures');
+                'first_name.required' => 'Le prénom est obligatoire.',
+                'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+                'first_name.max' => 'Le prénom ne doit pas dépasser 255 caractères.',
+
+                'birthdate.required' => 'La date de naissance est obligatoire.',
+                'birthdate.date' => 'La date de naissance doit être une date valide.',
+
+                'email.required' => 'L\'adresse email est obligatoire.',
+                'email.email' => 'L\'adresse email doit être valide.',
+                'email.unique' => 'Cette adresse email est déjà utilisée.',
+
+                'password.required' => 'Le mot de passe est obligatoire.',
+                'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
+                'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
+                'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+
+                'postal_code.string' => 'Le code postal doit être une chaîne de caractères.',
+                'postal_code.max' => 'Le code postal ne doit pas dépasser 10 caractères.',
+                'postal_code.regex' => 'Le code postal doit contenir 5 chiffres.',
+
+                'city.string' => 'La ville doit être une chaîne de caractères.',
+                'city.max' => 'La ville ne doit pas dépasser 255 caractères.',
+
+                'promotion.exists' => 'La promotion sélectionnée est invalide.',
+
+                'profile_picture.image' => 'La photo de profil doit être une image.',
+                'profile_picture.mimes' => 'Le format de la photo doit être jpeg, png ou jpg.',
+                'profile_picture.max' => 'La taille de la photo ne doit pas dépasser 2 Mo.',
+            ]
+        );
+
+        // Upload de la photo de profil
+        $profilePicturePath = $request->hasFile('profile_picture')
+            ? $this->uploadFile($request->file('profile_picture'), 'profile_', 'profile_pictures')
+            : null;
+
+        // Récupération ou création de l'adresse
+        $addressId = null;
+        $postalCode = $validatedData['postal_code'] ?? null;
+        $city = $validatedData['city'] ?? null;
+
+        if ($postalCode && $city) {
+            $formattedCity = ucfirst(strtolower($city));
+
+            $address = Address::firstOrCreate(
+                ['postal_code' => $postalCode],
+                ['city' => $formattedCity]
+            );
+
+            $addressId = $address->id;
         }
+
+        // Récupération de l'ID de la promotion (si fournie)
+        $promotionId = $validatedData['promotion']
+            ? Promotion::where('promotion_code', $validatedData['promotion'])->value('id')
+            : null;
 
         // Création de l'utilisateur
         $student = User::create([
@@ -73,8 +129,9 @@ class StudentController extends Controller
             'birthdate' => $validatedData['birthdate'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
-            'profile_picture_path' => $profilePicturePath, // Stocke le chemin dans la base de données
-            'promotion_id' => optional(Promotion::where('promotion_code', $validatedData['promotion'])->first())->id,
+            'profile_picture_path' => $profilePicturePath,
+            'promotion_id' => $promotionId,
+            'address_id' => $addressId,
         ]);
 
         $student->assignRole('student');
@@ -93,75 +150,108 @@ class StudentController extends Controller
 
     public function update(Request $request, User $student)
     {
-        $validatedData = $request->validate([
-            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'name' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'birthdate' => 'required|date',
-            'password' => 'nullable|string|min:8|confirmed',
-            'email' => 'required|email|max:255|unique:users,email,' . $student->id,
-            'promotion_id' => 'nullable|exists:promotions,id',
-            'postal_code' => [
-                'nullable', 'string', 'max:10',
-                function ($attribute, $value, $fail) {
-                    if ($value === 'Non assigné') {
-                        $fail('Veuillez assigner une valeur au code postal.');
-                    }
-                },
+        $validatedData = $request->validate(
+            [
+                'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'name' => 'required|string|max:255',
+                'first_name' => 'required|string|max:255',
+                'birthdate' => 'required|date',
+                'password' => 'nullable|string|min:8|confirmed',
+                'email' => 'required|email|max:255|unique:users,email,' . $student->id,
+                'postal_code' => [
+                    'nullable', 'string', 'max:10', 'regex:/^\d{5}$/',
+                    function ($attribute, $value, $fail) {
+                        if ($value === 'Non assigné') {
+                            $fail('Veuillez assigner une valeur au code postal.');
+                        }
+                    },
+                ],
+                'city' => [
+                    'nullable', 'string', 'max:255',
+                    function ($attribute, $value, $fail) {
+                        if ($value === 'Non assigné') {
+                            $fail('Veuillez assigner une valeur à la ville.');
+                        }
+                    },
+                ],
+                'promotion' => 'nullable|exists:promotions,promotion_code',
             ],
-            'city' => [
-                'nullable', 'string', 'max:255',
-                function ($attribute, $value, $fail) {
-                    if ($value === 'Non assigné') {
-                        $fail('Veuillez assigner une valeur à la ville.');
-                    }
-                },
-            ],
-            'promotion' => 'nullable|exists:promotions,promotion_code',
-        ]);
+            [
+                'profile_picture.image' => 'La photo de profil doit être une image.',
+                'profile_picture.mimes' => 'Le format de la photo doit être jpeg, png, jpg.',
+                'profile_picture.max' => 'La taille de la photo ne doit pas dépasser 2 Mo.',
+
+                'name.required' => 'Le nom est obligatoire.',
+                'name.string' => 'Le nom doit être une chaîne de caractères.',
+                'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+
+                'first_name.required' => 'Le prénom est obligatoire.',
+                'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+                'first_name.max' => 'Le prénom ne doit pas dépasser 255 caractères.',
+
+                'birthdate.required' => 'La date de naissance est obligatoire.',
+                'birthdate.date' => 'La date de naissance doit être une date valide.',
+
+                'password.string' => 'Le mot de passe doit être une chaîne de caractères.',
+                'password.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
+                'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+
+                'email.required' => 'L\'adresse email est obligatoire.',
+                'email.email' => 'L\'adresse email doit être valide.',
+                'email.max' => 'L\'adresse email ne doit pas dépasser 255 caractères.',
+                'email.unique' => 'Cette adresse email est déjà utilisée.',
+
+                'postal_code.string' => 'Le code postal doit être une chaîne de caractères.',
+                'postal_code.max' => 'Le code postal ne doit pas dépasser 10 caractères.',
+                'postal_code.regex' => 'Le code postal doit contenir 5 chiffres.',
+
+                'city.string' => 'La ville doit être une chaîne de caractères.',
+                'city.max' => 'La ville ne doit pas dépasser 255 caractères.',
+
+                'promotion.exists' => 'La promotion sélectionnée est invalide.',
+            ]
+        );
 
         // Gestion de la photo de profil
         if ($request->hasFile('profile_picture')) {
-            // Supprimer l'ancienne image si elle existe
+            // Suppression ancienne photo si existe
             if ($student->profile_picture_path) {
                 Storage::disk('public')->delete($student->profile_picture_path);
             }
-            // Sauvegarde de la nouvelle image
-            $profilePicturePath = $this->uploadFile($request->file('profile_picture'), 'profile_' . $student->id, 'profile_pictures');
-            $validatedData['profile_picture_path'] = $profilePicturePath;
+            $validatedData['profile_picture_path'] = $this->uploadFile(
+                $request->file('profile_picture'),
+                'profile_' . $student->id,
+                'profile_pictures'
+            );
         }
 
-        // Mise à jour du mot de passe si fourni
+        // Gestion du mot de passe
         if ($request->filled('password')) {
             $validatedData['password'] = Hash::make($request->password);
         } else {
             unset($validatedData['password']);
         }
 
-        // Traitement du mot de passe
-        if ($request->filled('password')) {
-            $validatedData['password'] = Hash::make($request->password);
-        } else {
-            unset($validatedData['password']);
-        }
-
-        // Association de l'adresse
+        // Gestion de l'adresse
         if ($request->filled(['postal_code', 'city'])) {
-            $address = Address::create([
-                'postal_code' => $request->postal_code,
-                'city' => $request->city,
-            ]);
+            $postalCode = $validatedData['postal_code'];
+            $city = ucfirst(strtolower($validatedData['city']));
+
+            $address = Address::firstOrCreate(
+                ['postal_code' => $postalCode],
+                ['city' => $city]
+            );
+
             $student->addresses()->associate($address);
         }
 
-        // Mise à jour promotion
+        // Mise à jour de la promotion
         if ($request->filled('promotion')) {
-            $promotion = Promotion::where('promotion_code', $request->promotion)->first();
-            if ($promotion) {
-                $student->promotion_id = $promotion->id;
-            }
+            $promotionId = Promotion::where('promotion_code', $request->promotion)->value('id');
+            $student->promotion_id = $promotionId;
         }
 
+        // Mise à jour de l'utilisateur
         $student->update($validatedData);
 
         return redirect()->route('student.edit', $student)->with('success', 'Étudiant mis à jour avec succès.');
@@ -174,7 +264,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Upload un fichier avec un nom propre
+     * Upload un fichier avec un nom unique
      */
     private function uploadFile($file, $prefix, $folder)
     {

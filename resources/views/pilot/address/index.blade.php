@@ -4,6 +4,13 @@
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
+
+        @if (session('success'))
+            <div class="alert alert-success shadow-lg mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-error shadow-lg mb-4">
                 <div class="flex items-center">
@@ -20,6 +27,8 @@
                 </div>
             </div>
         @endif
+
+            <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les addresses</h1>
 
             <form action="{{ route('address.index') }}" method="GET" class="mb-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -62,7 +71,7 @@
             </form>
 
 
-        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Les addresses</h1>
+
         @foreach($addresses as $address)
             <dialog id="modal-{{ $address->id }}" class="modal">
                 <div class="modal-box">
@@ -90,8 +99,17 @@
         @endforeach
 
 
+            <div class="flex justify-between mt-4">
+
+                <a href="{{route('dashboard.index')}}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
+                    ← Retour
+                </a>
+                <a href="{{ route('address.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
+                    Ajouter une address
+                </a>
+            </div>
+
         <!-- Version Mobile: Affichage en cartes -->
-    </div>
 
 
     <div class="md:hidden flex flex-col gap-4">
@@ -149,14 +167,7 @@
             @endforeach
             </tbody>
         </table>
+        {{ $addresses->links() }}
     </div>
-    <div class="flex justify-between mt-4">
-
-    <a href="{{route('dashboard.index')}}" class="btn btn-secondary px-6 py-2 flex items-center ml-5">
-        ← Retour
-    </a>
-    <a href="{{ route('address.create') }}" class="btn btn-secondary px-6 py-2 flex items-center mr-5">
-        Ajouter une address
-    </a>
     </div>
 @endsection

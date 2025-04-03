@@ -73,26 +73,31 @@
                     </div>
 
                     <br>
-                    <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
-                    <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
-                        @csrf
+                    @if (!auth()->user()->hasRole('pilot'))
+                        <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
-                        @php
-                            $existingRating = $company->evaluations->where('id', auth()->id())->first()?->pivot->rating;
-                        @endphp
+                        <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
+                            @csrf
 
-                        <div class="rating">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <input type="radio" name="rating"
-                                       class="mask mask-star-2 bg-orange-400"
-                                       value="{{ $i }}"
-                                    {{ ($existingRating !== null && $existingRating == $i) || ($existingRating === null && $i == 5) ? 'checked' : '' }} />
-                            @endfor
-                        </div>
+                            @php
+                                $existingRating = $company->evaluations->where('id', auth()->id())->first()?->pivot->rating;
+                            @endphp
 
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
-                    </form>
+                            <div class="rating">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <input type="radio" name="rating"
+                                           class="mask mask-star-2 bg-orange-400"
+                                           value="{{ $i }}"
+                                        {{ ($existingRating !== null && $existingRating == $i) || ($existingRating === null && $i == 5) ? 'checked' : '' }} />
+                                @endfor
+                            </div>
+
+                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
+                        </form>
+                    @endif
+
+
                     <br>
                     <p class="font-bold text-lg text-al">Cette entreprise est actuellement notée:</p>
 

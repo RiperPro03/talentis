@@ -4,10 +4,6 @@
 
 @section('content')
     <div class="container mx-auto py-6 px-4">
-{{--        <!-- Bouton de retour -->--}}
-{{--        <div class="flex justify-start mb-4">--}}
-{{--            <a href="{{ url()->previous() }}" class="btn btn-secondary">← Retour</a>--}}
-{{--        </div>--}}
         @if (session('success'))
             <div class="alert alert-success shadow-lg mb-4">
                 {{ session('success') }}

@@ -22,40 +22,41 @@ class OfferController extends Controller
         if (Route::currentRouteName() === 'pilot.offer.index') {
             $query = Offer::query();
 
-            // Filtrer par titre si un titre est fourni
+            // Filtrer par titre
             if ($request->filled('title')) {
                 $query->where('title', 'like', '%' . $request->input('title') . '%');
             }
 
-            // Filtrer par salaire minimum si une valeur est fournie
+            // Filtrer par salaire minimum
             if ($request->filled('min_salary')) {
                 $query->where('base_salary', '>=', $request->input('min_salary'));
             }
 
-            // Filtrer par type d'offre (stage, CDI, CDD, etc.)
+            // Filtrer par type d'offre
             if ($request->filled('type')) {
                 $query->where('type', $request->input('type'));
             }
 
-            // Filtrer par secteur d'activité
+            // Filtrer par secteur
             if ($request->filled('sector_id')) {
                 $query->where('sector_id', $request->input('sector_id'));
             }
+
+            // Filtrer par nom d'entreprise
             if ($request->filled('company')) {
                 $query->whereHas('companies', function ($q) use ($request) {
                     $q->where('name', 'like', '%' . $request->input('company') . '%');
                 });
             }
 
+            // Récupération triée et paginée
+            $offers = $query->latest()->paginate(10);
 
-            // Récupérer les offres avec pagination
-            $offers = $query->paginate(10);
-
-            // Récupérer les secteurs pour le champ de filtre
+            // Récupération des secteurs pour les filtres
             $sectors = Sector::all();
 
-            // Retourner la vue avec les résultats et les filtres sélectionnés
-            return view('pilot/offer.index', compact('offers', 'sectors'));
+            return view('pilot.offer.index', compact('offers', 'sectors'));
+
         }
 
         if ($request->has('offer-title') || $request->has('company') || $request->has('industry')
@@ -154,43 +155,70 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'base_salary' => 'nullable|numeric|min:0',
+                'type' => 'required|in:CDI,CDD,Stage,Alternance',
+                'start_offer' => 'required|date|after_or_equal:today',
+                'end_offer' => 'nullable|date|after:start_offer',
+                'company_id' => 'required|exists:companies,id',
+                'sector_id' => 'required|exists:sectors,id',
+                'skills' => 'nullable|array',
+                'skills.*' => 'string|exists:skills,skill_name',
+            ],
+            [
+                'title.required' => 'Le titre est obligatoire.',
+                'title.string' => 'Le titre doit être une chaîne de caractères.',
+                'title.max' => 'Le titre ne peut pas dépasser 255 caractères.',
 
+                'description.required' => 'La description est obligatoire.',
+                'description.string' => 'La description doit être une chaîne de caractères.',
 
-        // Valider les données de la requête
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'base_salary' => 'nullable|numeric|min:0',
-            'type' => 'required|in:CDI,CDD,Stage,Alternance',
-            'start_offer' => 'required|date|after_or_equal:today',
-            'end_offer' => 'nullable|date|after:start_offer',
-            'company_id' => 'required|exists:companies,id',
-            'sector_id' => 'required|exists:sectors,id',
-        ]);
+                'base_salary.numeric' => 'Le salaire doit être un nombre.',
+                'base_salary.min' => 'Le salaire doit être supérieur ou égal à 0.',
 
-        // Créer l'offre
+                'type.required' => 'Le type de contrat est obligatoire.',
+                'type.in' => 'Le type de contrat est invalide.',
+
+                'start_offer.required' => 'La date de début est obligatoire.',
+                'start_offer.date' => 'La date de début doit être une date valide.',
+                'start_offer.after_or_equal' => 'La date de début doit être aujourd\'hui ou ultérieure.',
+
+                'end_offer.date' => 'La date de fin doit être une date valide.',
+                'end_offer.after' => 'La date de fin doit être postérieure à la date de début.',
+
+                'company_id.required' => 'L\'entreprise est obligatoire.',
+                'company_id.exists' => 'L\'entreprise sélectionnée est invalide.',
+
+                'sector_id.required' => 'Le secteur est obligatoire.',
+                'sector_id.exists' => 'Le secteur sélectionné est invalide.',
+
+                'skills.array' => 'Les compétences doivent être un tableau.',
+                'skills.*.string' => 'Chaque compétence doit être une chaîne de caractères.',
+                'skills.*.exists' => 'Une ou plusieurs compétences sélectionnées sont invalides.',
+            ]
+        );
+
+        // Création de l'offre
         $offer = Offer::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'base_salary' => $request->input('base_salary'),
-            'type' => $request->input('type'),
-            'start_offer' => $request->input('start_offer'),
-            'end_offer' => $request->input('end_offer'),
-            'company_id' => $request->input('company_id'),
-            'sector_id' => $request->input('sector_id'),
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'],
+            'base_salary' => $validatedData['base_salary'] ?? null,
+            'type' => $validatedData['type'],
+            'start_offer' => $validatedData['start_offer'],
+            'end_offer' => $validatedData['end_offer'] ?? null,
+            'company_id' => $validatedData['company_id'],
+            'sector_id' => $validatedData['sector_id'],
         ]);
 
-        if ($request->has('skills')) {
-            // Récupérer les IDs des skills en fonction des noms envoyés
-            $skillsIds = Skill::whereIn('skill_name', $request->input('skills'))->pluck('id')->toArray();
-
-            // Associer les compétences à l'offre
+        // Association des compétences
+        if (!empty($validatedData['skills'])) {
+            $skillsIds = Skill::whereIn('skill_name', $validatedData['skills'])->pluck('id')->toArray();
             $offer->skills()->sync($skillsIds);
         }
 
-
-
-        // Rediriger vers la liste des offres avec un message de succès
         return redirect()->route('pilot.offer.index')->with('success', 'Offre créée avec succès.');
     }
     /**
@@ -229,47 +257,71 @@ class OfferController extends Controller
      */
     public function update(Request $request, Offer $offer)
     {
+        $validatedData = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'base_salary' => 'nullable|numeric|min:0',
+                'type' => 'required|in:CDI,CDD,Stage,Alternance',
+                'start_offer' => 'required|date|after_or_equal:today',
+                'end_offer' => 'nullable|date|after:start_offer',
+                'company_id' => 'nullable|exists:companies,id',
+                'sector_id' => 'nullable|exists:sectors,id',
+                'skills' => 'nullable|array',
+                'skills.*' => 'string|exists:skills,skill_name',
+            ],
+            [
+                'title.required' => 'Le titre est obligatoire.',
+                'title.string' => 'Le titre doit être une chaîne de caractères.',
+                'title.max' => 'Le titre ne peut pas dépasser 255 caractères.',
 
-        // Valider les données de la requête
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'base_salary' => 'nullable|numeric',
-            'type' => 'required|string',
-            'start_offer' => 'required|date',
-            'end_offer' => 'nullable|date',
-            'company_id' => 'nullable|exists:companies,id',
-            'sector_id' => 'nullable|exists:sectors,id',
+                'description.string' => 'La description doit être une chaîne de caractères.',
+
+                'base_salary.numeric' => 'Le salaire doit être un nombre.',
+                'base_salary.min' => 'Le salaire doit être supérieur ou égal à 0.',
+
+                'type.required' => 'Le type de contrat est obligatoire.',
+                'type.in' => 'Le type de contrat est invalide.',
+
+                'start_offer.required' => 'La date de début est obligatoire.',
+                'start_offer.date' => 'La date de début doit être une date valide.',
+                'start_offer.after_or_equal' => 'La date de début doit être aujourd\'hui ou ultérieure.',
+
+                'end_offer.date' => 'La date de fin doit être une date valide.',
+                'end_offer.after' => 'La date de fin doit être postérieure à la date de début.',
+
+                'company_id.exists' => 'L\'entreprise sélectionnée est invalide.',
+                'sector_id.exists' => 'Le secteur sélectionné est invalide.',
+
+                'skills.array' => 'Les compétences doivent être un tableau.',
+                'skills.*.string' => 'Chaque compétence doit être une chaîne de caractères.',
+                'skills.*.exists' => 'Une ou plusieurs compétences sélectionnées sont invalides.',
+            ]
+        );
+
+        // Mise à jour des informations de l'offre
+        $offer->update([
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'] ?? null,
+            'base_salary' => $validatedData['base_salary'] ?? null,
+            'type' => $validatedData['type'],
+            'start_offer' => $validatedData['start_offer'],
+            'end_offer' => $validatedData['end_offer'] ?? null,
+            'company_id' => $validatedData['company_id'] ?? $offer->company_id,
+            'sector_id' => $validatedData['sector_id'] ?? $offer->sector_id,
         ]);
 
-        // Vérifier et mettre à jour le `company_id` et le `sector_id` si nécessaire
-        if ($request->filled('company_id')) {
-            $offer->company_id = $request->company_id;
-        }
-
-        if ($request->filled('sector_id')) {
-            $offer->sector_id = $request->sector_id;
-        }
-
-        // Mettre à jour les informations de l'offre
-        $offer->update($validatedData);
-
-        // Mettre à jour les compétences liées à l'offre
-        if ($request->has('skills')) {
-            // Récupérer les IDs des skills en fonction des noms envoyés
-            $skillsIds = Skill::whereIn('skill_name', $request->input('skills'))->pluck('id')->toArray();
-
-            // Associer les compétences à l'offre
+        // Mettre à jour les compétences
+        if (!empty($validatedData['skills'])) {
+            $skillsIds = Skill::whereIn('skill_name', $validatedData['skills'])->pluck('id')->toArray();
             $offer->skills()->sync($skillsIds);
+        } else {
+            // Si aucune compétence sélectionnée → désassocier
+            $offer->skills()->detach();
         }
 
-        // Rediriger vers la page d'édition de l'offre avec un message de succès
         return redirect()->route('pilot.offer.edit', $offer)->with('success', 'Offre mise à jour avec succès.');
     }
-
-
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -280,6 +332,7 @@ class OfferController extends Controller
             return redirect()->route('pilot.offer.index')->withErrors(['User' => 'Offre non trouvée.']);
         }
 
+        $offer->applies()->delete();
         $offer->delete();
 
         return redirect()->route('pilot.offer.index')->with('success', 'Offre supprimée avec succès');
