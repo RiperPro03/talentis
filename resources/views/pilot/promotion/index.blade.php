@@ -69,17 +69,17 @@
             <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Code de promotion</th>
-                    <th class="text-center">Nombre d'étudiants</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Code de promotion</th>
+                    <th class="border px-4 py-2 text-center">Nombre d'étudiants</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($promotions as $promotion)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $promotion->promotion_code }}</td>
-                        <td class="text-center">{{ $promotion->students_count }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2text-center">{{ $promotion->promotion_code }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $promotion->students_count }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('promotion.edit', $promotion) }}" class="btn btn-sm btn-warning">Modifier</a>
                             <button class="btn btn-error btn-sm"
                                     onclick="document.getElementById('modal-{{ $promotion->id }}').showModal()">

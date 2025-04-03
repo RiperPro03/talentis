@@ -67,15 +67,15 @@
             <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Compétence</th>
+                    <th class="border px-4 py-2 text-center">Compétence</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($skills as $skill)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $skill->skill_name }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2 text-center">{{ $skill->skill_name }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('skill.edit', $skill) }}" class="btn btn-warning btn-sm">Modifier</a>
                             <button class="btn btn-error btn-sm"
                                     onclick="document.getElementById('modal-{{ $skill->id }}').showModal()">

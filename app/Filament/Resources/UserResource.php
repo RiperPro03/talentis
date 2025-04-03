@@ -79,12 +79,11 @@ class UserResource extends Resource
 
                 Select::make('roles')
                     ->label('Rôles')
-                    ->multiple()
-                    ->relationship('roles', 'name') // Utilisation de la relation Spatie
+                    ->relationship('roles', 'name')
                     ->preload()
                     ->searchable()
-                    ->options(fn () => Role::pluck('name', 'name')->toArray()) // Récupère tous les rôles
-                    ->afterStateUpdated(fn ($state, $record) => $record->syncRoles($state)), // Associe les rôles à l'utilisateur
+                    ->options(Role::pluck('name', 'id')->toArray())
+                    ->afterStateUpdated(fn ($state, $record) => $record?->syncRoles($state)),
             ]);
     }
 

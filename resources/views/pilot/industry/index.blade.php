@@ -67,15 +67,15 @@
             <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Nom du secteur d'activité</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Nom du secteur d'activité</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($industries as $industry)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $industry->name }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2 text-center">{{ $industry->name }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('industry.edit', $industry) }}" class="btn btn-warning btn-sm">Modifier</a>
                             <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $industry->id }}').showModal()">
                                 Retirer

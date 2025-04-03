@@ -67,15 +67,15 @@
             <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Secteur</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Secteur</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($sectors as $sector)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $sector->name }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2 text-center">{{ $sector->name }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('sector.edit', $sector) }}" class="btn btn-warning btn-sm">Modifier</a>
                             <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $sector->id }}').showModal()">
                                 Retirer
