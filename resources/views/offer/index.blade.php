@@ -7,12 +7,21 @@
 
         <h1 class="text-4xl font-bold mb-10">Offres</h1>
 
-        @if(session('errors'))
-            <div class="alert alert-warning mb-4 lg:w-1/5 mx-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                {{ session('errors') }}
+        @if (session('success'))
+            <div class="alert alert-success shadow-lg mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-error shadow-lg mb-4">
+                <div class="flex items-center">
+                    <ul class="mt-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         @endif
 
@@ -64,15 +73,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach ($offers as $offer)
                         <div class="relative">
-                            <!-- Bouton Ajouter aux Favoris -->
-                            <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="absolute top-2 right-2 z-10">
-                                @csrf
-                                <div class="tooltip tooltip-warning" data-tip="Ajouter aux favoris">
-                                    <button class="btn btn-circle btn-outline btn-sm bg-white shadow-md hover:bg-warning">
-                                        ❤️
-                                    </button>
-                                </div>
-                            </form>
+                            @if (!auth()->user()->hasRole('pilot'))
+                                <!-- Bouton Ajouter aux Favoris -->
+                                <form action="{{ route('wishlist.store', $offer) }}" method="POST" class="absolute top-2 right-2 z-10">
+                                    @csrf
+                                    <div class="tooltip tooltip-warning" data-tip="Ajouter aux favoris">
+                                        <button class="btn btn-circle btn-outline btn-sm bg-white shadow-md hover:bg-warning">
+                                            ❤️
+                                        </button>
+                                    </div>
+                                </form>
+                            @endif
 
                             <!-- Carte de l'Offre -->
                             <div class="card card-bordered shadow-md bg-base-100 relative h-full flex flex-col">
@@ -112,20 +123,22 @@
                                         </div>
 
                                         {{-- Location --}}
-                                        @foreach($offer->companies->addresses as $location)
-                                            <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
-                                                <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
-                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
-                                                    </path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
-                                                    </path>
-                                                </svg>
-                                                {{ $location->city }}
-                                            </div>
-                                        @endforeach
+                                        @if ($offer->companies && $offer->companies->addresses && $offer->companies->addresses->isNotEmpty())
+                                            @foreach ($offer->companies->addresses as $location)
+                                                <div class="badge badge-xl badge-ghost whitespace-nowrap flex items-center">
+                                                    <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="red" stroke-width="2"
+                                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M12 11c1.326 0 2.4-.93 2.4-2.077S13.326 6.846 12 6.846s-2.4.93-2.4 2.077S10.674 11 12 11z">
+                                                        </path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              d="M12 22s8-6.33 8-11.23A8 8 0 104 10.77C4 15.67 12 22 12 22z">
+                                                        </path>
+                                                    </svg>
+                                                    {{ $location->city }}
+                                                </div>
+                                            @endforeach
+                                        @endif
 
                                     </div>
 

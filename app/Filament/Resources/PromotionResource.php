@@ -45,9 +45,11 @@ class PromotionResource extends Resource
                     ->sortable()
                     ->searchable(),
 
-                TextColumn::make('users_count')
-                    ->counts('users')
-                    ->label('Nombre d\'étudiants'),
+                TextColumn::make('students_count')
+                    ->label('Nombre d\'étudiants')
+                    ->getStateUsing(function ($record) {
+                        return $record->users()->role('student')->count();
+                    }),
             ])
             ->filters([
                 //

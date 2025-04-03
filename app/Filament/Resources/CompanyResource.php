@@ -42,7 +42,7 @@ class CompanyResource extends Resource
                 FileUpload::make('logo_path')
                     ->label('Logo')
                     ->image()
-                    ->directory('logos')
+                    ->directory('logos_entreprise')
                     ->columnSpanFull(),
 
                 Textarea::make('description')

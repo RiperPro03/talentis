@@ -18,6 +18,7 @@ class CreateAdminUser extends Command
 
     /**
      * Description de la commande.
+     * php artisan make:admin admin@example.com --name="Super Admin" --first-name="Admin" --password="password"
      *
      * @var string
      */

@@ -10,11 +10,17 @@ class SkillController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $skills = Skill::all();
-        return view('pilot/skill.index', compact('skills'));
+        $query = Skill::query();
 
+        if ($request->has('search')) {
+            $query->where('skill_name', 'like', '%' . $request->search . '%');
+        }
+
+        $skills = $query->paginate(10);
+
+        return view('pilot/skill.index', compact('skills'));
     }
 
     /**
@@ -31,15 +37,21 @@ class SkillController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'skill_name' => 'required|string|max:255|unique:skills,skill_name',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'skill_name' => 'required|string|max:255|unique:skills,skill_name',
+            ],
+            [
+                'skill_name.required' => 'Le nom de la compétence est obligatoire.',
+                'skill_name.string' => 'Le nom de la compétence doit être une chaîne de caractères.',
+                'skill_name.max' => 'Le nom de la compétence ne doit pas dépasser 255 caractères.',
+                'skill_name.unique' => 'Cette compétence existe déjà.',
+            ]
+        );
 
-        Skill::create([
-            'skill_name' => $request->skill_name,
-        ]);
+        Skill::create($validatedData);
 
-        return redirect()->route('skill.create')->with('success', 'Skill créée avec succès.');
+        return redirect()->route('skill.create')->with('success', 'Compétence créée avec succès.');
     }
 
     /**
@@ -48,7 +60,7 @@ class SkillController extends Controller
     public function show(Skill $skill = null)
     {
         if(!$skill){
-            return redirect()->route('skill.index')->with('error', 'Compétence non trouvée');
+            return redirect()->route('skill.index')->withErrors(['User' => 'Compétence non trouvée.']);
         }
 //        return view('skill.show', compact('skill'));
         return response()->json($skill);
@@ -65,17 +77,24 @@ class SkillController extends Controller
 
     public function update(Request $request, Skill $skill)
     {
-        // Validation des données
-        $validatedData = $request->validate([
-            'skill_name' => 'required|string|max:255|unique:skills,skill_name,' . $skill->id . ',id',
-        ]);
+        // Validation avec messages personnalisés
+        $validatedData = $request->validate(
+            [
+                'skill_name' => 'required|string|max:255|unique:skills,skill_name,' . $skill->id,
+            ],
+            [
+                'skill_name.required' => 'Le nom de la compétence est obligatoire.',
+                'skill_name.string' => 'Le nom de la compétence doit être une chaîne de caractères.',
+                'skill_name.max' => 'Le nom de la compétence ne doit pas dépasser 255 caractères.',
+                'skill_name.unique' => 'Cette compétence existe déjà.',
+            ]
+        );
 
-
-        // Mise à jour de la promotion
+        // Mise à jour
         $skill->update($validatedData);
 
-        // Redirection avec un message de succès
-        return redirect()->route('skill.edit',$skill)->with('success', 'Skill mis à jour avec succès');
+        // Redirection avec succès
+        return redirect()->route('skill.index')->with('success', 'Compétence mise à jour avec succès.');
     }
 
     /**
@@ -84,7 +103,7 @@ class SkillController extends Controller
     public function destroy(Skill $skill = null)
     {
         if (!$skill) {
-            return redirect()->route('skill.index')->with('error', 'Compétence non trouvée');
+            return redirect()->route('skill.index')->withErrors(['User' => 'Compétence non trouvée.']);
         }
         $skill->delete();
         return redirect()->route('skill.index')->with('success', 'Compétence supprimée');

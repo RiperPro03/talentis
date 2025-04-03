@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('locates', function (Blueprint $table) {
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
+            $table->foreignId('company_id')
+                ->constrained('companies')
+                ->onDelete('cascade'); // Met à NULL lors de la suppression
+
+            $table->foreignId('address_id')
+                ->constrained('addresses')
+                ->onDelete('cascade'); // Supprime l'entrée en cas de suppression de l'adresse
+
             $table->primary(['company_id', 'address_id']);
         });
     }

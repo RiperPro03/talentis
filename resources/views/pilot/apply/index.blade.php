@@ -1,223 +1,182 @@
 @extends('layouts.app')
 
-@section('title', 'Candidatures - Talentis')
+@section('title', 'Gestion candidatures - Talentis')
 
 @section('content')
-    <div class="container mx-auto py-6 px-4">
+    <div class="max-w-7xl mx-auto py-8 px-4 space-y-6">
 
         @if (session('success'))
-            <div class="alert alert-success shadow-lg mb-4">
-                {{ session('success') }}
+            <div class="alert alert-success shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 w-6 h-6" fill="none"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12l2 2 4-4m-6 4V9m0 12A9 9 0 1 0 3 12a9 9 0 0 0 18 0 9 9 0 0 0-18 0z" />
+                </svg>
+                <span>{{ session('success') }}</span>
             </div>
         @endif
 
-            @if ($errors->any())
-                <div class="alert alert-error shadow-lg mb-4">
-                    <div class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        <div>
-                            <ul class="mt-2 list-disc list-inside text-sm">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+        @if ($errors->any())
+            <div class="alert alert-error shadow-lg">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 w-6 h-6" fill="none"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <ul class="ml-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-            @endif
-
-        <h1 class="text-lg md:text-4xl font-bold mb-6 text-center">Candidatures</h1>
-
-        <form action="{{ route('pilot.apply.index') }}" method="GET" class="mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                <!-- Titre de l'offre -->
-                <div class="form-control w-full">
-                    <label class="label" for="offer-title">
-                        <span class="label-text">Titre de l'offre</span>
-                    </label>
-                    <input
-                        type="text"
-                        name="offer_title"
-                        id="offer-title"
-                        value="{{ request('offer_title') }}"
-                        class="input input-bordered w-full"
-                        placeholder="Ex : Développeur, UX Designer..."
-                    />
-                </div>
-
-                <!-- Nom ou prénom du candidat -->
-                <div class="form-control w-full">
-                    <label class="label" for="candidate">
-                        <span class="label-text">Nom ou prénom du candidat</span>
-                    </label>
-                    <input
-                        type="text"
-                        name="candidate"
-                        id="candidate"
-                        value="{{ request('candidate') }}"
-                        class="input input-bordered w-full"
-                        placeholder="Ex : Marie, Dupont"
-                    />
-                </div>
-
-                <!-- Filtres par entreprise (multi-select) -->
-                <x-multi-select-filter
-                    name="company"
-                    label="Entreprise"
-                    :items="$companies"
-                    key="name"
-                />
             </div>
+        @endif
 
-            <div class="flex justify-end mt-4">
-                <button type="submit" class="btn btn-primary">Rechercher</button>
-            </div>
+        <h1 class="text-3xl font-bold text-center">Liste des candidatures</h1>
+
+        {{-- Filtres --}}
+        <form action="{{ route('pilot.apply.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 justify-center mt-6">
+            <input type="text" name="offer_title" placeholder="Titre de l'offre" value="{{ request('offer_title') }}"
+                   class="input input-bordered w-full md:max-w-xs">
+            <input type="text" name="candidate" placeholder="Nom du candidat" value="{{ request('candidate') }}"
+                   class="input input-bordered w-full md:max-w-xs">
+            <select name="company" class="select select-bordered w-full md:max-w-xs">
+                <option value="">Entreprise</option>
+                @foreach ($companies as $company)
+                    <option value="{{ $company->name }}" {{ request('company') === $company->name ? 'selected' : '' }}>
+                        {{ $company->name }}
+                    </option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn btn-primary w-full md:w-auto">Rechercher</button>
         </form>
 
-        @foreach($offers as $offer)
+        <div class="flex justify-between mb-6">
+            <a href="{{ route('dashboard.index') }}" class="btn btn-secondary">← Retour</a>
+        </div>
+
+        {{-- Mobile Version --}}
+        <div class="md:hidden flex flex-col gap-4 mt-6">
+            @forelse ($offers as $offer)
                 @foreach ($offer->applies as $user)
-                    <!-- Modal de confirmation -->
-                    <dialog id="modal-{{ $offer->id }}" class="modal">
-                        <div class="modal-box">
-                            <h3 class="font-bold text-lg">Confirmer la suppression</h3>
-                            <p class="py-4">
-                                Êtes-vous sûr de vouloir retirer la candidature du candidat
-                                <strong>{{ $user->first_name }} {{ $user->name }}</strong> pour le poste
-                                de :<strong>{{ $offer->title }}</strong> ?
-                            </p>
-                            <div class="modal-action">
-                                <form method="dialog">
-                                    <button class="btn">Annuler</button>
-                                </form>
-                                <form action="{{ route('pilot.apply.remove', [$offer, $user]) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-error">Confirmer</button>
-                                </form>
-                            </div>
+                    <div class="bg-white shadow-md rounded-xl p-4">
+                        <h2 class="font-bold text-lg">{{ $offer->title }}</h2>
+                        <p class="text-gray-600">{{ $offer->companies->name }}</p>
+                        <p class="mt-2 text-sm">Candidat : <strong>{{ $user->first_name }} {{ $user->name }}</strong></p>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            @foreach ($offer->companies->addresses as $address)
+                                <span class="badge badge-ghost">📍 {{ $address->city }}</span>
+                            @endforeach
                         </div>
+                        <p class="text-sm mt-2">Lettre : {{ $user->pivot->cover_letter ? Str::limit($user->pivot->cover_letter, 80) : 'Non fournie' }}</p>
+                        <p class="text-xs text-gray-500">Soumis le : {{ $user->pivot->created_at->format('d/m/Y') }}</p>
 
-                        <!-- Ce backdrop ferme le modal si on clique à l'extérieur -->
-                        <form method="dialog" class="modal-backdrop">
-                            <button class="cursor-default">Fermer</button>
-                        </form>
-                    </dialog>
-                @endforeach
-        @endforeach
+                        <div class="flex flex-col gap-2 mt-4">
+                            @if ($user->pivot->curriculum_vitae)
+                                <a href="{{ Storage::url($user->pivot->curriculum_vitae) }}" target="_blank" class="btn btn-outline btn-sm">Voir CV</a>
+                            @else
+                                <span class="text-sm text-gray-500 italic">CV non fourni</span>
+                            @endif
 
-        @if ($offers->isEmpty())
-            <p class="text-center text-gray-500">Aucune candidature enregistrée.</p>
-        @else
-            {{-- Version Mobile --}}
-            <div class="md:hidden flex flex-col gap-4">
-                @foreach ($offers as $offer)
-                    @foreach ($offer->applies as $user)
-                        <div class="card bg-white shadow-md rounded-lg p-4">
-                            <h2 class="text-lg font-semibold mb-1">
-                                {{ $offer->title }}
-                            </h2>
-
-                            <p class="text-gray-600 mb-1">
-                                {{ $offer->companies->name }}
-                            </p>
-
-                            <p class="text-sm text-gray-700 mb-1">Candidat : <strong>{{ $user->first_name }} {{ $user->name }}</strong></p>
-
-                            <div class="flex flex-wrap gap-1 mb-2">
-                                @foreach ($offer->companies->addresses as $location)
-                                    <div class="badge badge-ghost whitespace-nowrap">
-                                        📍 {{ $location->city }}
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <div class="text-sm text-gray-700 mb-1">
-                                Soumis le : {{ $user->pivot->created_at->format('d/m/Y') }}
-                            </div>
-
-                            <div class="text-sm text-gray-700 mb-1">
-                                Lettre : {{ $user->pivot->cover_letter ? Str::limit($user->pivot->cover_letter, 80) : 'Non fournie' }}
-                            </div>
-
-                            <div class="flex flex-col gap-2 mt-4">
-                                @if ($user->pivot->curriculum_vitae)
-                                    <a href="{{ Storage::url($user->pivot->curriculum_vitae) }}" target="_blank"
-                                       class="btn btn-outline btn-sm">Voir CV</a>
-                                @else
-                                    <span class="text-sm text-gray-500 italic">CV non fourni</span>
-                                @endif
-
-                                <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">
-                                    Retirer
-                                </button>
-                            </div>
+                            <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}-{{ $user->id }}').showModal()">
+                                Retirer
+                            </button>
                         </div>
-                    @endforeach
+                    </div>
                 @endforeach
-            </div>
+            @empty
+                <p class="text-center text-gray-500">Aucune candidature trouvée.</p>
+            @endforelse
+        </div>
 
-            {{-- Version Desktop --}}
-            <div class="hidden md:block overflow-x-auto">
-                <table class="table w-full border-collapse border bg-white text-sm md:text-base">
-                    <thead>
-                    <tr class="bg-gray-50">
-                        <th class="border px-4 py-2 text-center">Poste</th>
-                        <th class="border px-4 py-2 text-center">Entreprise</th>
-                        <th class="border px-4 py-2 text-center">Candidat</th>
-                        <th class="border px-4 py-2 text-center">Localisation</th>
-                        <th class="border px-4 py-2 text-center">CV</th>
-                        <th class="border px-4 py-2 text-center">Lettre</th>
-                        <th class="border px-4 py-2 text-center">Soumis le</th>
-                        <th class="border px-4 py-2 text-center">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+        {{-- Desktop Version --}}
+
+        <div class="hidden md:block overflow-x-auto mt-8">
+            <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
+                <thead>
+                <tr class="bg-gray-100">
+                    <th class="text-center">Poste</th>
+                    <th class="text-center">Entreprise</th>
+                    <th class="text-center">Candidat</th>
+                    <th class="text-center">Localisation</th>
+                    <th class="text-center">CV</th>
+                    <th class="text-center">Lettre</th>
+                    <th class="text-center">Soumis le</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if ($offers->isNotEmpty())
                     @foreach ($offers as $offer)
                         @foreach ($offer->applies as $user)
                             <tr class="hover:bg-gray-50">
-                                <td class="border px-4 py-2">{{ $offer->title }}</td>
-                                <td class="border px-4 py-2">{{ $offer->companies->name }}</td>
-                                <td class="border px-4 py-2">{{ $user->first_name }} {{ $user->name }}</td>
-                                <td class="border px-4 py-2">
-                                    @foreach ($offer->companies->addresses as $location)
-                                        <div class="badge badge-ghost whitespace-nowrap flex items-center">
-                                            📍 {{ $location->city }}
-                                        </div>
+                                <td class="text-center">{{ $offer->title }}</td>
+                                <td class="text-center">{{ $offer->companies->name }}</td>
+                                <td class="text-center">{{ $user->first_name }} {{ $user->name }}</td>
+                                <td class="text-center">
+                                    @foreach ($offer->companies->addresses as $address)
+                                        <div class="badge badge-ghost">📍 {{ $address->city }}</div>
                                     @endforeach
                                 </td>
-                                <td class="border px-4 py-2 text-center">
+                                <td class="text-center">
                                     @if ($user->pivot->curriculum_vitae)
-                                        <a href="{{ Storage::url($user->pivot->curriculum_vitae) }}" target="_blank"
-                                           class="btn btn-outline btn-sm">Voir CV</a>
+                                        <a href="{{ Storage::url($user->pivot->curriculum_vitae) }}" target="_blank" class="btn btn-outline btn-sm">Voir CV</a>
                                     @else
-                                        <span class="text-sm text-gray-500 italic">Non fourni</span>
+                                        <span class="text-gray-500 italic text-sm">Non fourni</span>
                                     @endif
                                 </td>
-                                <td class="border px-4 py-2">
+                                <td class="text-center">
                                     {{ $user->pivot->cover_letter ? Str::limit($user->pivot->cover_letter, 80) : 'Non fournie' }}
                                 </td>
-                                <td class="border px-4 py-2 text-center text-gray-500">
-                                    {{ $user->pivot->created_at->format('d/m/Y') }}
-                                </td>
-
-                                <td class="border px-4 py-2 text-center">
-                                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">
+                                <td class="text-center text-gray-500">{{ $user->pivot->created_at->format('d/m/Y') }}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}-{{ $user->id }}').showModal()">
                                         Retirer
                                     </button>
                                 </td>
                             </tr>
                         @endforeach
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                @else
+                    <tr>
+                        <td colspan="8" class="text-center text-gray-500">Aucune candidature trouvée.</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
 
-            {{-- Pagination --}}
-            <div class="mt-6">
-                {{ $offers->links() }}
-            </div>
-        @endif
+            {{ $offers->links() }}
+        </div>
+
+
+        {{-- Modaux --}}
+        @foreach ($offers as $offer)
+            @foreach ($offer->applies as $user)
+                <dialog id="modal-{{ $offer->id }}-{{ $user->id }}" class="modal">
+                    <div class="modal-box">
+                        <h3 class="font-bold text-lg">Confirmer la suppression</h3>
+                        <p class="py-4">Êtes-vous sûr de vouloir retirer la candidature de
+                            <strong>{{ $user->first_name }} {{ $user->name }}</strong>
+                            pour le poste : <strong>{{ $offer->title }}</strong> ?
+                        </p>
+                        <div class="modal-action flex justify-between">
+                            <form method="dialog">
+                                <button class="btn">Annuler</button>
+                            </form>
+                            <form action="{{ route('pilot.apply.remove', [$offer, $user]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-error">Confirmer</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button class="cursor-default">Fermer</button>
+                    </form>
+                </dialog>
+            @endforeach
+        @endforeach
+
     </div>
 @endsection

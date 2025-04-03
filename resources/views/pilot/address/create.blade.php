@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Modifier la compétence')
+@section('title', 'Créer une adresse')
 
 @section('content')
     <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10 space-y-6">
 
-        <h2 class="text-3xl font-bold text-center mb-6">Modifier la compétence</h2>
+        <h2 class="text-3xl font-bold text-center mb-6">Créer une adresse</h2>
 
         @if (session('success'))
             <div class="alert alert-success shadow-lg">
@@ -35,19 +35,32 @@
             </div>
         @endif
 
-        <form action="{{ route('skill.update', $skill) }}" method="POST" class="space-y-4">
+        <form action="{{ route('address.store') }}" method="POST" class="space-y-4">
             @csrf
-            @method('PUT')
 
             <div class="form-control w-full">
-                <label class="label font-medium">Nom de la compétence</label>
-                <input type="text" name="skill_name" value="{{ old('skill_name', $skill->skill_name) }}"
+                <label class="label font-medium">Code postal</label>
+                <input type="text" name="postal_code" value="{{ old('postal_code') }}"
+                       placeholder="Ex : 31000"
                        class="input input-bordered w-full">
+                @error('postal_code')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label font-medium">Ville</label>
+                <input type="text" name="city" value="{{ old('city') }}"
+                       placeholder="Ex : Toulouse"
+                       class="input input-bordered w-full">
+                @error('city')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="flex justify-between items-center mt-6">
-                <a href="{{ route('skill.index') }}" class="btn btn-secondary">← Retour</a>
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="{{ route('address.index') }}" class="btn btn-secondary">← Retour</a>
+                <button type="submit" class="btn btn-primary">Créer</button>
             </div>
         </form>
     </div>

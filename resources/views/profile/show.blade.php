@@ -15,9 +15,11 @@
                             <img src="{{ Storage::url($user->profile_picture_path) }}" alt="Photo de profil">
                         </div>
                     </div>
+                    
                     <h3 class="text-lg sm:text-xl font-bold">{{ $user->first_name ?? '' }} {{ $user->name ?? ''}}</h3>
                     <p class="text-sm sm:text-base font-medium">📅 Date de naissance : <span class="font-semibold">{{$user->birthdate ?? ''}}</span></p>
                     <p class="text-sm sm:text-base font-medium">🎓 Promotion : <span class="font-semibold">{{$user->promotion->promotion_code ?? ''}}</span></p>
+                    <p class="text-sm sm:text-base font-medium">🏠 Adresse : <span class="font-semibold">{{$user->addresses->postal_code ?? '' . ' ' . $user->addresses->city ?? ''}}</span></p>
                 </div>
             </div>
 

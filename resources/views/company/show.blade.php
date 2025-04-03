@@ -73,6 +73,7 @@
                     </div>
 
                     <br>
+
                     <p class="font-bold text-lg text-al">Vous avez travaillé ici ? Notez l'entreprise.</p>
 
                     <form action="{{ route('company.rate', $company) }}" method="POST" class="space-y-4">
@@ -93,6 +94,8 @@
 
                         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Envoyer</button>
                     </form>
+
+
                     <br>
                     <p class="font-bold text-lg text-al">Cette entreprise est actuellement notée:</p>
 
