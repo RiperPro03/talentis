@@ -91,25 +91,25 @@
             <table class="table w-full bg-white shadow-md rounded-xl">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Titre</th>
-                    <th class="text-center">Description</th>
-                    <th class="text-center">Salaire</th>
-                    <th class="text-center">Type</th>
-                    <th class="text-center">Entreprise</th>
-                    <th class="text-center">Secteur</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Titre</th>
+                    <th class="border px-4 py-2text-center">Description</th>
+                    <th class="border px-4 py-2text-center">Salaire</th>
+                    <th class="border px-4 py-2 text-center">Type</th>
+                    <th class="border px-4 py-2 text-center">Entreprise</th>
+                    <th class="border px-4 py-2text-center">Secteur</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($offers as $offer)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $offer->title }}</td>
-                        <td class="text-center">{{ Str::limit($offer->description, 80) }}</td>
-                        <td class="text-center">{{ $offer->base_salary ?? 'Non précisé' }}</td>
-                        <td class="text-center">{{ $offer->type }}</td>
-                        <td class="text-center">{{ $offer->companies->name ?? 'Non spécifié' }}</td>
-                        <td class="text-center">{{ $offer->sector->name ?? 'Non spécifié' }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2 text-center">{{ $offer->title }}</td>
+                        <td class="border px-4 py-2 text-center">{{ Str::limit($offer->description, 80) }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $offer->base_salary ?? 'Non précisé' }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $offer->type }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $offer->companies->name ?? 'Non spécifié' }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $offer->sector->name ?? 'Non spécifié' }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('pilot.offer.edit', $offer) }}" class="btn btn-sm btn-warning">Modifier</a>
                             <button class="btn btn-error btn-sm"
                                     onclick="document.getElementById('modal-{{ $offer->id }}').showModal()">

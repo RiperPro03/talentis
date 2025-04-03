@@ -96,14 +96,14 @@
             <table class="table w-full bg-white shadow-md rounded-xl text-sm md:text-base">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Poste</th>
-                    <th class="text-center">Entreprise</th>
-                    <th class="text-center">Candidat</th>
-                    <th class="text-center">Localisation</th>
-                    <th class="text-center">CV</th>
-                    <th class="text-center">Lettre</th>
-                    <th class="text-center">Soumis le</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Poste</th>
+                    <th class="border px-4 py-2 text-center">Entreprise</th>
+                    <th class="border px-4 py-2 text-center">Candidat</th>
+                    <th class="border px-4 py-2 text-center">Localisation</th>
+                    <th class="border px-4 py-2 text-center">CV</th>
+                    <th class="border px-4 py-2 text-center">Lettre</th>
+                    <th class="border px-4 py-2 text-center">Soumis le</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,26 +111,26 @@
                     @foreach ($offers as $offer)
                         @foreach ($offer->applies as $user)
                             <tr class="hover:bg-gray-50">
-                                <td class="text-center">{{ $offer->title }}</td>
-                                <td class="text-center">{{ $offer->companies->name }}</td>
-                                <td class="text-center">{{ $user->first_name }} {{ $user->name }}</td>
-                                <td class="text-center">
+                                <td class="border px-4 py-2text-center">{{ $offer->title }}</td>
+                                <td class="border px-4 py-2 text-center">{{ $offer->companies->name }}</td>
+                                <td class="border px-4 py-2 text-center">{{ $user->first_name }} {{ $user->name }}</td>
+                                <td class="border px-4 py-2 text-center">
                                     @foreach ($offer->companies->addresses as $address)
                                         <div class="badge badge-ghost">📍 {{ $address->city }}</div>
                                     @endforeach
                                 </td>
-                                <td class="text-center">
+                                <td class="border px-4 py-2 text-center">
                                     @if ($user->pivot->curriculum_vitae)
                                         <a href="{{ Storage::url($user->pivot->curriculum_vitae) }}" target="_blank" class="btn btn-outline btn-sm">Voir CV</a>
                                     @else
                                         <span class="text-gray-500 italic text-sm">Non fourni</span>
                                     @endif
                                 </td>
-                                <td class="text-center">
+                                <td class="border px-4 py-2 text-center">
                                     {{ $user->pivot->cover_letter ? Str::limit($user->pivot->cover_letter, 80) : 'Non fournie' }}
                                 </td>
-                                <td class="text-center text-gray-500">{{ $user->pivot->created_at->format('d/m/Y') }}</td>
-                                <td class="text-center">
+                                <td class="border px-4 py-2 text-center text-gray-500">{{ $user->pivot->created_at->format('d/m/Y') }}</td>
+                                <td class="border px-4 py-2 text-center">
                                     <button class="btn btn-error btn-sm" onclick="document.getElementById('modal-{{ $offer->id }}-{{ $user->id }}').showModal()">
                                         Retirer
                                     </button>
@@ -140,7 +140,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="8" class="text-center text-gray-500">Aucune candidature trouvée.</td>
+                        <td colspan="8" class="border px-4 py-2 text-center text-gray-500">Aucune candidature trouvée.</td>
                     </tr>
                 @endif
                 </tbody>

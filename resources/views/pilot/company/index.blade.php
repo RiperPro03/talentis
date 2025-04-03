@@ -76,21 +76,21 @@
             <table class="table w-full bg-white shadow-md rounded-xl">
                 <thead>
                 <tr class="bg-gray-100">
-                    <th class="text-center">Nom</th>
-                    <th class="text-center">Description</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Téléphone</th>
-                    <th class="text-center">Actions</th>
+                    <th class="border px-4 py-2 text-center">Nom</th>
+                    <th class="border px-4 py-2 text-center">Description</th>
+                    <th class="border px-4 py-2 text-center">Email</th>
+                    <th class="border px-4 py-2 text-center">Téléphone</th>
+                    <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($companies as $company)
                     <tr class="hover:bg-gray-50">
-                        <td class="text-center">{{ $company->name }}</td>
-                        <td class="text-center">{{ Str::limit($company->description, 80) }}</td>
-                        <td class="text-center">{{ $company->email }}</td>
-                        <td class="text-center">{{ $company->phone_number }}</td>
-                        <td class="text-center flex justify-center gap-2 py-2">
+                        <td class="border px-4 py-2 text-center">{{ $company->name }}</td>
+                        <td class="border px-4 py-2 text-center">{{ Str::limit($company->description, 80) }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $company->email }}</td>
+                        <td class="border px-4 py-2 text-center">{{ $company->phone_number }}</td>
+                        <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('pilot.company.edit', $company) }}"
                                class="btn btn-warning btn-sm">Modifier</a>
                             <button class="btn btn-error btn-sm"
