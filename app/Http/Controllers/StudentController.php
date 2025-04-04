@@ -17,7 +17,7 @@ class StudentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::role('student');
+        $query = User::role('student')->with('promotion');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->input('name') . '%');
@@ -31,14 +31,17 @@ class StudentController extends Controller
             $query->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
+        if ($request->filled('promotion')) {
+            $query->whereHas('promotion', function ($q) use ($request) {
+                $q->where('promotion_code', 'like', '%' . $request->input('promotion') . '%');
+            });
+        }
+
         $students = $query->paginate(10);
+        $promotions = Promotion::pluck('promotion_code');
 
-        return view('pilot.student.index', compact('students'));
+        return view('pilot.student.index', compact('students', 'promotions'));
     }
-
-
-
-
 
     public function create()
     {

@@ -42,6 +42,15 @@
                    class="input input-bordered w-full max-w-xs">
             <input type="email" name="email" placeholder="Email" value="{{ request('email') }}"
                    class="input input-bordered w-full max-w-xs">
+            <select name="promotion" class="select select-bordered w-full max-w-xs">
+                <option value="">Toutes promotions</option>
+                @foreach ($promotions as $promo)
+                    <option value="{{ $promo }}" {{ request('promotion') == $promo ? 'selected' : '' }}>
+                        {{ $promo }}
+                    </option>
+                @endforeach
+            </select>
+
             <button type="submit" class="btn btn-primary w-full md:w-auto">Rechercher</button>
         </form>
 
@@ -60,6 +69,9 @@
                 <div class="bg-white shadow-md rounded-xl p-4 space-y-2">
                     <h2 class="text-lg font-semibold">{{ $student->name }} {{ $student->first_name }}</h2>
                     <p class="text-gray-600">{{ $student->email }}</p>
+                    <p class="text-gray-600">
+                        Promotion : {{ $student->promotion?->promotion_code ?? 'Non assignée' }}
+                    </p>
                     <div class="flex justify-between items-center mt-3">
                         <a href="{{ route('student.edit', $student->id) }}" class="btn btn-warning btn-sm">
                             Modifier
@@ -81,6 +93,7 @@
                     <th class="border px-4 py-2 text-center">Nom</th>
                     <th class="border px-4 py-2 text-center">Prénom</th>
                     <th class="border px-4 py-2 text-center">Email</th>
+                    <th class="border px-4 py-2 text-center">Promotion</th>
                     <th class="border px-4 py-2 text-center">Actions</th>
                 </tr>
                 </thead>
@@ -90,6 +103,9 @@
                         <td class="border px-4 py-2 text-center">{{ $student->name }}</td>
                         <td class="border px-4 py-2 text-center">{{ $student->first_name }}</td>
                         <td class="border px-4 py-2 text-center">{{ $student->email }}</td>
+                        <td class="border px-4 py-2 text-center">
+                            {{ $student->promotion?->promotion_code ?? 'Non assignée' }}
+                        </td>
                         <td class="border px-4 py-2 text-center flex justify-center gap-2 py-2">
                             <a href="{{ route('student.show', $student->id) }}" class="btn btn-info btn-sm">
                                 Détails
