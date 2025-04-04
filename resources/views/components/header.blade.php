@@ -99,7 +99,7 @@
                     $isPilot = auth()->user()->hasRole('pilot');
                 @endphp
                 <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-20 mt-3 w-52 p-2 shadow">
-                    <li><a href="{{ route('profil.show') }}" class="text-lg">Profile</a></li>
+                    <li><a href="{{ route('profil.show') }}" class="text-lg">Profil</a></li>
                     @if($isAdmin || $isStudent)
                         <li><a href="{{ route('apply.index') }}" class="text-lg">Mes candidatures</a></li>
                         <li><a href="{{ route('wishlist.index') }}" class="text-lg">Favori</a></li>
