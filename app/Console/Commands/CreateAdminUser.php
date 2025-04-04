@@ -46,6 +46,7 @@ class CreateAdminUser extends Command
             'first_name' => $firstName,
             'email' => $email,
             'password' => Hash::make($password),
+            'birthdate'   => now()->subYears(30),
         ]);
 
         // Vérifier si le rôle admin existe, sinon le créer
