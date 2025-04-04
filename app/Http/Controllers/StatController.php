@@ -37,12 +37,13 @@ class StatController extends Controller
 
         // Nombre d'offres de type stage de plus de 3 mois et 6 mois
         $internships3Months = Offer::where('type', 'stage')
-            ->whereRaw('EXTRACT(MONTH FROM AGE(end_offer, start_offer)) > 3')
+            ->whereRaw("DATE_PART('year', AGE(end_offer, start_offer)) * 12 + DATE_PART('month', AGE(end_offer, start_offer)) > 3")
             ->count();
 
         $internships6Months = Offer::where('type', 'stage')
-            ->whereRaw('EXTRACT(MONTH FROM AGE(end_offer, start_offer)) > 6')
+            ->whereRaw("DATE_PART('year', AGE(end_offer, start_offer)) * 12 + DATE_PART('month', AGE(end_offer, start_offer)) > 6")
             ->count();
+
 
 
         // Top 3 des offres qui payent le mieux
