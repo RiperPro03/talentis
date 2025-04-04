@@ -70,8 +70,10 @@ php artisan migrate
 npm run build
 ```
 
-
-T'es beau Christopher tu sais ? <3
+### 🔗 Créer le lien de stockage public
+```sh
+php artisan storage:link
+```
 
 ### 🌐 Démarrer le serveur Laravel
 ```sh
