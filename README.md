@@ -1,5 +1,5 @@
 # 🌟 Talentis
-Bienvenue sur **Talentis**
+Bienvenue sur **Talentis**, une plateforme de gestion conçue pour simplifier la mise en relation entre les talents et les entreprises.
 
 ---
 
@@ -77,3 +77,9 @@ T'es beau Christopher tu sais ? <3
 ```sh
 php artisan serve
 ```
+
+### 👨‍💻 Contributeurs
+- Christopher Asin — [@RiperPro03] (https://www.github.com/RiperPro03)
+- Enzo Casse — [@Latulipedcd] (https://github.com/Latulipedcd)
+- Quentin Chabres — [@QuentinGH] (https://github.com/QuentinGH)
+- Dagmawi Desta — [@Dagmawi229] (https://github.com/Dagmawi229)
